@@ -1,0 +1,5 @@
+# Obsidian workspace layout (prevents conflicts between mobile and desktop screen layouts)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+.obsidian/cache/
