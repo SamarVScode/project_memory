@@ -1,0 +1,10 @@
+{
+  "autoBackupAfterFileChange": true,
+  "autoSaveInterval": 5,
+  "autoPullInterval": 5,
+  "autoPullOnBoot": true,
+  "disablePush": false,
+  "pullBeforePush": true,
+  "disablePopups": false,
+  "listChangedFilesInStatusBar": true
+}
