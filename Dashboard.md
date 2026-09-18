@@ -4,6 +4,13 @@ Welcome to your central engineering memory layer! This vault serves as the persi
 
 ---
 
+## 📜 Rules & Memory Engine Guidelines
+*Standard operating procedures for onboarding new repositories and incrementally patching existing codebase memory.*
+* **[[Rules/How-to-Add-New-Codebase-Memory|How to Add New Codebase Memory]]**: Authoritative rules, 19 required sections, monorepo handling, and prompt template for onboarding new codebases.
+* **[[Rules/How-to-Update-Codebase-Memory|How to Update Codebase Memory]]**: Surgical, incremental patching standard, section-by-section rules, and prompt template for updating existing codebases.
+
+---
+
 ## 🗺️ Operational Knowledge Clusters
 
 ### 1. 📊 Logistics Big-Data & Excel Streaming Pipeline
