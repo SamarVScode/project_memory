@@ -2,7 +2,7 @@
 title: Google Apps Script Webapp Architecture Rulebook
 type: rules
 status: active
-tags: [rules, google-apps-script, architecture-rulebook, webapp, best-practices]
+tags: [rules, google-apps-script, architecture-rulebook, webapp, best-practices, typescript]
 created: 2026-09-18
 last-updated: 2026-09-18
 ---
@@ -20,6 +20,7 @@ last-updated: 2026-09-18
 You are an expert Google Apps Script (GAS) Software Architect and Full-Stack Systems Engineer.
 When generating or modifying code for Google Apps Script Web Applications, you MUST strictly adhere to the rules, constraints, and architecture patterns specified in this document.
 You must NEVER hallucinate Node.js module systems (import/export), NEVER hardcode column array indices (row[2]), NEVER hardcode tab names without rollover fallbacks, NEVER use unescaped template literals containing slashes, regex, or HTML tags in client-side scripts, NEVER call Utilities.formatDate() inside large row loops, and NEVER run heavy initializations in global scope.
+Always adopt the Enterprise TypeScript Standard (.ts with Clasp Native Compilation module: "None") for full type safety, zero silent cron failures, and 1:1 Stackdriver line parity.
 Always enforce the 2-Stage Progressive Loading architecture, client-side heavy compute, safe serialization across google.script.run, top-level global function gateways, single-batch Spreadsheet I/O, dynamic header resolution, and safe CacheService size limits (<90 KB single key / multi-key chunking up to 500 KB).
 ```
 
@@ -1233,14 +1234,17 @@ When configured to **Execute as: Me**, Google protects visitor privacy:
 
 ## 19. Enterprise TypeScript Scaffolding & Type Safety (The Clasp Native Standard)
 
-### The Architectural Recommendation: Native Clasp TS vs Complex Bundlers
-While third-party bundlers (Vite / Webpack / Rollup) allow standard `import`/`export`, they introduce heavy toolchain churn, dependency rot, and mangle output into a single minified bundle where Stackdriver cloud stack traces no longer match source lines.
+### The Industry-Grade Enterprise Standard: Native Clasp TypeScript (`module: "None"`)
+For all enterprise-scale Google Apps Script web applications, automated data pipelines, and mission-critical triggers, **TypeScript (`.ts`) with Clasp Native Compilation (`module: "None"`) is the official Industry-Grade Enterprise Standard**.
 
-For 98% of Google Apps Script applications, **Native Clasp TypeScript (`.ts`) is the superior, recommended standard**:
-1. **1:1 Line Number Parity in Stackdriver:** When Google Cloud logs `Error in GenericDataService at line 42`, developers and AI agents can open `src/GenericDataService.ts:42` and fix it in seconds without source-map confusion.
-2. **Context Window Efficiency for AI Agents:** AI coding agents load only the specific `.ts` service or `.html` pane needed for a task, rather than parsing a massive monolithic bundle.
-3. **Zero Toolchain Rot:** Requires only two stable devDependencies (`typescript` and `@types/google-apps-script`). Projects continue compiling cleanly years later without broken build plugins.
-4. **Instant Deploys & Clean Builds:** Using zero-config local compilation (via Clasp 2.4.x `ts2gas` or standard `tsc`), TypeScript transpiles 1:1 into clean `.gs` / `.js` files without mangling source lines.
+In mission-critical enterprise environments and high-visibility logistics operations, untyped vanilla JavaScript introduces severe operational hazards: silent failures in headless automated triggers, untracked schema drifts across shared workbooks, and runtime `TypeError` crashes during peak concurrency.
+
+Native Clasp TypeScript eliminates these hazards entirely:
+1. **High-Visibility Operations & Zero-Downtime Automated Triggers:** Mission-critical time-driven cron triggers, webhooks, and sheet automations run headless in background workers without active user monitoring. Untyped scripts fail silently when an underlying sheet tab or column alias shifts. TypeScript guarantees strict compile-time verification across all data models and schema registries, eliminating silent cron failures and preventing dirty writebacks or incomplete ledger states before deployment.
+2. **Full `@types/google-apps-script` Signature Validation:** Every call to Apps Script APIs (`SpreadsheetApp`, `DriveApp`, `LockService`, `CacheService`, `PropertiesService`, `Utilities`, `UrlFetchApp`) is strictly checked against official Google Workspace API type definitions at build time. Typos in method names, invalid parameters, or misused return values are caught immediately during `tsc --noEmit` rather than failing during a production run.
+3. **Exact 1:1 Stackdriver Line Parity (Zero Mangling):** Third-party bundlers (Vite / Webpack / Rollup) mangle backend code into a single minified bundle where Google Cloud Stackdriver stack traces no longer match source lines. In contrast, Native Clasp TypeScript transpiles 1:1 into clean `.gs` / `.js`. When Google Cloud Stackdriver logs `Error in GenericDataService at line 42`, engineers and AI agents can immediately open `src/GenericDataService.ts:42` with exact line parity—reducing Mean Time to Recovery (MTTR) to seconds during live incidents.
+4. **Context Window Efficiency for AI Agents:** AI coding agents load and reason over isolated `.ts` service files or `.html` panes without wasting context windows parsing multi-megabyte minified bundles.
+5. **Zero Toolchain Rot & Dependency Bloat:** Complex bundlers require volatile plugin ecosystems that break across Node updates. The Native Clasp TypeScript standard relies exclusively on two ultra-stable devDependencies (`typescript` and `@types/google-apps-script`), ensuring projects compile reliably across years without maintenance overhead.
 
 > [!IMPORTANT] Clasp 2.x vs Clasp 3.x TypeScript Compilation
 > * In **`@google/clasp` 2.4.x**, Clasp has built-in `ts2gas` transpilation. Running `clasp push` automatically converts `.ts` files to `.gs` in-memory locally before uploading to Google servers.
@@ -1340,7 +1344,7 @@ namespace GenericDataService {
 ```
 
 #### Rule 19.2: Strongly-Typed Client-Server RPC Contracts (`types.ts`)
-Define explicit ambient TypeScript interfaces for every resource, configuration object, and `google.script.run` response envelope (omit `export` so types remain ambiently global under `"module": "None"` without triggering TS1148):
+Enterprise applications **MUST** define explicit ambient TypeScript interfaces for every resource, configuration object, and `google.script.run` response envelope in `src/types.ts` (omit `export` so types remain ambiently global under `"module": "None"` without triggering TS1148). This contract layer eliminates silent schema drift between client panes and server services:
 
 ```typescript
 // src/types.ts (Ambient global interfaces for module: "None")
@@ -1421,7 +1425,7 @@ clasp deploy -V <VERSION_NUMBER> -d "Production release v1.X"
 
 Before outputting code or deploying changes to a Google Apps Script project, every AI Agent must verify:
 
-- [ ] **TypeScript Type Safety**: All TypeScript code compiles cleanly via `npm run typecheck` (`tsc --noEmit`) with zero errors before pushing.
+- [ ] **Mandatory Enterprise TypeScript Standard**: All enterprise GAS applications use TypeScript (`.ts`) with native Clasp compilation (`module: "None"`), ambient contract interfaces defined in `types.ts`, full `@types/google-apps-script` signature validation, and pass `tsc --noEmit` with zero errors before pushing.
 - [ ] **No ES6 Modules in `.gs`**: Zero `import` or `export` statements in any `.gs` file.
 - [ ] **Object Literal Namespaces**: All services wrapped in `const ServiceName = Object.freeze({ ... });` or TypeScript namespaces.
 - [ ] **Top-Level Global Endpoints for RPC**: All `google.script.run` endpoints declared as top-level global functions in `Controller.gs` / `Controller.ts` (not nested in objects/namespaces).

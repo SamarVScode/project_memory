@@ -2,7 +2,7 @@
 title: GAS Architecture Index & Agent Router
 type: rules
 status: active
-tags: [rules, google-apps-script, architecture-index, triage-matrix, agent-router]
+tags: [rules, google-apps-script, architecture-index, triage-matrix, agent-router, typescript]
 created: 2026-09-18
 last-updated: 2026-09-18
 ---
@@ -22,7 +22,8 @@ last-updated: 2026-09-18
 ```text
 You are an expert Google Apps Script Software Architect. Before generating or modifying any GAS code, inspect GAS_ARCHITECTURE_INDEX.md to triage the user's task to its corresponding App Archetype or Feature Sections.
 Read ONLY the targeted sections in GAS-Webapp-Architecture-Rulebook.md to conserve context and eliminate hallucinations.
-You must strictly follow the 4 Non-Negotiable Core Laws (Flat Scope, Dynamic Headers, Safe Serialization, Client-Side Compute) and pass all 19 verification checks in Section 21 before writing final code.
+TypeScript (.ts) with Clasp Native Compilation (module: "None") is the Industry-Grade Standard for enterprise visibility, crash prevention, and zero-downtime automated triggers.
+You must strictly follow the 4 Non-Negotiable Core Laws (Flat Scope, Dynamic Headers, Safe Serialization, Client-Side Compute) alongside the Enterprise TypeScript Standard, and pass all verification checks in Section 21 before writing final code.
 ```
 
 ---
@@ -35,6 +36,9 @@ You must strictly follow the 4 Non-Negotiable Core Laws (Flat Scope, Dynamic Hea
 | **2** | **The Header Map Law** | [[GAS-Webapp-Architecture-Rulebook#Rule 5.4: The Header Map Law (Zero Hardcoded Column Numbers)|Sec 5.4 `L343–387`]] | **Zero hardcoded column array indices** (`row[0]`, `row[2]`). Always map headers dynamically from Row 1 using `HeaderResolver.createColumnMap(headers, schemaAliases)` with candidate aliases. |
 | **3** | **Safe Serialization Matrix** | [[GAS-Webapp-Architecture-Rulebook#4. HtmlService, Scriptlets & The Client Template Literal Rule|Sec 4 `L236–279`]] & [[GAS-Webapp-Architecture-Rulebook#7. Client-Server Bridge (`google.script.run`) & Serialization Matrix|Sec 7 `L425–455`]] | **Zero raw `Date` objects** (convert to ISO string). Zero server `Blob` objects (use Base64 or Drive URLs). Zero `Map`/`Set` across RPC. Standard response: `{ success, data, error }`. Client script avoids unescaped regex/slashes/HTML in backticks. |
 | **4** | **Client-Side Heavy Compute** | [[GAS-Webapp-Architecture-Rulebook#8. Client-Side Compute, DOM & Virtualized Batch Chunking|Sec 8 `L456–509`]] | Treat GAS backend as a dumb data pipe. Filter, sort, aggregate in browser memory (<10ms). For >100 rows, enforce 50-row batch chunking (`requestAnimationFrame`) to eliminate UI freeze. |
+
+> [!IMPORTANT] Enterprise Standard Mandate
+> **TypeScript (.ts) with Clasp Native Compilation (`module: "None"`) is the Industry-Grade Standard** for enterprise visibility, crash prevention, and zero-downtime automated triggers. All mission-critical backend logic, schema registries, and RPC bridges must enforce strict ambient `types.ts` interface contracts and full `@types/google-apps-script` signature validation.
 
 ---
 
@@ -73,7 +77,7 @@ You must strictly follow the 4 Non-Negotiable Core Laws (Flat Scope, Dynamic Hea
 | **Virtualized DOM Rendering** | [[GAS-Webapp-Architecture-Rulebook#8. Client-Side Compute, DOM & Virtualized Batch Chunking|Sec 8 `L456–509`]] | `renderTableChunked(rows, container)` (50 rows/batch RAF) |
 | **Styled Client Excel Export** | [[GAS-Webapp-Architecture-Rulebook#Pure Client-Side Styled XLSX Generation (`xlsx-js-style`)|Sec 17 (XLSX) `L1168–1202`]] | `exportStyledExcel(data, filename)` (`xlsx-js-style`) |
 | **50MB / 6-Min Escape Hatch** | [[GAS-Webapp-Architecture-Rulebook#16. Hybrid Cloud Microservice Offload Pattern (The 50MB / 6-Min Escape Hatch)|Sec 16 `L1120–1148`]] | Hybrid Cloud FastAPI Streamer + 1-Min Poller Trigger |
-| **Native Clasp TypeScript** | [[GAS-Webapp-Architecture-Rulebook#19. Enterprise TypeScript Scaffolding & Type Safety (The Clasp Native Standard)|Sec 19 `L1225–1366`]] | `tsconfig.json` (`module: "None"`) + `types.ts` |
+| **Enterprise TypeScript Standard** | [[GAS-Webapp-Architecture-Rulebook#19. Enterprise TypeScript Scaffolding & Type Safety (The Clasp Native Standard)|Sec 19 `L1225–1366`]] | **Industry-Grade Enterprise Standard**: TypeScript (`.ts`) with Clasp Native Compilation (`module: "None"`), ambient `types.ts` contracts, full `@types/google-apps-script` signature validation, zero-downtime automated triggers, and 1:1 Stackdriver line parity. |
 | **Local Clasp Deployments** | [[GAS-Webapp-Architecture-Rulebook#20. Local Development & `clasp` Push / Deploy Workflow|Sec 20 `L1367–1410`]] | `clasp push` + `clasp deploy -i <DEPLOYMENT_ID>` |
 | **Multi-User Scaling Access** | [[GAS-Webapp-Architecture-Rulebook#18. Deployment, Permissions (`Execute as: Me`) & Multi-User Scaling|Sec 18 `L1203–1224`]] | `Execute as: Me` + Sub-second RPC bursts |
 
@@ -81,17 +85,18 @@ You must strictly follow the 4 Non-Negotiable Core Laws (Flat Scope, Dynamic Hea
 
 ## 🛡️ Pre-Flight Verification Gate
 
-Before presenting, saving, or deploying any Google Apps Script code, you **MUST** run through the complete 19-gate verification checklist in **[[GAS-Webapp-Architecture-Rulebook#21. The Master AI Pre-Flight Verification Checklist|Section 21 of GAS-Webapp-Architecture-Rulebook.md `L1411–1435`]]**.
+Before presenting, saving, or deploying any Google Apps Script code, you **MUST** run through the complete verification checklist in **[[GAS-Webapp-Architecture-Rulebook#21. The Master AI Pre-Flight Verification Checklist|Section 21 of GAS-Webapp-Architecture-Rulebook.md `L1411–1435`]]**.
 
 ### Top Critical Failure Checks:
 
-1. 🛑 **No Node.js ES6 modules in `.gs`** (`import` / `export` forbidden).
-2. 🛑 **All services wrapped in frozen objects or TS namespaces** (`const Service = Object.freeze({...})`).
-3. 🛑 **All RPC bridge endpoints exposed as top-level functions in `Controller.gs`**.
-4. 🛑 **Zero hardcoded column indices (`row[2]`)** — dynamic `HeaderResolver` strictly required.
-5. 🛑 **Zero raw `Date` or `Blob` objects returned across `google.script.run`**.
-6. 🛑 **Zero `Utilities.formatDate()` inside row loops** — use native V8 string slicing.
-7. 🛑 **No unescaped regex/slashes/closing tags inside backtick template literals in client `<script>`**.
-8. 🛑 **All external and parent links contain `target="_top"`**.
-9. 🛑 **All client-to-server calls wrapped in `callServerWithRetry` exponential backoff**.
-10. 🛑 **Clasp subfolder includes use full paths** (`include('Panes/Pane_Dashboard')`).
+1. 🛑 **Mandatory Enterprise TypeScript & Interface Contracts**: All enterprise GAS applications must be authored in TypeScript (`.ts`) using Clasp Native Compilation (`module: "None"`), ambient contract interfaces defined in `types.ts`, full `@types/google-apps-script` signature validation, and pass `tsc --noEmit` with zero errors.
+2. 🛑 **No Node.js ES6 modules in `.gs`/`.ts`** (`import` / `export` forbidden under `module: "None"`).
+3. 🛑 **All services wrapped in frozen objects or TS namespaces** (`const Service = Object.freeze({...})` or `namespace Service { ... }`).
+4. 🛑 **All RPC bridge endpoints exposed as top-level globals in `Controller.ts` / `Controller.gs`**.
+5. 🛑 **Zero hardcoded column indices (`row[2]`)** — dynamic `HeaderResolver` strictly required.
+6. 🛑 **Zero raw `Date` or `Blob` objects returned across `google.script.run`**.
+7. 🛑 **Zero `Utilities.formatDate()` inside row loops** — use native V8 string slicing.
+8. 🛑 **No unescaped regex/slashes/closing tags inside backtick template literals in client `<script>`**.
+9. 🛑 **All external and parent links contain `target="_top"`**.
+10. 🛑 **All client-to-server calls wrapped in `callServerWithRetry` exponential backoff**.
+11. 🛑 **Clasp subfolder includes use full paths** (`include('Panes/Pane_Dashboard')`).

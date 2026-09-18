@@ -1,3 +1,12 @@
+---
+title: Engineering Second Brain & Project Master Map
+type: dashboard
+status: active
+tags: [dashboard, index, master-map, google-apps-script, typescript]
+created: 2026-09-18
+last-updated: 2026-09-18
+---
+
 # 🧠 Engineering Second Brain & Project Master Map
 
 Welcome to your central engineering memory layer! This vault serves as the persistent knowledge base for all your software repositories, Google Apps Script pipelines, and infrastructure architectures.
@@ -8,8 +17,8 @@ Welcome to your central engineering memory layer! This vault serves as the persi
 *Standard operating procedures for onboarding new repositories and incrementally patching existing codebase memory.*
 * **[[Rules/How-to-Add-New-Codebase-Memory|How to Add New Codebase Memory]]**: Authoritative rules, 19 required sections, monorepo handling, and prompt template for onboarding new codebases.
 * **[[Rules/How-to-Update-Codebase-Memory|How to Update Codebase Memory]]**: Surgical, incremental patching standard, section-by-section rules, and prompt template for updating existing codebases.
-* **[[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]]**: Fast-triage decision matrix, 6 App Archetypes, 22 granular feature lookups, line-number citations, and pre-flight gatekeeper for Google Apps Script development.
-* **[[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]]**: Complete 21-section authoritative engineering standard for high-performance, enterprise-grade Google Apps Script web apps.
+* **[[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]]**: Fast-triage decision matrix, 6 App Archetypes, 22 granular feature lookups, line-number citations, pre-flight gatekeeper, and official codification of TypeScript (`.ts`) Native Compilation as the enterprise standard.
+* **[[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]]**: Complete 21-section authoritative engineering standard establishing Native Clasp TypeScript (`module: "None"`) as the industry standard for high-visibility operations, zero-downtime automated triggers, full `@types/google-apps-script` signature validation, and 1:1 Stackdriver parity.
 
 ---
 
