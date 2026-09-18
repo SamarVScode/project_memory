@@ -1,3 +1,12 @@
+---
+title: Google Apps Script Webapp Architecture Rulebook
+type: rules
+status: active
+tags: [rules, google-apps-script, architecture-rulebook, webapp, best-practices]
+created: 2026-09-18
+last-updated: 2026-09-18
+---
+
 # 📘 Universal Google Apps Script (GAS) Web Application Architecture & AI Training Rulebook
 
 > **Standard Engineering Specification & System Prompt for AI Coding Agents**  
