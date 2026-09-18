@@ -8,6 +8,8 @@ Welcome to your central engineering memory layer! This vault serves as the persi
 *Standard operating procedures for onboarding new repositories and incrementally patching existing codebase memory.*
 * **[[Rules/How-to-Add-New-Codebase-Memory|How to Add New Codebase Memory]]**: Authoritative rules, 19 required sections, monorepo handling, and prompt template for onboarding new codebases.
 * **[[Rules/How-to-Update-Codebase-Memory|How to Update Codebase Memory]]**: Surgical, incremental patching standard, section-by-section rules, and prompt template for updating existing codebases.
+* **[[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]]**: Fast-triage decision matrix, 6 App Archetypes, 22 granular feature lookups, line-number citations, and pre-flight gatekeeper for Google Apps Script development.
+* **[[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]]**: Complete 21-section authoritative engineering standard for high-performance, enterprise-grade Google Apps Script web apps.
 
 ---
 
