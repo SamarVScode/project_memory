@@ -8,55 +8,59 @@ Welcome to your central engineering memory layer! This vault serves as the persi
 
 ### 1. 📊 Logistics Big-Data & Excel Streaming Pipeline
 *High-throughput data streaming processing 500k+ row supply chain workbooks in constant $O(1)$ memory.*
-* **Core Hub:** [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR|XLSX-STREAM-REPORT-GENERATOR (`ei_stream_server`)]]
+* **Core Hub:** [[Projects/XLSX-STREAM-REPORT-GENERATOR|XLSX-STREAM-REPORT-GENERATOR (`ei_stream_server`)]]
 * **Bridges & Filters:**
-  * [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]]
-  * [[Projects/Repo-DataConversion|DataConversion (`xlsx-filter-service`)]]
-* **Connected Google Apps Script Satellites:**
-  * [[Projects/GAS-EI-Pan-India-Report|GAS: EI Pan India Report]]
-  * [[Projects/GAS-HourlyConversionReport|GAS: Hourly Conversion Report]]
-  * [[Projects/GAS-Lake-Ingestion-Pipeline|GAS: Lake Ingestion Pipeline]]
-  * [[Projects/GAS-dc-rca-progression|GAS: DC RCA Progression]]
-  * [[Projects/GAS-spf-final|GAS: SPF Final]]
-  * [[Projects/GAS-RVP-Q2-AppendAutomation|GAS: RVP Q2 Append Automation]]
-  * [[Projects/GAS-RTO-Q2-appendAutomation|GAS: RTO Q2 Append Automation]]
-  * [[Projects/GAS-D-1-SummaryAutomation|GAS: D-1 Summary Automation]]
-  * [[Projects/GAS-BRSNRAttributesAutomation|GAS: BRSNR Attributes Automation]]
-  * [[Projects/GAS-shipment-reco|GAS: Shipment Reco]]
+  * [[Projects/xlsx_to_csv_bridge|xlsx_to_csv_bridge]]
+  * [[Projects/DataConversion|DataConversion (`xlsx-filter-service`)]]
+* **Connected Google Apps Script Satellites & Pipelines:**
+  * [[Projects/EI-Pan-India-Report|EI-Pan-India-Report]]
+  * [[Projects/HourlyConversionReport|HourlyConversionReport]]
+  * [[Projects/EI-Stream-Trigger|EI-Stream-Trigger (Lake Ingestion Pipeline)]]
+  * [[Projects/ei-report-trigger|ei-report-trigger (Render Cloud Trigger Orchestrator)]]
+  * [[Projects/dc-rca-progression|dc-rca-progression (Hub RCA Tracker Dashboard)]]
+  * [[Projects/spf-final|spf-final (North Loss DB / Cluster Lead View)]]
+  * [[Projects/RVP-Q2-AppendAutomation|RVP-Q2-AppendAutomation]]
+  * [[Projects/RTO-Q2-appendAutomation|RTO-Q2-appendAutomation]]
+  * [[Projects/D-1-SummaryAutomation|D-1-SummaryAutomation]]
+  * [[Projects/BRSNRAttributesAutomation|BRSNRAttributesAutomation]]
+  * [[Projects/shipment_reco|shipment_reco]]
+  * [[Projects/shipVerify_BridgeAutomation|shipVerify_BridgeAutomation]]
+  * [[Projects/scm-performance|scm-performance (24-Hr SLA Performance)]]
 
 ---
 
 ### 2. 🎥 Warehouse Vision & VMS Hardware Overlays
 *Workstation camera overlays recording live packing operations in WebM VP9 with barcode scanner integrations.*
 * **Web Overlays & Bridges:**
-  * [[Projects/Repo-Bagging-VMS-overlay|Bagging-VMS-overlay]]
-  * [[Projects/Repo-cameraOverlayBridge|cameraOverlayBridge]]
+  * [[Projects/Bagging-VMS-overlay|Bagging-VMS-overlay]]
+  * [[Projects/cameraOverlayBridge|cameraOverlayBridge]]
 * **Connected Google Apps Script Backend:**
-  * [[Projects/GAS-Bagging-VMS-System|GAS: Bagging VMS System]]
+  * [[Projects/bagging-vms-gas-backend|bagging-vms-gas-backend]]
 
 ---
 
 ### 3. 📱 Field Agent Operations & Manpower Tracking
 *Mobile and administrative tooling tracking agent shifts, leave requests, payouts, and L4D attendance.*
-* **Mobile & Admin Hub:** [[Projects/Repo-agent-summary-mechanism|agent-summary-mechanism]]
-* **Connected Google Apps Script Satellites:**
-  * [[Projects/GAS-live-l4d-test|GAS: Live L4D Inactivity Engine]]
-  * [[Projects/GAS-Agent-payout|GAS: Agent Payout]]
-  * [[Projects/GAS-agent-backend-payout|GAS: Agent Backend Payout]]
-  * [[Projects/GAS-userdefinedDB|GAS: User-Defined DB]]
-  * [[Projects/GAS-App-Dashborad|GAS: App Dashboard]]
-  * [[Projects/GAS-North-Dashboard-Server|GAS: North Dashboard Server]]
+* **Mobile & Admin Hub (Monorepo):** [[Projects/agent-summary-mechanism|agent-summary-mechanism]]
+  * [[Projects/AgentFlow-Android|AgentFlow Android App]]
+  * [[Projects/AgentFlow-Web-Tracker|AgentFlow Web Operations Map]]
+  * [[Projects/AgentFlow-Leave-Admin|AgentFlow Leave Administration]]
+  * [[Projects/AgentFlow-GAS-Backend|AgentFlow GAS Payout Backend]]
+* **Connected Operations Consoles & Satellites:**
+  * [[Projects/l4d-dashboard|l4d-dashboard (L4D Inactivity Engine & Roster Dashboard)]]
+  * [[Projects/gas-ops-dashboard|gas-ops-dashboard (Operations Hub Management Suite)]]
+  * [[Projects/unified-dashboard|unified-dashboard (MRZ Operations Unified Dashboard)]]
+  * [[Projects/nps|nps (NPS Performance Engine)]]
+  * [[Projects/tasky|tasky (Logistics Task Poller)]]
+  * [[Projects/pre-alert|pre-alert (Logistics Dispatch Notifier)]]
 
 ---
 
 ### 4. 💰 Financial Automations & Cash Reconciliation
 *Automated tracking of Cash-On-Delivery (COD) remittances, transaction lookups, and account top-ups.*
 * **Connected Google Apps Script Satellites:**
-  * [[Projects/GAS-COD-Automation|GAS: COD Automation]]
-  * [[Projects/GAS-casj|GAS: Cash Reconciliation (casj)]]
-  * [[Projects/GAS-cash-inject|GAS: Cash Inject]]
-  * [[Projects/GAS-tidFinder|GAS: TID Finder]]
-  * [[Projects/GAS-PreAlertAutomation|GAS: Pre-Alert Automation]]
+  * [[Projects/cod-automation|cod-automation (Excel Runsheet Bridge & PDF Deposit Slip)]]
+  * [[Projects/cash-inject|cash-inject (Cash Pickup Transaction Tracker)]]
 
 ---
 
