@@ -153,6 +153,9 @@ l4d_dashboard/
 └── index.html                   # Single-page dashboard UI, Chart.js donut, virtualized modal, client engine, XLSX export
 ```
 
+> [!note] File Extension Convention Note
+> Files in the primary developer workspace `C:\Users\User\Desktop\L4D Dashboard` carry `.gs` extensions (`Code.gs`, `Controller.gs`, etc.), while the remote clone repository at `remote_clones\l4d_dashboard` uses `.js` extensions. Clasp automatically synchronizes both to the remote Google Apps Script container.
+
 ## 5. Core Modules & Responsibilities
 
 ### `Config.js`

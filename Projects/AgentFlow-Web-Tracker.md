@@ -102,6 +102,9 @@ agent-summary-mechanism/work-tracker/
 ├── package.json                     # Package manifest: work-tracker, React 19, Vite 8, Tesseract.js
 ├── vercel.json                      # Vercel deployment routing rewrite rule
 ├── vite.config.js                   # Vite configuration with React plugin
+├── WORK_TRACKER_CYCLES_PLAN.md      # Bi-monthly payout cycle planning document
+├── gas/                             # Google Apps Script helper endpoints
+├── tests/                           # Component and integration test specs
 └── src/
     ├── App.jsx                      # Central router, protected routes, theme toggle, lifted submissions
     ├── config.js                    # Supabase URL and anon key configuration

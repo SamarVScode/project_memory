@@ -168,7 +168,7 @@ agentflow-android/app/src/main/
     ├── drawable/                         # Vectors (ic_launcher_background, ic_launcher_foreground)
     ├── mipmap-anydpi-v26/                # Adaptive icons (ic_launcher.xml, ic_launcher_round.xml)
     ├── values/                           # strings.xml, colors.xml, themes.xml
-    └── xml/                              # file_paths.xml (FileProvider), backup_rules.xml
+    └── xml/                              # file_paths.xml (FileProvider), backup_rules.xml, data_extraction_rules.xml
 ```
 
 ---

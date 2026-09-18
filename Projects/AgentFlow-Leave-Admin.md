@@ -104,6 +104,8 @@ leave-management/admin/
     ├── index.css                    # Tailwind CSS imports and application styling (33 KB)
     ├── main.jsx                     # Application bootstrap mounting into DOM
     │
+    ├── assets/                      # Static branding assets (hero.png, react.svg, vite.svg)
+    │
     ├── components/
     │   ├── AdminLogin.jsx           # Form for admin email and password submission
     │   ├── ConfirmDeleteModal.jsx   # Deletion confirmation dialog with agent name and date confirmation
