@@ -793,7 +793,7 @@ clasp push
 > - Delete webhooks or modify bot metadata via the Telegram Bot API.
 > 
 > **Required Remediation Plan**:
-> 1. Open Telegram and message `@BotFather` to immediately **revoke and regenerate** the token for bot `8599162082`.
+> 1. Open Telegram and message `@BotFather` to immediately **revoke and regenerate** the token for bot `[REDACTED_SECRET]`.
 > 2. Open the Apps Script Editor $\rightarrow$ **Project Settings** $\rightarrow$ **Script Properties**.
 > 3. Add a new property:
 >    - **Property**: `RVP_BOT_TOKEN`

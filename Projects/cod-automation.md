@@ -108,7 +108,7 @@ flowchart TD
 ## 4. Folder & File Structure
 
 ```
-C:\Users\User\Desktop\gptd\remote_clones\cash\
+C:\Users\User\Desktop\cash\
 ├── .clasp.json          # Clasp configuration linking local workspace to GAS project ID
 ├── appsscript.json      # Manifest defining V8 runtime, timezone, scopes, and advanced APIs
 ├── Code.js              # Server-side monolith: RPC endpoints, spreadsheet/PDF compilers, queue daemon
@@ -411,7 +411,7 @@ sequenceDiagram
 ### Setup Steps
 1. Navigate to the local workspace:
    ```bash
-   cd C:\Users\User\Desktop\gptd\remote_clones\cash
+   cd C:\Users\User\Desktop\cash
    ```
 2. Verify `.clasp.json` contains the target script ID:
    ```json
@@ -544,7 +544,7 @@ sequenceDiagram
 To refresh or update this document in future maintenance cycles:
 1. Re-clone or pull the latest code using Clasp:
    ```bash
-   cd C:\Users\User\Desktop\gptd\remote_clones\cash
+   cd C:\Users\User\Desktop\cash
    clasp pull
    ```
 2. Feed this existing note alongside any changed code files (`Code.js`, `index.html`, `appsscript.json`) into the AI assistant.
