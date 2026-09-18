@@ -15,9 +15,13 @@ last-updated: 2026-09-17
 ---
 
 ## 1. Overview
-`AgentFlow-GAS-Backend` is an enterprise financial reconciliation engine and interactive payout dashboard located at `gas-app` (Script ID: `123Tjjgr4ICG_WlhxpbpWlmxqEOYKKKHYQu0bbSVr3w7Ggbd2UH4GI07c`). Running on the modern Google Apps Script V8 runtime and managed via Google Clasp, it serves as the financial settlement bridge between delivery proof data recorded by field agents in [[Supabase]] and the corporate [[Google Sheets]] ledgers used by payroll finance. The script ingests daily task tallies from Supabase via `UrlFetchApp`, cross-references agent rosters and Casper IDs from the master `Agent_view` sheet, generates isolated bi-monthly payout tabs (`Cycle 1`: 1st–15th, `Cycle 2`: 16th–End, `Full Month`), and powers an embedded single-page application built with Alpine.js and Tailwind CSS for interactive inline auditing and bulk payout status releases.
+`AgentFlow-GAS-Backend` is an enterprise financial reconciliation engine and interactive payout dashboard located at `gas-app` (Script ID: `123Tjjgr4ICG_WlhxpbpWlmxqEOYKKKHYQu0bbSVr3w7Ggbd2UH4GI07c`). Running on the modern Google Apps Script V8 runtime and managed via Google Clasp, it serves as the financial settlement bridge between delivery proof data recorded by field agents in [[Supabase]] and the corporate [[Google Sheets]] ledgers used by payroll finance.
 
----
+### The Operational Problem
+Logistics payroll and finance teams encounter substantial friction when reconciling disparate delivery run records against corporate payroll ledgers. Manually compiling field agent attendance, cross-referencing Casper IDs across roster spreadsheets, isolating bi-monthly payout windows, and verifying delivery proofs against payout claims is error-prone, slow, and prone to duplicate payouts or missing payouts during cycle-end cutoffs.
+
+### The Architectural Solution
+The script ingests daily task tallies from Supabase via `UrlFetchApp`, cross-references agent rosters and Casper IDs from the master `Agent_view` sheet, and generates isolated bi-monthly payout tabs (`Cycle 1`: 1st–15th, `Cycle 2`: 16th–End, `Full Month`). It powers an embedded single-page application built with Alpine.js and Tailwind CSS for interactive inline auditing, real-time variance detection, and bulk payout status releases directly within Google Sheets.
 
 ## 2. Tech Stack
 

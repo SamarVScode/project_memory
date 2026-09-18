@@ -15,9 +15,19 @@ last-updated: 2026-09-17
 ---
 
 ## 1. Overview
-The `agent-summary-mechanism` repository is an end-to-end logistics operations, work verification, leave administration, and bi-monthly agent payout ecosystem designed for warehouse hubs, field delivery agents, and logistics administrative operations. It resolves operational reconciliation gaps between physical delivery runsheets, agent attendance, and financial payout disbursements by integrating a high-performance native Android application with on-device computer vision OCR, an offline-first SQLite synchronization engine, a mobile-responsive web work tracker, a centralized React administrative dashboard, a shared [[Supabase]] cloud database/storage backend, and an enterprise [[Google Apps Script]] (GAS) spreadsheet computation pipeline. Field agents submit runsheet proofs with strict anti-tampering cryptographic hashing and capture timestamp validation, while administrative supervisors audit leave schedules, oversee team concurrency, and release bi-monthly payout cycles directly into cloud spreadsheets without data loss or duplicate accounting.
+The `agent-summary-mechanism` repository is an end-to-end logistics operations, work verification, leave administration, and bi-monthly agent payout ecosystem designed for warehouse hubs, field delivery agents, and logistics administrative operations.
 
----
+### The Operational Problem
+Last-mile delivery hubs face pervasive operational reconciliation gaps between physical delivery runsheets, delivery associate attendance, and financial payout disbursements. Manual paper runsheet handling results in lost proofs, fraudulent or misdated claims, uncoordinated rider absenteeism, and delayed bi-monthly payroll calculations. Furthermore, operations teams lack unified, real-time telemetry bridging frontline field submissions with back-office spreadsheet ledgers, leading to payout disputes and delivery capacity shortages.
+
+### The Architectural Solution
+The ecosystem resolves these operational challenges by integrating six specialized architectural components:
+1. **Native Android Client (`AgentFlow-Android`)**: High-performance mobile app with on-device ML Kit OCR, EXIF date verification, and offline-first SQLite/WorkManager synchronization.
+2. **Web Fallback Workstation (`AgentFlow-Web-Tracker`)**: Browser SPA featuring client-side WebAssembly `Tesseract.js` OCR and SHA-256 deduplication.
+3. **Administrative Dashboard (`AgentFlow-Leave-Admin`)**: Centralized React 19 governance console for supervisor leave approvals, shift density monitoring, and audit trails.
+4. **Cloud Persistence (`Supabase`)**: PostgreSQL database, PostgREST APIs, and Supabase Storage for encrypted proof image retention.
+5. **Reconciliation Engine (`AgentFlow-GAS-Backend`)**: Google Apps Script V8 pipeline computing bi-monthly payout tabs (`Cycle 1`, `Cycle 2`, `Full Month`) directly in Google Sheets.
+6. **Root Orchestration Architecture**: Unified monorepo tooling and shared contracts ensuring zero data loss and automated bi-monthly settlement.
 
 ## 2. Tech Stack
 

@@ -34,7 +34,7 @@ In high-velocity last-mile e-commerce logistics (such as [[Flipkart]] / [[Ekart]
 * **Date Tab Formatting Discrepancies**: Dispatch workbooks store daily runs under sheet tabs named after dates. Inconsistent date formatting across hub coordinators (e.g., `01-05-2026` vs `1/5/2026` vs `2026/05/01`) caused standard script lookups to fail, halting reconciliation workflows.
 * **Disjointed Roster Ingestion**: Wishmaster roster names existed across multiple sheets—partially in a master human resources directory (`agents` tab) and dynamically across header columns in daily outbound tracking spreadsheets.
 
-### The Solution
+### The Architectural Solution
 `shipment_reco` eliminates manual verification friction by providing a self-contained, reactive web application with instant hardware barcode scanning and two-way Google Sheets synchronization:
 1. **Robust Tab Date Matching Engine (`_getTabByDate`)**: Implements an algorithmic date parser that extracts and decomposes day, month, and year components from tab strings, immune to slash, hyphen, period, or space formatting variations.
 2. **Dual-Source Wishmaster Ingestion (`getWishmasterNames`)**: Merges delivery associate names from a dedicated Master Agents roster (`1avV2Tx9SGaaUeFu2alONmXeXkGYqE4I5r1ZncPYmY7M`) with the active outbound headers of the day's dispatch workbook (`1-P1oZ_A_J1OTsUqgQ7y5Uu9Ive92B0LYtCW-aBhEwRg`), eliminating missing-person edge cases.

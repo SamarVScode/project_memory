@@ -10,7 +10,13 @@ last-updated: 2026-09-18
 ---
 
 ## 1. Overview
-The **L4D Inactivity Engine & Roster Dashboard** (also designated in Google Apps Script as `live l4d test` and `L4D Agent Retention Console`) is an enterprise operations console and algorithmic workforce retention engine developed for Myntra Logistics manpower operations. Built to address high rider/Wishmaster attrition and sudden absenteeism across delivery hubs, the system tracks daily attendance records across a rolling 15-day observation window, classifies delivery riders across four critical stages of last-4-days (L4D) inactivity, detects synthetic or fraudulent scan events (*Fake Activations*), and delivers real-time telemetry to Area Leads (ALs) and Cluster Leads (CLs). Operating as a high-performance Google Apps Script web application backed by Google Drive and Google Sheets, it ingests multi-source historical delivery reports alongside live intraday delivery trackers, serving sub-second dashboard interactions through a two-stage progressive asynchronous data pipeline and client-side V8 retention evaluation.
+The **L4D Inactivity Engine & Roster Dashboard** (also designated in Google Apps Script as `live l4d test` and `L4D Agent Retention Console`) is an enterprise operations console and algorithmic workforce retention engine developed for Myntra Logistics manpower operations.
+
+### The Operational Problem
+Last-mile delivery networks suffer from high rider/Wishmaster attrition, unannounced absenteeism, and sudden inactive drops. When delivery associates go inactive for 1 to 4+ consecutive days, delivery capacity collapses, leading to customer delivery breaches and delayed delivery runs. Furthermore, manual roster checking fails to detect fraudulent or synthetic scan events (*Fake Activations*), where associates register superficial scans without performing actual deliveries to reset their inactivity counters.
+
+### The Architectural Solution
+The system tracks daily attendance records across a rolling 15-day observation window, classifies delivery riders across four critical stages of last-4-days (L4D) inactivity, detects synthetic or fraudulent scan events (*Fake Activations*), and delivers real-time telemetry to Area Leads (ALs) and Cluster Leads (CLs). Operating as a high-performance Google Apps Script web application backed by Google Drive and Google Sheets, it ingests multi-source historical delivery reports alongside live intraday delivery trackers, serving sub-second dashboard interactions through a two-stage progressive asynchronous data pipeline and client-side V8 retention evaluation.
 
 ## 2. Tech Stack
 

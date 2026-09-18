@@ -15,9 +15,13 @@ last-updated: 2026-09-17
 ---
 
 ## 1. Overview
-`AgentFlow-Web-Tracker` is a responsive, browser-based Single Page Application (SPA) located at `agent-summary-mechanism/work-tracker` (manifest: `work-tracker`). It serves as an accessible web fallback and desktop interface for field delivery agents to authenticate via Casper ID, upload daily runsheet proofs, inspect bi-monthly cycle earnings, and submit leave requests. Built on React 19, Vite 8, and the `@supabase/supabase-js` SDK, the portal executes client-side optical character recognition in the browser using WebAssembly-powered `Tesseract.js`. Extracted delivery tallies are validated against mathematical invariants, deduplicated via SHA-256 image hashes, uploaded to Supabase Storage, and recorded in PostgreSQL for operational tracking and financial settlement.
+`AgentFlow-Web-Tracker` is a responsive, browser-based Single Page Application (SPA) located at `agent-summary-mechanism/work-tracker` (manifest: `work-tracker`). It serves as an accessible web fallback and desktop interface for field delivery agents to authenticate via Casper ID, upload daily runsheet proofs, inspect bi-monthly cycle earnings, and submit leave requests.
 
----
+### The Operational Problem
+Delivery agents who experience mobile device failures, lack compatible Android hardware, or need a desktop workstation interface require a dependable portal to submit daily runsheet proofs and check cycle earnings. Without client-side document processing and immediate verification feedback, agents risk submitting illegible images, duplicate proofs, or mathematically invalid task tallies that trigger payment disputes.
+
+### The Architectural Solution
+Built on React 19, Vite 8, and the `@supabase/supabase-js` SDK, the portal executes client-side optical character recognition in the browser using WebAssembly-powered `Tesseract.js`. Extracted delivery tallies are validated against mathematical invariants, deduplicated via SHA-256 image hashes, uploaded to Supabase Storage, and recorded in PostgreSQL for operational tracking and financial settlement.
 
 ## 2. Tech Stack
 

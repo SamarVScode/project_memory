@@ -22,7 +22,11 @@ In nationwide e-commerce supply chain logistics, customer returns collected from
 2. **Target Ingestion Stream**: Third-party logistics reporting systems email automated daily archive dumps with the subject signature `RVP Q2 D-4 courier wise || RPCs ||- <YYYY-MM-DD>`.
 3. **Hub Specialization**: The national CSV attachment encompasses returns across all regional hubs and distribution centers (DCs). The Mirzapur hub operations team requires an isolated, append-only historical log of packages routed to or through `MRZ` (`RVP_DC_CODE_FILTER = 'MRZ'`).
 
-Prior to this automation, hub supervisors were required to manually monitor inbox threads, download multi-megabyte compressed `.zip` archives, extract CSV workbooks, apply spreadsheet auto-filters for the `MRZ` DC code, and copy-paste rows into the master tracking workbook.
+### The Operational Problem
+Prior to this automation, hub supervisors were required to manually monitor inbox threads, download multi-megabyte compressed `.zip` archives, extract CSV workbooks, apply spreadsheet auto-filters for the `MRZ` DC code, and copy-paste rows into the master tracking workbook. This manual process was vulnerable to human omission, delayed reverse-logistics reconciliation, and created operational blindspots in tracking returned customer inventory.
+
+### The Architectural Solution
+The automation provides a scheduled serverless ETL pipeline on Google Apps Script running on a 5-minute time-driven trigger (`checkAndProcessRvp`). It dynamically calculates the rolling D-4 date window (`Asia/Kolkata`), searches Gmail for matching archive dumps, decompresses `.zip` payloads in volatile RAM via `Utilities.unzip()`, parses tabular bytes via `Utilities.parseCsv()`, filters for `DC_code` matching `MRZ`, idempotently appends rows to Google Sheet `1kbTNOacK1vL3L1x4I3Uy3eBXUeIWiCRFG6lunJ2BYvc`, labels threads with `Processed-RVP-Q2`, and broadcasts formatted Markdown telemetry to Telegram.
 
 ```mermaid
 flowchart LR
@@ -67,8 +71,6 @@ flowchart LR
 6. **Real-Time Telegram Telemetry**: Formats structured operational Markdown alerts (dispatching tracking row counts or empty-file warnings) and pushes them via HTTP POST (`UrlFetchApp.fetch`) to Telegram chat `-1003779595579` (`Code.js:164-220`).
 7. **Thread State Idempotency**: Marks processed email threads with the user label `Processed-RVP-Q2` and flags them as read (`Code.js:149-150`). Threads encountering parsing exceptions are deliberately left unlabelled to permit automatic retry on subsequent polling cycles (`Code.js:156-157`).
 8. **Operational Backfill & Diagnostic Suites**: Features pre-built administrative utilities for single-date overrides (`manualBackfill`), 20-day historical batch ingestion (`runBackfillRange`), label purging (`resetRvp`), and dry-run email attachment inspection (`debugRvpTest`).
-
----
 
 ## 2. Tech Stack
 

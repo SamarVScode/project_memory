@@ -14,11 +14,11 @@ last-updated: 2026-09-17
 ## 1. Overview
 The **xlsx_to_csv_bridge** is a dedicated, ultra-low-memory HTTP streaming microservice written in [[Python]] using [[FastAPI]] and [[Uvicorn]]. Its core architectural objective is to ingest large, multi-worksheet supply-chain spreadsheets (`.xlsx` workbooks ranging from 100 MB to 250 MB+ containing 500,000+ rows) from [[Google Drive]] or direct client multipart uploads, parse them via a SAX-based XML stream engine (`xlsx2csv`), apply granular row- and sheet-level filtering rules, and stream the resulting transformed records back as clean `.csv` data.
 
+### The Operational Problem
 The project was explicitly engineered as a cloud-hosted processing offloader for [[Google Apps Script]] (GAS) automation environments. GAS operates under severe execution constraints—specifically a 50 MB in-memory payload limit for raw processing, strict quotas on URL fetch payloads, and a hard 6-minute (360 seconds) execution timeout (`UrlFetchApp`). When upstream logistics pipelines in the Dexter / Myntra logistics network produce daily operational workbooks (such as previous-day summary reports or intraday dispatch logs), GAS scripts cannot parse the underlying OpenXML format directly without exhausting container memory or timing out.
 
+### The Architectural Solution
 Running within the constrained 512 MB RAM Free Tier of [[Render]], the service keeps peak resident set size (RSS) memory consumption below 50 MB by completely bypassing DOM-based spreadsheet parsers (`pandas`, `openpyxl`). It features Google Drive virus-scan confirmation token bypassing, asynchronous background conversion with concurrency semaphore throttling, HTTP `Range` request streaming for partial byte-chunk downloads, domain-specific sheet selection (e.g., `Sameday` and `D-1` modes), and a dual-phase "Early-Exit" optimization that scans summary sheets to bound the search space across massive raw data sheets.
-
----
 
 ## 2. Tech Stack
 

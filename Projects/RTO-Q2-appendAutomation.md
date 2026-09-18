@@ -24,7 +24,11 @@ In e-commerce supply chain logistics, shipments that fail forward delivery to cu
 3. **Direct CSV Attachment Pipeline**: Unlike the sister RVP automation (which requires in-memory ZIP archive decompression for `.zip` files), the RTO pipeline receives standalone, uncompressed CSV files whose filename contains `RTO_Q2_Data` (`RTO_CSV_FILENAME_PART = 'RTO_Q2_Data'`).
 4. **Hub Specialization & Dual-Column Filtration**: The raw nationwide CSV encompasses returns for every distribution center across India. The Mirzapur hub operations team requires an isolated, append-only historical log of packages routed to `MRZ`. The automation dynamically searches both the `DC_code` column and the `hubname` column for the `MRZ` token (`RTO_DC_CODE_FILTER = 'MRZ'`), trimming whitespace and normalizing case to guarantee zero missed packages.
 
-Prior to the deployment of this automation, hub supervisors were required to manually monitor email threads, download multi-megabyte CSV files, manually apply spreadsheet filters for `MRZ` across both distribution center and hub columns, and copy-paste rows into the master tracking sheet.
+### The Operational Problem
+Prior to the deployment of this automation, hub supervisors were required to manually monitor email threads, download multi-megabyte nationwide CSV files, manually apply spreadsheet filters for `MRZ` across both `DC_code` and `hubname` columns, and copy-paste rows into the master tracking sheet. This repetitive manual process introduced significant reporting delays, human oversight risks, untracked inventory leakage, and missed SLA breaches on return packages.
+
+### The Architectural Solution
+The automation deploys an event-driven serverless daemon on Google Apps Script running on a 5-minute recurring time-driven trigger (`checkAndProcessRto`). It queries Gmail for inbound D-1 return threads, directly extracts uncompressed CSV attachments (`RTO_Q2_Data`), parses tabular data via `Utilities.parseCsv()`, applies dual-column filtration for `MRZ`, idempotently batch-appends records to Google Sheet `1XZjOURueamCkNlEDXxbH2cZnuV-WPYFH0ZPiMYO2PKo`, marks threads with label `Processed-RTO-Q2`, and dispatches real-time Telegram Markdown telemetry.
 
 ```mermaid
 flowchart LR
@@ -69,8 +73,6 @@ flowchart LR
 5. **Real-Time Telegram Telemetry**: Formats structured operational Markdown alerts (reporting tracking row counts or zero-row warnings) and dispatches them via HTTP POST (`UrlFetchApp.fetch`) to Telegram chat `-1003779595579` (`Code.js:152-209`).
 6. **Thread State Idempotency**: Marks processed email threads with the user label `Processed-RTO-Q2` and flags them as read (`Code.js:132-135`). Threads encountering parsing exceptions are left unlabelled to permit automatic self-healing retry on subsequent polling ticks (`Code.js:137-141`).
 7. **Operational Reset & Backfill Utilities**: Provides pre-built administrative functions for manual execution (`manualRunRto`), historical reprocessing (`backfillRto`), and complete environment state resets (`resetRto`) (`Code.js:235-270`).
-
----
 
 ## 2. Tech Stack
 

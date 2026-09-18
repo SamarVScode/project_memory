@@ -10,7 +10,13 @@ last-updated: 2026-09-18
 ---
 
 ## 1. Overview
-The **EI Report Trigger & Pipeline Orchestrator** (deployed Web App title: **EI Report Server Dashboard**, script identifier: `1iW0yF_C0bgen2unvNG4Z5u0-g0U2Re6Y-N3U3c4yGVto5zUHE4lbo-L5`) is an enterprise [[Google Apps Script]] (GAS) cloud orchestration gateway and interactive operations dashboard. It connects Google Workspace logistics workflows with the external high-throughput streaming engine [[XLSX-STREAM-REPORT-GENERATOR]] deployed on [[Render]]. The project resolves Google Apps Script's strict 6-minute execution timeout and 50 MB heap ceiling when processing multi-megabyte logistics datasets across nationwide distribution centers. It achieves this by offloading heavy data transformation to an external asynchronous Python microservice while coordinating ingestion, scheduled Gmail harvesting, background trigger polling, Google Drive folder organization, and direct tab replication into a centralized Master Google Sheet.
+The **EI Report Trigger & Pipeline Orchestrator** (deployed Web App title: **EI Report Server Dashboard**, script identifier: `1iW0yF_C0bgen2unvNG4Z5u0-g0U2Re6Y-N3U3c4yGVto5zUHE4lbo-L5`) is an enterprise [[Google Apps Script]] (GAS) cloud orchestration gateway and interactive operations dashboard. It connects Google Workspace logistics workflows with the external high-throughput streaming engine [[XLSX-STREAM-REPORT-GENERATOR]] deployed on [[Render]].
+
+### The Operational Problem
+Processing multi-megabyte supply chain datasets across nationwide distribution centers within native Google Apps Script repeatedly fails due to platform execution limits: a hard 6-minute execution timeout and a 50 MB heap ceiling. Ingesting large Excel workbooks, parsing multiple sheets, and synchronizing tracking sheets across 10 distinct reporting pipelines causes catastrophic script crashes, disrupting daily operational tracking across national logistics hubs.
+
+### The Architectural Solution
+The project resolves these platform constraints by offloading heavy data transformation to an external asynchronous Python microservice ([[XLSX-STREAM-REPORT-GENERATOR]]) while coordinating ingestion, scheduled Gmail harvesting, background trigger polling, Google Drive folder organization, and direct tab replication into a centralized Master Google Sheet.
 
 The orchestrator supports 10 specialized supply chain reporting pipelines:
 - **EI Summary Report (`ei`)**: Early parcel ingestion tracking and nationwide intake analytics.
@@ -23,8 +29,6 @@ The orchestrator supports 10 specialized supply chain reporting pipelines:
 - **VMS Adherence Report (`vms_adherence`)**: Vendor Management System vendor compliance auditing.
 - **2nd Attempt Adherence Report (`2nd_attempt_adherence`)**: Secondary delivery re-attempt operational adherence.
 - **Untraceable Report (`untraceable`)**: Missing shipment reconciliation and audit tracking.
-
----
 
 ## 2. Tech Stack
 

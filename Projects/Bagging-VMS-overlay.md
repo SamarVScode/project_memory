@@ -70,7 +70,7 @@ In fast-paced fulfillment centers (FC) and sorting hubs, warehouse operators pac
 3. **Cross-Origin Resource Sharing (CORS) Restrictions**: Standalone web frontends hosted externally cannot directly dispatch standard HTTP `POST` requests (`fetch()` or `XMLHttpRequest`) with multipart video payloads to Google Apps Script endpoints (`/exec`) because Google's servers issue 302 redirects and disallow CORS preflight headers (`OPTIONS`).
 4. **Bandwidth & Gas Execution Limits**: Video recordings transmitted to Google Apps Script via `google.script.run` must be encoded as Base64 strings. Apps Script imposes a strict **50 MB payload ceiling** per invocation. Standard uncompressed or high-bitrate video (e.g., 2.5–10 Mbps) would rapidly breach this limit, exhaust workstation memory, and saturate warehouse Wi-Fi networks.
 
-### The Solution
+### The Architectural Solution
 `Bagging-VMS-overlay` resolves all of these constraints through a surgical, hardware-optimized architecture:
 * **Top-Level Hardware Acquisition**: By serving the outer page from GitHub Pages or `localhost`, the browser grants unrestricted access to external USB webcams mounted above the packing table.
 * **Controlled WebM VP9 Low-Bitrate Compression**: The recording engine encodes directly into `video/webm;codecs=vp9` (with VP8 fallback) throttled to **800 kbps** at **24 frames per second** with **720p ideal resolution** (`index.html:352-364`). A typical 15–30 second bagging sequence generates a tiny file of approximately **1.5 to 3.0 MB**, well within the 50 MB execution ceiling.

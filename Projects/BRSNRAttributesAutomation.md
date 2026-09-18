@@ -23,7 +23,7 @@ In modern e-commerce reverse logistics, shipments returned by customers or undel
 
 To mitigate this, enterprise logistics systems generate daily BRSNR data dumps covering regional return shipments. Upstream dispatch systems distribute these dumps via automated emails with subjects following the pattern `Myntra BRSNR <Date>`.
 
-### The Technical Challenge
+### The Operational Problem
 The daily BRSNR workbooks distributed across the supply chain contain high-volume nationwide shipment records formatted in modern OpenXML spreadsheets (`.xlsx`), binary Excel workbooks (`.xlsb`), legacy Excel files (`.xls`), or flat files (`.csv`). A single workbook routinely spans tens of thousands of rows with numerous attribute columns (`ShipmentId`, `AgeCategory`, `DC Code`, `Final Hub`, `TotalPrice`).
 
 Direct execution within Google Apps Script faces severe platform constraints:

@@ -12,9 +12,13 @@ last-updated: 2026-09-18
 # SCM TAT 24 Hrs Performance Automation
 
 ## 1. Overview
-**SCM TAT 24 Hrs Performance Automation** is an automated, cloud-integrated logistics performance pipeline running on [[Google Apps Script]] (GAS) under the modern [[V8]] runtime. Developed for supply-chain logistics operations, the application automatically ingests, extracts, transforms, and analyzes daily rolling 24-hour turnaround time (TAT) performance workbooks dispatched via [[Gmail]]. To circumvent Google Apps Script's strict platform boundaries—notably the 6-minute execution ceiling and 50 MB memory quota—the script establishes an asynchronous bridge to an external cloud microservice (`https://xlsx-filter-service.onrender.com`) hosted on [[Render]], offloading the decompression and filtering of heavy Microsoft Excel (`.xlsx`) files. Once converted into streaming tabular CSV records, the system aggregates operational counts and closure rates across regional Distribution Centers (DCs / Hubs), renders a formatted executive dashboard with conditional formatting in [[Google Sheets]], updates execution diagnostics in a dedicated `SCM Logs` tab, and tags source email threads with `SCM_PROCESSED` to ensure idempotency.
+**SCM TAT 24 Hrs Performance Automation** is an automated, cloud-integrated logistics performance pipeline running on [[Google Apps Script]] (GAS) under the modern [[V8]] runtime. Developed for supply-chain logistics operations, the application automatically ingests, extracts, transforms, and analyzes daily rolling 24-hour turnaround time (TAT) performance workbooks dispatched via [[Gmail]].
 
----
+### The Operational Problem
+Monitoring 24-hour turnaround time (TAT) compliance across multiple regional Distribution Centers (DCs and Hubs) requires processing heavy daily Excel (`.xlsx`) workbooks containing complete transaction histories. Decompressing and calculating metrics from these large files directly in Google Apps Script is constrained by hard platform limits: a 6-minute execution timeout and a 50 MB memory ceiling. Attempting synchronous in-memory parsing results in script aborts and delayed performance scorecards.
+
+### The Architectural Solution
+To circumvent platform limits, the script establishes an asynchronous bridge to an external cloud microservice (`https://xlsx-filter-service.onrender.com`) hosted on [[Render]], offloading binary spreadsheet decompression and filtering. Once converted into streaming tabular CSV records, the system aggregates operational counts and closure rates across regional Distribution Centers, renders a formatted executive dashboard with conditional formatting in [[Google Sheets]], updates execution diagnostics in a dedicated `SCM Logs` tab, and tags source email threads with `SCM_PROCESSED` to ensure strict idempotency.
 
 ## 2. Tech Stack
 

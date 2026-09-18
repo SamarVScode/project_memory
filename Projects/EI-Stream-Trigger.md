@@ -14,7 +14,15 @@ last-updated: 2026-09-17
 ## 1. Overview
 The **EI Stream Trigger** (codebase title: **EI Stream Trigger — Google Apps Script (Server Edition)**, also referenced across the engineering vault as the **Lake Ingestion Pipeline** or `ei_stream_trigger`) is an enterprise-grade cloud dispatcher, automated scheduling engine, and operational dashboard built on [[Google Apps Script]] (GAS). It serves as the primary client-side orchestrator for the [[EI Stream Report Server]] (`https://xlsx-stream-report-generator.onrender.com`), a high-throughput, Zero-DOM Python microservice running on [[Render]].
 
-The system is purpose-built to solve a fundamental barrier in enterprise spreadsheet processing: Google Apps Script enforces a strict **6-minute (360-second) execution ceiling** and a **50 MB heap limitation**. Processing multi-gigabyte logistics data across 71 distribution centers (DCs) nationwide in native GAS crashes scripts through `Exceeded maximum execution time` or Out-of-Memory (`OOM`) exceptions. EI Stream Trigger circumvents these constraints by decoupling file ingestion and report synthesis into an asynchronous, distributed streaming pipeline.
+### The Operational Problem
+Processing multi-gigabyte supply chain spreadsheets across 71 distribution centers (DCs) nationwide directly within Google Apps Script is impossible due to hard platform constraints: a strict **6-minute (360-second) execution ceiling** and a **50 MB heap limitation**. Ingesting and transforming enterprise workbooks in native GAS triggers immediate `Exceeded maximum execution time` crashes or Out-of-Memory (`OOM`) termination, preventing operational leads from receiving timely morning logistics reports.
+
+### The Architectural Solution
+EI Stream Trigger circumvents these platform constraints by decoupling file ingestion, data transformation, and report synthesis into an asynchronous, distributed streaming architecture:
+- Dispatches heavy spreadsheet workloads to the external Python/Rust streaming microservice [[EI Stream Report Server]] hosted on Render via Drive URLs or direct uploads.
+- Uses an asynchronous 1-minute polling engine (`createPollTrigger_` / `deletePollTrigger_`) storing transient job state in `PropertiesService.getScriptProperties()` to keep GAS compute time under 5 seconds per query.
+- Replicates finalized multi-tab workbooks into a centralized Master Google Sheet (`17DW3Q5WXSLcJEqi9hK9PRzgpty4126F4ZLaE4uL5neE`) using `Sheet.copyTo()`, preserving all column widths, formulas, and formats.
+- Delivers a high-density "Paper Ink Workstation" UI (`Index.html`, 4,011 lines) for manual uploads, Drive Cabinet browsing, and pipeline monitoring.
 
 ```mermaid
 flowchart LR
@@ -61,8 +69,6 @@ flowchart LR
 4. **Resilient Failover & Wakeup Logic**: Incorporates progressive backoff and retry handling to withstand Render Free Tier cold starts (handling HTTP 502, 503, 504) and transient HTTP 404 responses during server process reboots.
 5. **Exact Master Sheet Synchronization**: Replicates finalized multi-tab workbooks into a centralized Master Google Sheet (`17DW3Q5WXSLcJEqi9hK9PRzgpty4126F4ZLaE4uL5neE`) using `Sheet.copyTo()`, preserving all column widths, color schemes, font weights, formulas, number formats, and merged cells.
 6. **Tactile "Paper Ink Workstation" Dashboard**: High-density neo-brutalist web application (`Index.html`, 4,011 lines) offering theme switching (`warm-paper`, `mono-eink`, `blueprint`, `sepia`), interactive Google Drive Cabinet browser, real-time receipt log terminal, and tab-append controls.
-
----
 
 ## 2. Tech Stack
 

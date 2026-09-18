@@ -12,9 +12,13 @@ last-updated: 2026-09-17
 # EI Stream Report Server
 
 ## 1. Overview
-The **EI Stream Report Server** (`ei_stream_server`) is a high-throughput, Zero-DOM asynchronous streaming microservice built in Python using [[FastAPI]] and [[Uvicorn]]. It is purpose-built to ingest, transform, and aggregate massive production supply chain spreadsheets (`.xlsx`, `.xlsb`, `.csv`, `.ods` up to 350 MB+ and 500,000+ rows) sourced from [[Google Drive]] or direct client uploads into corporate-styled, multi-tab operational Excel workbooks. Running on resource-constrained environments—specifically [[Render]]'s 512 MB RAM Free Tier—it eliminates Out-of-Memory (OOM / `SIGKILL`) crashes caused by standard DOM-based libraries (`pandas`, `openpyxl`, `xlsxwriter`) by maintaining a constant $O(1)$ memory footprint of ~15 MB to 35 MB RAM. The service is primarily consumed by upstream [[Google Apps Script]] (GAS) triggers and regional logistics operations managers across 71 distribution centers (DCs) to generate mission-critical performance scorecards, turnaround time (TAT) metrics, delivery adherence, and aging pendency reports.
+The **EI Stream Report Server** (`ei_stream_server`) is a high-throughput, Zero-DOM asynchronous streaming microservice built in Python using [[FastAPI]] and [[Uvicorn]]. It is purpose-built to ingest, transform, and aggregate massive production supply chain spreadsheets (`.xlsx`, `.xlsb`, `.csv`, `.ods` up to 350 MB+ and 500,000+ rows) sourced from [[Google Drive]] or direct client uploads into corporate-styled, multi-tab operational Excel workbooks.
 
----
+### The Operational Problem
+Regional logistics operations managers across 71 distribution centers (DCs) rely on daily performance scorecards, turnaround time (TAT) metrics, delivery adherence, and aging pendency reports compiled from multi-hundred-megabyte nationwide spreadsheets. Standard spreadsheet processing libraries (`pandas`, `openpyxl`, `xlsxwriter`) load entire workbook DOM structures into memory, causing catastrophic Out-of-Memory (OOM / `SIGKILL`) crashes in resource-constrained environments such as Render's 512 MB RAM Free Tier. Furthermore, upstream Google Apps Script orchestrators cannot process these files due to a strict 50 MB heap ceiling and 6-minute execution limits.
+
+### The Architectural Solution
+The microservice implements a Zero-DOM streaming architecture leveraging SAX parsing and low-overhead generators to maintain a constant $O(1)$ memory footprint of ~15 MB to 35 MB RAM even when processing 350 MB+ workbooks. It provides asynchronous job processing with unique job tokens, Google Drive virus-scan token bypassing, multi-format parsing (`.xlsx`, `.xlsb`, `.csv`, `.ods`), and dynamic multi-tab report synthesis, allowing upstream GAS triggers and web workstations to poll job status and retrieve styled operational workbooks reliably.
 
 ## 2. Tech Stack
 

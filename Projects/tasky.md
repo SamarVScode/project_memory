@@ -15,20 +15,20 @@ last-updated: 2026-09-18
 ---
 
 ## 1. Overview
-`Tasky Logistics Tasks Poller` (clasp project slug: `tasky`, Google Clasp Script ID: `1RYMhyRZ2V8fRmn4IvYKBU2sxCuiLon93-jUYwyVVvK2I1GuZWMT96qbK`) is a dedicated supply chain operations monitoring daemon built on [[Google Apps Script]] (V8 runtime). It automates the intake, filtering, change detection, and team notification of daily customer assertion tasks for the Mirzapur logistics hub (`MRZ`). 
+`Tasky Logistics Tasks Poller` (clasp project slug: `tasky`, Google Clasp Script ID: `1RYMhyRZ2V8fRmn4IvYKBU2sxCuiLon93-jUYwyVVvK2I1GuZWMT96qbK`) is a dedicated supply chain operations monitoring daemon built on [[Google Apps Script]] (V8 runtime). It automates the intake, filtering, change detection, and team notification of daily customer assertion tasks for the Mirzapur logistics hub (`MRZ`).
 
-Prior to Tasky, hub supervisors and logistics field teams had to manually monitor, refresh, and scan a central operational [[Google Sheets]] spreadsheet (`Tasks` tab) throughout the morning to discover newly assigned tasks and CX assertions. Tasky eliminates manual polling by operating as an automated headless daemon scheduled to execute every 15 minutes during the critical morning operational window (07:00 AM to 12:00 PM IST). 
+### The Operational Problem
+Prior to Tasky, hub supervisors and logistics field teams had to manually monitor, refresh, and scan a central operational [[Google Sheets]] spreadsheet (`Tasks` tab) throughout the morning to discover newly assigned tasks and customer experience (CX) assertions. This manual polling was tedious, caused response delays on urgent customer escalations, and was prone to alert spam or missed tasks when multiple users updated rows simultaneously.
 
-The poller incorporates a multi-layer gating engine to prevent alert spam:
+### The Architectural Solution
+Tasky eliminates manual polling by operating as an automated headless daemon scheduled to execute every 15 minutes during the critical morning operational window (07:00 AM to 12:00 PM IST), incorporating a multi-layer gating engine to ensure accurate dispatch:
 1. **Operating Window Gating:** Evaluates current local time in `Asia/Kolkata` and only executes between 07:00 and 12:00.
 2. **Calendar Date Gating:** Inspects `PropertiesService.getScriptProperties().getProperty("LAST_PROCESSED_DATE")` to ensure alerts are dispatched at most once per calendar date.
 3. **Empty Data Gating:** Verifies that rows in the remote spreadsheet contain actual data in the first three columns.
-4. **3-Column SHA-256 Fingerprint Gating:** Hashes the first three columns (`c0|c1|c2`) of all sheet rows using SHA-256 and Base64 encoding. It compares this digest against `LAST_SENT_FINGERPRINT` in `ScriptProperties` to ensure that notifications are dispatched only after fresh daily data has been pasted, while remaining immune to downstream manual modifications in columns 4+.
+4. **3-Column SHA-256 Fingerprint Gating:** Hashes the first three columns (`c0|c1|c2`) of all sheet rows using SHA-256 and Base64 encoding. It compares this digest against `LAST_SENT_FINGERPRINT` in `ScriptProperties` to ensure notifications are dispatched only after fresh daily data has been pasted, while remaining immune to downstream manual modifications in columns 4+.
 5. **Dynamic Header Resolution & MRZ Filtering:** Resolves variable header names for the Distribution Center column (`DC`, `Source_DC`, `Source DC`), tracking number (`Final_Tracking_Number`), and customer assertion (`l5_name`), filtering exclusively for records assigned to `"MRZ"`.
 6. **Chunked Telegram Broadcast:** Formats individual task cards with Markdown syntax and batches them into payloads under 3,500 characters, posting directly to Topic ID `9` of the logistics operations [[Telegram]] supergroup (`-1003779595579`).
 7. **Manual Test Safety Hook:** Provides an `isManual` bypass parameter and `manualRun()` entry point that allows operators and developers to execute immediate end-to-end runs without altering production date or fingerprint state in `ScriptProperties`.
-
----
 
 ## 2. Tech Stack
 

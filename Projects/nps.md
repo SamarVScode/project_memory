@@ -12,9 +12,13 @@ last-updated: 2026-09-18
 # NPS Performance Calculation Engine
 
 ## 1. Overview
-**NPS Performance Calculation Engine** is an automated, cloud-integrated customer satisfaction and operational analytics pipeline operating on [[Google Apps Script]] (GAS) under the modern [[V8]] runtime. Built for logistics and supply chain delivery operations, the application automatically ingests daily Net Promoter Score (NPS) customer feedback survey workbooks delivered as Microsoft Excel attachments (`.xlsx`, `.xlsb`, `.xls`) via [[Gmail]]. To overcome Google Apps Script's native runtime constraints—specifically the 6-minute execution ceiling and memory boundaries when decompressing heavy multi-sheet workbooks—the script connects to an external FastAPI microservice hosted on [[Render]] (`https://xlsx-filter-service.onrender.com`), offloading binary parsing and converting workbook rows into streamable CSV tabular records. The engine normalizes survey ratings and textual sentiments into standardized Promoter (`P`), Neutral (`N`), and Detractor (`D`) categories, calculates mathematical NPS metrics (`((Promoters - Detractors) / Total) * 100`), renders an executive dual-table side-by-side dashboard in a shared corporate [[Google Sheets]] workbook, and appends filtered raw responses for regional distribution centers (`MRZ`) and hubs (`MirzapurMYNTRAHub_MRZ`) into a historical repository.
+**NPS Performance Calculation Engine** is an automated, cloud-integrated customer satisfaction and operational analytics pipeline operating on [[Google Apps Script]] (GAS) under the modern [[V8]] runtime. Built for logistics and supply chain delivery operations, the application automatically ingests daily Net Promoter Score (NPS) customer feedback survey workbooks delivered as Microsoft Excel attachments (`.xlsx`, `.xlsb`, `.xls`) via [[Gmail]].
 
----
+### The Operational Problem
+Customer feedback surveys generate large daily workbooks containing nationwide delivery ratings and free-form sentiment text. Ingesting and analyzing these heavy, multi-sheet workbooks directly within Google Apps Script causes script failures due to the platform's 6-minute execution ceiling and 50 MB memory limit. Additionally, manual extraction of feedback for regional distribution centers (`MRZ`) and hubs (`MirzapurMYNTRAHub_MRZ`) delays customer dissatisfaction resolution and NPS trend reporting.
+
+### The Architectural Solution
+To overcome runtime constraints, the script connects to an external FastAPI microservice hosted on [[Render]] (`https://xlsx-filter-service.onrender.com`), offloading binary spreadsheet decompression and converting workbook rows into streamable CSV records. The engine normalizes survey ratings and textual sentiments into standardized Promoter (`P`), Neutral (`N`), and Detractor (`D`) categories, calculates mathematical NPS metrics (`((Promoters - Detractors) / Total) * 100`), renders an executive dual-table side-by-side dashboard in a shared corporate [[Google Sheets]] workbook, and appends filtered raw responses into a historical repository.
 
 ## 2. Tech Stack
 

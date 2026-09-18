@@ -40,7 +40,7 @@ However, deploying this application directly through Google Apps Script's native
 * **Chromium Permissions Policy Iframe Blocking**: Google Apps Script serves web interfaces within a nested sandboxed `<iframe>` on a `googleusercontent.com` sub-domain. Modern Chromium-based browsers (Google Chrome, Microsoft Edge, Opera) enforce strict Permissions Policies that prohibit camera hardware streaming (`getUserMedia()`) inside sandboxed or cross-origin nested frames unless every parent frame explicitly delegates camera features.
 * **Lack of Direct Hardware Control**: Within the Google Apps Script execution context, operators cannot reliably select the device's rear-facing camera (`facingMode: 'environment'`), manage camera streams, or downscale high-resolution frames before uploading them over constrained logistics warehouse Wi-Fi/cellular networks.
 
-### The Solution: Top-Window Camera Bridge Architecture
+### The Architectural Solution
 `cameraOverlayBridge` solves this fundamental browser restriction by operating as an **Inverse Proxy / Host Shell**:
 1. **Top-Level Browsing Context Execution**: The operator launches `cameraOverlayBridge` as the root document (`window.top`) on a trusted origin (`localhost:8080`, GitHub Pages, or an internal domain). Because it executes at the top-level origin, it possesses unrestricted access to browser hardware APIs.
 2. **Full-Viewport Embedded Workstation**: The host embeds the complete `VerifyScan Pro` Google Apps Script application inside a borderless, 100vh iframe (`#app-frame`, `index.html:134`) configured with explicit hardware delegation (`allow="camera; microphone" allowfullscreen`).

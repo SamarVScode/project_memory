@@ -39,7 +39,7 @@ Operational tracking was fragmented across separate remote Google Spreadsheets c
 * **Dual-Compliance Blindspots**: Tracking RCA completion alone was insufficient. High-loss incidents require filing financial **Debit Forms**. Operational leaders lacked visibility into whether an incident had its RCA filled AND whether the corresponding Debit Form had been submitted.
 * **Google Apps Script Scalability Walls**: Synchronously pulling and aggregating tens of thousands of rows across multi-tab sheets repeatedly exceeded the Google Apps Script **6-minute (360-second) execution limit**, crashed browser tabs from DOM overload, and exhausted the **CacheService 100 KB per-key limit**.
 
-### The Solution
+### The Architectural Solution
 `spf final` resolves these bottlenecks through a high-performance, multi-tiered architecture:
 1. **Google Sheets Advanced API v4 Direct RPC Engine**: Bypasses slow `SpreadsheetApp` DOM abstractions by querying the Google Sheets Advanced Service (v4 RPC protocol) via `Sheets.Spreadsheets.Values.get()`, falling back gracefully to `SpreadsheetApp` only when necessary (`TrackerService.gs:182-222`).
 2. **Two-Phase Asynchronous Client Hydration**:

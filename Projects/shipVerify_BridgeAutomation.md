@@ -36,7 +36,7 @@ In high-velocity last-mile e-commerce and reverse-logistics distribution centers
 * **Cross-Origin Resource Sharing (CORS) Barriers**: Standalone hardware workstation overlays—such as [[Bagging-VMS-overlay]] and [[cameraOverlayBridge]]—run on local station hosts (`http://localhost:8080`) or GitHub Pages. These external frontends cannot directly invoke Google Apps Script endpoints via standard `fetch()` or `XMLHttpRequest` due to Google's redirect mechanism and strict CORS headers, which block client-side preflight `OPTIONS` requests.
 * **Multi-Hub Operational Isolation**: Different distribution centers (e.g., Delhi North Hub, Bangalore Hub, Mirzapur Hub) require their verification records and photo archives to route to distinct regional Google Sheets and Google Drive folders without deploying isolated codebases or duplicating script projects.
 
-### The Solution
+### The Architectural Solution
 `shipVerify_BridgeAutomation` solves these challenges by combining a 100% native [[Google Workspace]] serverless backend with a dual-execution architectural paradigm:
 1. **Serverless Infrastructure Replacement**: Replaces Firebase Auth with native Google Workspace identity (`Session.getActiveUser().getEmail()`), replaces Firestore with structured 20-column relational [[Google Sheets]] (`SpreadsheetApp`), and replaces Cloudinary/S3 with automated [[Google Drive]] folder hierarchies (`DriveApp`).
 2. **Dual-Mode Architectural Deployment**:

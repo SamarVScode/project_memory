@@ -15,9 +15,13 @@ last-updated: 2026-09-17
 ---
 
 ## 1. Overview
-`AgentFlow-Android` is a high-reliability native Android application (`com.agentflow.tracker`, v1.0.6, versionCode 7) built for warehouse delivery agents and logistics field personnel. It automates daily work proof verification, cycle earnings calculation, and leave management directly on mobile devices. The app eliminates manual delivery tallying and fraudulent or misdated claims through an on-device computer vision pipeline using Google ML Kit OCR, binary EXIF/MediaStore capture date verification, and client-side SHA-256 deduplication. Built on an offline-first architecture with local SQLite storage (`LocalSubmissionsDbHelper`) and AndroidX WorkManager background synchronization, field agents can record runsheets in zero-connectivity environments with immediate UI confirmation, while enjoying seamless in-place updates via an integrated GitHub Releases auto-updater backed by a permanent cryptographic release keystore.
+`AgentFlow-Android` is a high-reliability native Android application (`com.agentflow.tracker`, v1.0.6, versionCode 7) built for warehouse delivery agents and logistics field personnel to automate daily work proof verification, cycle earnings calculation, and leave management directly on mobile devices.
 
----
+### The Operational Problem
+Warehouse delivery and courier operations face pervasive reconciliation friction from manual delivery tallying, missing physical runsheets, delayed payout settlements, and fraudulent or misdated submission claims. In fast-paced last-mile hubs and remote delivery routes, field agents frequently operate in zero-connectivity environments where standard web portals fail, leading to unrecorded runsheets, dispute backlogs, and lack of attendance visibility.
+
+### The Architectural Solution
+`AgentFlow-Android` eliminates manual reconciliation and fraud through a client-side on-device computer vision pipeline using Google ML Kit OCR, binary EXIF/MediaStore capture date verification, and client-side SHA-256 deduplication. Built on an offline-first architecture with local SQLite storage (`LocalSubmissionsDbHelper`) and AndroidX WorkManager background synchronization, field agents can record runsheets offline with immediate UI confirmation, while enjoying seamless in-place updates via an integrated GitHub Releases auto-updater backed by a permanent cryptographic release keystore.
 
 ## 2. Tech Stack
 

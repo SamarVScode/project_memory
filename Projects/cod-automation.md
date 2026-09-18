@@ -15,11 +15,13 @@ last-updated: 2026-09-18
 ---
 
 ## 1. Overview
-`COD Automation` (internal web app title: `Excel Runsheet Bridge`, dashboard header: `Hub Cash Recon Dashboard`, Clasp Script ID: `1gcCe2od7PapnNtHzmwc12RMwzGd23nSp-Q-mlSuMeW7sYrV429reEwNQ`, Editor URL: [script.google.com project](https://script.google.com/home/projects/1gcCe2od7PapnNtHzmwc12RMwzGd23nSp-Q-mlSuMeW7sYrV429reEwNQ/edit)) is an enterprise-grade financial auditing, cash-on-delivery (COD) runsheet reconciliation, and automated document compilation system built on the [[Google Apps Script]] (V8 engine) serverless platform. The tool serves operations supervisors and cash desk personnel at logistics fulfillment hubs and courier distribution facilities *(inferred)*. It addresses the operational friction and manual calculation errors inherent in reconciling physical cash collected by delivery executives against logistics manifest TSV exports from ERP systems. 
+`COD Automation` (internal web app title: `Excel Runsheet Bridge`, dashboard header: `Hub Cash Recon Dashboard`, Clasp Script ID: `1gcCe2od7PapnNtHzmwc12RMwzGd23nSp-Q-mlSuMeW7sYrV429reEwNQ`, Editor URL: [script.google.com project](https://script.google.com/home/projects/1gcCe2od7PapnNtHzmwc12RMwzGd23nSp-Q-mlSuMeW7sYrV429reEwNQ/edit)) is an enterprise-grade financial auditing, cash-on-delivery (COD) runsheet reconciliation, and automated document compilation system built on the [[Google Apps Script]] (V8 engine) serverless platform.
 
+### The Operational Problem
+Operations supervisors and cash desk personnel at logistics fulfillment hubs face significant operational friction and calculation error risks when reconciling physical cash collected by delivery executives against logistics manifest TSV exports from ERP systems. Cashiers must manually segregate physical cash from digital gateway transactions (UPI, card, QR), compute complex denomination totals, reconcile differences against bank deposit slips, and manually archive paper proof slips, leading to reconciliation delays and cash discrepancy disputes.
+
+### The Architectural Solution
 Deployed as a client-side Single-Page Application (`index.html`) backed by an atomic server execution pipeline (`Code.js`), the application ingests raw tab-delimited Excel clipboard data, parses and validates multi-column courier delivery runsheets, isolates cash collections from digital gateway transactions, computes aggregated financial metrics, and generates a formatted, three-tab [[Google Sheets]] workbook (`Summary`, `Ledger`, and an archived `Cash` tab cloned directly from master spreadsheet `1JL7dO-CWo6B3HaG0UbcIpgmVmBqlRTGgjmvsUsL0Ifw`). Simultaneously, it renders a pixel-perfect, two-page vector audit PDF slip, generates an immediate client-side base64 download stream, organizes generated documents in date-indexed [[Google Drive]] archive folders (`1d69rY5MCHYj7zWKP8mi0VSACXYoXMLkN`), and registers an asynchronous polling trigger to locate and copy corresponding Airtel Payments Bank deposit receipts archived in Drive folder `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` (managed by companion project [[cash-inject]]).
-
----
 
 ## 2. Tech Stack
 

@@ -14,13 +14,13 @@ last-updated: 2026-09-17
 ## 1. Overview
 **HourlyConversionReport** is an automated, event-driven serverless logistics tracking pipeline running on [[Google Apps Script]] (GAS) under the modern [[V8]] runtime. Operating within the supply-chain network of Myntra / Dexter in Northern India, its core operational mandate is to perform intraday, hourly extraction, conversion, performance computation, and multi-channel alerting for same-day delivery operations centered on the **Mirzapur Distribution Center (`MRZ`)**.
 
+### The Operational Problem
 Every operating day between **10:00 AM and 8:00 PM IST**, upstream enterprise dispatch systems emit automated hourly snapshot emails containing nationwide same-day workbooks (`E2E_sameday_Summary_DD-MMM-YYYY HH.xlsx`). These comprehensive dumps contain hundreds of thousands of shipment rows spanning all Northern hubs and Distribution Centers. Native Google Apps Script execution environments cannot ingest or parse these massive OpenXML (`.xlsx`) files directly: GAS enforces a hard **6-minute (360 seconds)** execution timeout, a **50 MB in-memory heap limitation**, strict payload size quotas on `UrlFetchApp`, and lacks a native, low-memory XML SAX parser.
 
+### The Architectural Solution
 HourlyConversionReport solves this architectural barrier by implementing a **Two-Phase Asynchronous Polling & Chained-Trigger Architecture**:
 1. **Phase 1 (`runSamedayPolling`)**: Triggered every 5 minutes by a time-based cron trigger during the operational window (10:00 AM to 8:40 PM IST). It queries [[Gmail]] for the expected hourly email (`subject:"E2E_sameday_Summary_{{DATE}} {{HOUR}}.xlsx"`), verifies the payload format using binary magic-byte inspection (`PK\x03\x04`) or MIME metadata filtering, makes the file accessible via [[Google Drive]], and delegates heavy spreadsheet decompression and target-filtering to an external streaming microservice: [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]] hosted on [[Render]]. Phase 1 records the job identifier in `ScriptProperties` and registers a self-scheduling, one-shot time-based trigger for Phase 2.
 2. **Phase 2 (`continueSameday`)**: Fired 10 minutes later (with up to 3 subsequent 5-minute retries) by the installable continuation trigger. It queries the bridge's `/job/{job_id}` endpoint, downloads a pre-filtered, lightweight CSV containing only `MRZ` operational records, cleans hidden carriage returns (`\r`) and Byte-Order Marks (`\uFEFF`), decomposes the data into sheet groups (`E2E_DC` and `Agent_view`), updates a live [[Google Sheets]] operational dashboard (`1vuzG3MNccbOBNKBBTQ0kf9yKT8UQLVV7J9AUj1vR5Rw`) via atomic batch writes, and broadcasts rich HTML KPI cards to dedicated forum topics in a central [[Telegram]] operations supergroup.
-
----
 
 ## 2. Tech Stack
 

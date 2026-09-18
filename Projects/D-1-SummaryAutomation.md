@@ -17,10 +17,15 @@ The **D-1 SummaryAutomation** (production title: **MRZ D-1 Daily Report — V4 (
 
 ### Operational Context & Supply Chain Domain
 
-In large-scale retail and e-commerce supply chain logistics (Dexter / Myntra logistics network), operational management relies on standardized, pan-India reconciliation reports compiled at 23:00 hours each night covering the preceding operational day ($D-1$). These workbooks encompass millions of package transactions across every distribution center and regional delivery zone throughout India:
+In large-scale retail and e-commerce supply chain logistics (Dexter / Myntra logistics network), operational management relies on standardized, pan-India reconciliation reports compiled at 23:00 hours each night covering the preceding operational day ($D-1$). These workbooks encompass millions of package transactions across every distribution center and regional delivery zone throughout India.
 
-1. **Workbook Scale & The OpenXML Memory Problem**: The upstream automated reporting system broadcasts daily emails with the subject line pattern `E2E Day-1 Summary <DD-MMM-YYYY> 23hrs`. These messages either attach or link to massive Microsoft Excel (`.xlsx`) workbooks ranging from 100 MB to 250 MB+ containing 500,000 to 1,000,000+ rows partitioned across multiple regional worksheets (`E2E_Dexter`, `E2E_DC`, `North`, `East`, `West`, `South`, and `Agent_view`). Native [[Google Apps Script]] execution environments operate under strict sandboxed quotas: a hard 50 MB in-memory payload ceiling and a hard 6-minute (360 seconds) execution timeout (`UrlFetchApp` and script execution). Attempting to parse OpenXML DOM structures of this scale within GAS causes instantaneous Out-Of-Memory (OOM) fatal crashes or trigger timeout termination.
-2. **The Two-Phase Asynchronous Trigger Pattern**: To circumvent both the 50 MB memory boundary and the 6-minute execution limit, `D-1 SummaryAutomation` implements a decoupled, two-phase asynchronous orchestration model. Phase 1 (`runMRZIngestor`) discovers the daily email, validates file integrity, configures temporary Google Drive access permissions, dispatches an asynchronous conversion payload to an external SAX-streaming bridge microservice (`xlsx_to_csv_bridge`), stores state tokens in `PropertiesService`, and programmatically arms a 10-minute continuation clock trigger (`ScriptApp`). Phase 2 (`continueProcessing`) awakens upon trigger firing, polls the bridge service, downloads the consolidated, filtered tabular CSV payload, merges regional zones into Google Sheets, and broadcasts structured HTML performance cards to specialized Telegram forum topic threads.
+### The Operational Problem
+The upstream automated reporting system broadcasts daily emails with the subject line pattern `E2E Day-1 Summary <DD-MMM-YYYY> 23hrs`. These messages either attach or link to massive Microsoft Excel (`.xlsx`) workbooks ranging from 100 MB to 250 MB+ containing 500,000 to 1,000,000+ rows partitioned across multiple regional worksheets (`E2E_Dexter`, `E2E_DC`, `North`, `East`, `West`, `South`, and `Agent_view`). Native [[Google Apps Script]] execution environments operate under strict sandboxed quotas: a hard 50 MB in-memory payload ceiling and a hard 6-minute (360 seconds) execution timeout (`UrlFetchApp` and script execution). Attempting to parse OpenXML DOM structures of this scale within GAS causes instantaneous Out-Of-Memory (OOM) fatal crashes or trigger timeout termination.
+
+### The Architectural Solution
+To circumvent both the 50 MB memory boundary and the 6-minute execution limit, `D-1 SummaryAutomation` implements a decoupled, **Two-Phase Asynchronous Trigger Pattern** and multi-tab ingestion pipeline:
+1. **Phase 1 Ingestion & Delegation**: Phase 1 (`runMRZIngestor`) discovers the daily email, validates file integrity, configures temporary Google Drive access permissions, dispatches an asynchronous conversion payload to an external SAX-streaming bridge microservice (`xlsx_to_csv_bridge`), stores state tokens in `PropertiesService`, and programmatically arms a 10-minute continuation clock trigger (`ScriptApp`).
+2. **Phase 2 Polling & Consolidation**: Phase 2 (`continueProcessing`) awakens upon trigger firing, polls the bridge service, downloads the consolidated, filtered tabular CSV payload, merges regional zones into Google Sheets, and broadcasts structured HTML performance cards to specialized Telegram forum topic threads.
 3. **Multi-Tab Data Domain & Regional Consolidation**:
    - **`E2E_Dexter`**: Summary worksheet containing high-level hub totals. Extracted for target Out-For-Delivery (`OFD`) and Out-For-Pickup (`OFP`) quotas to establish an early-exit boundary for raw sheet scanning.
    - **`E2E_DC`**: High-level distribution center metrics filtered specifically for `MRZ`, tracking macro delivery numbers and reconciliation statuses.
@@ -76,8 +81,6 @@ flowchart TD
     ZoneMerge --> TgTopic3
     ZoneMerge --> TgTopic4
 ```
-
----
 
 ## 2. Tech Stack
 

@@ -14,11 +14,11 @@ last-updated: 2026-09-17
 ## 1. Overview
 **DataConversion** (internally identified as `server_v2` / `xlsx-filter-service`) is an asynchronous, job-based spreadsheet filtering HTTP microservice written in [[Python]] using [[FastAPI]] and [[Uvicorn]]. Its core operational objective is to ingest large, complex supply-chain workbooks across multiple spreadsheet formats (`.xlsx`, `.xls`, `.xlsb`, and `.csv`), automatically discover operational raw data worksheets, dynamically detect header schemas based on Distribution Center (DC) or Logistics Hub column hierarchies, and stream isolated, filtered records formatted as clean `.csv` files.
 
+### The Operational Problem
 The microservice operates within the logistics infrastructure supporting the Myntra and Dexter supply-chain network across Uttar Pradesh and Northern India. Upstream automation pipelines—specifically [[Google Apps Script]] (GAS) instances such as [[Projects/GAS-HourlyConversionReport|GAS: HourlyConversionReport]] and [[Projects/GAS-dc-rca-progression|GAS: dc rca progression]]—routinely receive operational shipment dumps containing hundreds of thousands of nationwide rows. GAS suffers from strict architectural boundaries: a 50 MB execution memory ceiling, payload size quotas, and a hard 6-minute (360 seconds) execution timeout (`UrlFetchApp`). These scripts cannot parse multi-megabyte compressed OpenXML (`.xlsx`), binary Excel (`.xlsb`), or legacy BIFF8 (`.xls`) workbooks directly in memory.
 
+### The Architectural Solution
 DataConversion solves this by acting as an offloaded conversion engine. Clients submit workbooks via multipart form upload to an asynchronous job queue (`POST /process`). The server validates the format, streams the payload to local ephemeral storage, schedules background processing in an asynchronous thread executor (`loop.run_in_executor`), and returns an immediate `202 Accepted` response. Clients poll a lightweight status endpoint (`GET /status/{job_id}`) and retrieve the filtered CSV upon completion (`GET /download/{job_id}`). To accommodate constrained container environments such as [[Render]]'s 512 MB RAM tier, the engine leverages `openpyxl` in read-only streaming mode, `pyxlsb` binary record unpacking, and row-by-row iteration to filter records against a strict whitelist of 11 regional Distribution Centers and 11 Logistics Hubs with flexible normalization.
-
----
 
 ## 2. Tech Stack
 

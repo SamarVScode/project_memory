@@ -22,12 +22,12 @@ LOCAL CLONE PATH:  C:\Users\User\Desktop\tracker db - Copy
 TARGET NOTE:       C:\Users\User\Desktop\gptd\prompt_project memory\dc-rca-progression.md
 ```
 
-### The Problem
+### The Operational Problem
 In regional e-commerce logistics, shipments encounter operational anomalies across multiple independent supply chain vectors: Cash on Delivery (COD) remittance delays, End of Business (EOB) +5 delivery pendencies, forward network delays, return-to-origin (RTO) and reverse-pickup (RVP) lost inventory, Seller Protection Fund (SPF) claims, and Branch Return Shipment Non-Receipt (BRSNR). Each vector is tracked by separate operational teams in independent Google Spreadsheets containing thousands of rows updated asynchronously. 
 
 Logistics Area Leaders and Hub Incharges previously had no centralized, unified visibility into RCA compliance across these 7 tracking sheets. Tracking compliance manually required loading multiple gigabyte-scale Google Spreadsheets, filtering by hub names manually, and calculating completion ratios. Furthermore, automated server-side aggregation in Google Apps Script was historically plagued by execution timeouts: attempting to synchronously open and parse 7 large Google Spreadsheets in a single script execution exceeds Google Apps Script's strict **6-minute (360-second) execution ceiling**, resulting in fatal script terminations (`Exceeded maximum execution time`).
 
-### The Solution
+### The Architectural Solution
 **dc rca progression** resolves both the operational and architectural challenges through a decoupled, client-orchestrated asynchronous architecture:
 1. **Asynchronous Multi-Tracker Backend**: Rather than performing a single massive server-side aggregation, the backend exposes an asynchronous remote procedure call endpoint (`getTrackerData(trackerId, forceRefresh)` in `Code.gs:124-187`). The client browser initiates 7 concurrent, independent Google Apps Script calls (`google.script.run`) upon dashboard load, isolating the runtime of each spreadsheet read into its own execution context.
 2. **Multi-Level High-Performance Caching**: Each tracker's aggregation output is cached in `CacheService.getScriptCache()` with a **15-minute Time-to-Live (TTL)** (900 seconds) under versioned cache keys (`TRACKER_DATA_V5_<trackerId>`), eliminating redundant remote spreadsheet I/O (`Code.gs:129-143, 172-176`).

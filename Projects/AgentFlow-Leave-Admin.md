@@ -15,9 +15,13 @@ last-updated: 2026-09-17
 ---
 
 ## 1. Overview
-`AgentFlow-Leave-Admin` is an administrative web dashboard located at `leave-management/admin` (manifest: `admin`). It provides warehouse supervisors and operations managers with real-time visibility and governance over agent leave schedules, attendance records, and team concurrency conflicts. Built with React 19, Vite 8, and Tailwind CSS v4, the dashboard connects directly to [[Supabase]] using GoTrue password-based JWT authentication and PostgREST endpoints. Supervisors review pending leave submissions, approve or reject requests with audit commentary, assign official leaves directly to field agents, inspect month-by-month calendar density, and resolve delivery shift coverage risks before releasing bi-monthly payout approvals.
+`AgentFlow-Leave-Admin` is an administrative web dashboard located at `leave-management/admin` (manifest: `admin`). It provides warehouse supervisors and operations managers with real-time visibility and governance over agent leave schedules, attendance records, and team concurrency conflicts.
 
----
+### The Operational Problem
+Warehouse hubs and delivery centers frequently face uncoordinated absenteeism and last-minute leave requests from field associates. Without centralized visibility into team-wide scheduling density, supervisors risk approving overlapping leaves that compromise daily delivery capacity and SLA compliance. Furthermore, disjointed leave tracking causes discrepancies between recorded attendance and bi-monthly payroll disbursement calculations.
+
+### The Architectural Solution
+Built with React 19, Vite 8, and Tailwind CSS v4, the dashboard connects directly to [[Supabase]] using GoTrue password-based JWT authentication and PostgREST endpoints. Supervisors review pending leave submissions, approve or reject requests with audit commentary, assign official leaves directly to field agents, inspect month-by-month calendar density, and resolve delivery shift coverage risks before releasing bi-monthly payout approvals.
 
 ## 2. Tech Stack
 

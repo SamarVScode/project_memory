@@ -30,14 +30,13 @@ TIMEZONE:            GMT+05:30 (Asia/Kolkata)
 ---
 
 ## 1. Overview
+**GAS Bagging VMS Backend & Verification System** is an enterprise serverless video capture, archival, and chain-of-custody logging backend engineered on [[Google Apps Script]] (GAS) and modern browser WebRTC/MediaRecorder APIs. Designed specifically for high-velocity e-commerce logistics fulfillment centers (FCs) and sorting hubs within [[Myntra]] / [[Flipkart]] supply chain networks, it provides an auditable, tamper-proof visual verification ledger for outbound packing and bagging operations.
 
-**GAS Bagging VMS Backend & Verification System** is an enterprise serverless video capture, archival, and chain-of-custody logging backend engineered on [[Google Apps Script]] (GAS) and modern browser WebRTC/MediaRecorder APIs. Designed specifically for high-velocity e-commerce logistics fulfillment centers (FCs) and sorting hubs within [[Myntra]] / [[Flipkart]] supply chain networks, it provides an auditable, tamper-proof visual verification ledger for outbound packing and bagging operations. 
+### The Operational Problem
+High-velocity fulfillment centers face major financial exposure from missing item claims, package pilferage, and carrier transit disputes. Without tamper-proof visual proof recorded at the exact moment of bagging, warehouse operations cannot verify whether an item was correctly packed before transfer to third-party couriers. Furthermore, deploying video capture within Google Apps Script faces severe technical hurdles: modern Chromium browsers enforce strict **Permissions Policy** sandboxing that blocks camera hardware (`getUserMedia`) inside cross-origin iframes, while standard uncompressed video quickly exceeds Apps Script's 50 MB payload ceiling.
 
-When warehouse packing associates scan physical security seals and dispatch bags, the system coordinates real-time video capture from overhead USB cameras, enforces strict barcode scanner workflows (Seal ID scan triggers recording; Bag ID scan terminates and dispatches footage), compresses recordings client-side into lightweight WebM VP9 containers (~300 kbps to 800 kbps), streams Base64-encoded binary payloads into Google Drive, and atomically logs an 8-column (or 10-column in the iframe bridge variant) audit ledger in Google Sheets (`Footage_Logs`). 
-
-The system solves two primary operational challenges: eliminating carrier liability and customer dispute exposure resulting from pilferage or transit tampering, and overcoming modern Chromium browser sandboxing constraints (Permissions Policy blocking `getUserMedia` in cross-origin iframes) through a decoupled architecture that functions either as a standalone workstation application or via an authenticated iframe embedded within the [[Bagging-VMS-overlay]] parent shell.
-
----
+### The Architectural Solution
+When warehouse packing associates scan physical security seals and dispatch bags, the system coordinates real-time video capture from overhead USB cameras, enforces strict barcode scanner workflows (Seal ID scan triggers recording; Bag ID scan terminates and dispatches footage), compresses recordings client-side into lightweight WebM VP9 containers (~300 kbps to 800 kbps), streams Base64-encoded binary payloads into Google Drive, and atomically logs an audit ledger in Google Sheets (`Footage_Logs`). It overcomes browser sandboxing by functioning either as a standalone workstation application or via an authenticated iframe communicating bidirectionally with the [[Bagging-VMS-overlay]] parent host shell.
 
 ## 2. Tech Stack
 

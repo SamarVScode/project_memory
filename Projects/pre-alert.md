@@ -15,13 +15,15 @@ last-updated: 2026-09-18
 ---
 
 ## 1. Overview
-`Pre-Alert Logistics Automation` (local project directory: `Pre alert`, Google Clasp Script ID: `1h02kI7VEpfBgaKAs1Q53oA1_oSon-AM5laK7_xZE10jBttIfQ6toxkZY`) is a mission-critical supply chain automation daemon and web-based consignment reconciliation platform built on [[Google Apps Script]] (V8 runtime). It automates the intake, filtering, operational dispatch, and formal acknowledgement of cross-dock logistics transfers originating from Lucknow Bagging & Transfer Station (`LKO_BTS`) destined for Uttar Pradesh Delivery Hubs (`UP DH`), with dedicated focus on the Mirzapur Myntra fulfillment center (`MirzapurMYNTRAHub_MRZ`). 
+`Pre-Alert Logistics Automation` (local project directory: `Pre alert`, Google Clasp Script ID: `1h02kI7VEpfBgaKAs1Q53oA1_oSon-AM5laK7_xZE10jBttIfQ6toxkZY`) is a mission-critical supply chain automation daemon and web-based consignment reconciliation platform built on [[Google Apps Script]] (V8 runtime). It automates the intake, filtering, operational dispatch, and formal acknowledgement of cross-dock logistics transfers originating from Lucknow Bagging & Transfer Station (`LKO_BTS`) destined for Uttar Pradesh Delivery Hubs (`UP DH`), with dedicated focus on the Mirzapur Myntra fulfillment center (`MirzapurMYNTRAHub_MRZ`).
 
-The application operates in two synchronized operational modes:
+### The Operational Problem
+Cross-dock logistics line-haul transfers from transfer hubs (such as `LKO_BTS`) to regional delivery hubs require rapid inbound physical verification. Previously, shift pre-alerts arrived as unstructured inline HTML tables via email during peak evening hours (7:00 PM to 12:00 AM Midnight IST). Hub supervisors had to manually scan complex email matrices, extract inbound bag counts, transcribe consignment identifiers into tracking sheets, and manually compose formal acknowledgment emails, resulting in transit tracking gaps and reconciliation delays.
+
+### The Architectural Solution
+The application operates in two synchronized operational modes to automate this workflow:
 1. **Headless Ingestion Daemon (`Code.js`):** A scheduled background poller running during peak transfer windows (7:00 PM to 12:00 AM Midnight IST) that sweeps an authorized [[Gmail]] inbox for shift pre-alerts matching `subject:"LKO_BTS TO UP DH"`. It dynamically parses unstructured inline HTML table matrices using regular expression tokenizers, isolates consignment metrics for `MirzapurMYNTRAHub_MRZ`, records real-time delivery manifests into a central [[Google Sheets]] operational log (`Daily_landing`), persists message thread state in `PropertiesService`, and dispatches rich markdown logistics notifications directly to Topic `8` of an operations [[Telegram]] supergroup.
 2. **Interactive Reconciliation Workstation (`Index.html`):** A client-facing Single Page Application (SPA) powered by [[Tailwind CSS]] and [[SheetJS]] deployed as a Google Apps Script Web App. Hub operators upload inbound Excel/CSV manifests or paste tabular bag-level data, which the backend aggregates into a two-tier formatted [[Google Sheets]] workbook (Executive Summary with KPI scorecards and Destination Hub breakdown, plus a detailed Consignment Ledger tab). The system exports this workbook as an A4 landscape PDF via Google Sheets export endpoints and automatically dispatches a reply-all acknowledgement containing the PDF report directly back to the original Gmail pre-alert thread.
-
----
 
 ## 2. Tech Stack
 
