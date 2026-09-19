@@ -6,7 +6,7 @@ tags: [gas, google-apps-script, logistics, ei-pan-india, e2e-task-automation, we
 script-id: 1BbvGwjFJ4n-x0Z26gxBJFMOs0NyUFfewPY-eddLZfMfS8YZy54uBqT6R
 editor-url: https://script.google.com/home/projects/1BbvGwjFJ4n-x0Z26gxBJFMOs0NyUFfewPY-eddLZfMfS8YZy54uBqT6R/edit
 created: 2026-09-17
-last-updated: 2026-09-17
+last-updated: 2026-09-19
 ---
 
 # EI-Pan-India-Report (E2E Task Daily Automation)
@@ -201,10 +201,10 @@ gptd/
 ### `gas_code/WeekManager.js`
 - **Purpose:** Temporal calculation engine managing date parsing, week boundaries, and Excel-compatible week numbers.
 - **Key Functions:**
-  - `parseDate(dateStr)` (`WeekManager.js:13-41`): Converts strings formatted as `"DD-MMM"` or `"DD-MMM-YYYY"` (e.g., `"13-Sep-2026"`) into a JavaScript `Date`. Explicitly sets hours to `12:00:00` (midday) to prevent daylight saving time or UTC date-flipping bugs.
-  - `getWeekNumber(date)` (`WeekManager.js:49-64`): Implements the exact algorithm of Excel/Sheets `WEEKNUM(date, 1)`: week begins on Sunday; the week containing January 1 is Week 1.
-  - `getWeekInfo(date)` (`WeekManager.js:71-89`): Computes metadata: `{ weekNum, year, dayOfWeek (0=Sun..6=Sat), spreadsheetName: "E2E Task - WK <weekNum>", sundayDate, saturdayDate, isFirstDayOfWeek: dayOfWeek === 0 }`.
-  - `formatDate(date, includeYear = false)` (`WeekManager.js:94-102`): Emits zero-padded `"DD-MMM"` or `"DD-MMM-YYYY"`.
+  - `parseDate(dateStr, defaultYear = null)` (`WeekManager.js:14-42`): Converts strings formatted as `"DD-MMM"` or `"DD-MMM-YYYY"` (e.g., `"13-Sep-2026"`) into a JavaScript `Date`. Explicitly sets hours to `12:00:00` (midday) to prevent daylight saving time or UTC date-flipping bugs. If a two-part date (`"DD-MMM"`) is passed, defaults to `defaultYear || new Date().getFullYear()`.
+  - `getWeekNumber(date)` (`WeekManager.js:50-65`): Implements the exact algorithm of Excel/Sheets `WEEKNUM(date, 1)`: week begins on Sunday; the week containing January 1 is Week 1.
+  - `getWeekInfo(date)` (`WeekManager.js:72-90`): Computes metadata: `{ weekNum, year, dayOfWeek (0=Sun..6=Sat), spreadsheetName: "E2E Task - WK <weekNum>", sundayDate, saturdayDate, isFirstDayOfWeek: dayOfWeek === 0 }`.
+  - `formatDate(date, includeYear = false)` (`WeekManager.js:95-103`): Emits zero-padded `"DD-MMM"` or `"DD-MMM-YYYY"`.
 - **Depends on:** Nothing (pure utility).
 - **Depended on by:** `Main.js`, `EmailService.js`, `DriveService.js`, `AppendService.js`, `BackfillService.js`, `TestRunner.js`.
 - **Notable logic / gotchas:** `parseDate` splits on `[\s-]+` and parses month names via a lowercase 3-letter dictionary. Two-digit years (e.g., `"26"`) are automatically expanded to `2000 + parsedYear`.
@@ -226,10 +226,10 @@ gptd/
 - **Key Functions:**
   - `convertXlsxToTempSheet(xlsxBlob)` (`DriveService.js:14-48`): Performs zero-memory conversion by calling `Drive.Files.insert` (Drive API v2) or `Drive.Files.create` (v3) with `mimeType: MimeType.GOOGLE_SHEETS`. Returns `{ tempFileId, tempSpreadsheet }`.
   - `cleanupTempFile(tempFileId)` (`DriveService.js:54-62`): Calls `DriveApp.getFileById(tempFileId).setTrashed(true)`.
-  - `getOrCreateWeeklySpreadsheet(weekInfo)` (`DriveService.js:69-109`): Searches `CONFIG.DESTINATION_FOLDER_ID` for `E2E Task - WK <weekNum>`. If found, verifies layout via `ensureTaskPer1kLayout` and `initializeRateFormatting`. If not found, duplicates `CONFIG.TEMPLATE_SPREADSHEET_ID` into the destination folder via `templateFile.makeCopy(targetFileName, folder)`, then initializes the historical week link (`initializePastReportsLink`).
-  - `initializePastReportsLink(newSpreadsheet, weekInfo, folder)` (`DriveService.js:114-142`): Looks up `E2E Task - WK <weekNum - 1>` in the folder (handles Week 1 rollover to Week 52 of previous year) and appends `[ "Week<prevNum>_<prevYear>", prevFile.getUrl() ]` into `Past_reports_link`.
-  - `ensureTaskPer1kLayout(spreadsheet)` (`DriveService.js:149-198`): Freezes Columns A..C and Rows 1..2. Ensures headers A2:C2 (`Source_DC`, `Region`, `City`), WTD headers D1:I1, Row 2 subheaders, and unhides all columns via `AppendService.ensureAllColumnsVisible`.
-  - `initializeRateFormatting(spreadsheet)` (`DriveService.js:203-245`): Pre-applies `#,#0` to volume columns and `#,##0.00` to all rate columns across `Task_per_1k` and `raw_task_1K`.
+  - `getOrCreateWeeklySpreadsheet(weekInfo)` (`DriveService.js:69-133`): Searches `CONFIG.DESTINATION_FOLDER_ID` for `E2E Task - WK <weekNum>`. If found, verifies layout via `ensureTaskPer1kLayout` and `initializeRateFormatting`. If not found, duplicates `CONFIG.TEMPLATE_SPREADSHEET_ID` into the destination folder via `templateFile.makeCopy(targetFileName, folder)`. **Automated Sanitization**: Purges columns beyond 15 in `Task_per_1k` (`deleteColumns(16, maxCols - 15)`) and deletes leftover data rows from `Raw` and `raw_task_1K`. Initializes the historical week link (`initializePastReportsLink`), verifies freeze panes, and pre-applies rate formatting.
+  - `initializePastReportsLink(newSpreadsheet, weekInfo, folder)` (`DriveService.js:138-166`): Looks up `E2E Task - WK <weekNum - 1>` in the folder (handles Week 1 rollover to Week 52 of previous year) and appends `[ "Week<prevNum>_<prevYear>", prevFile.getUrl() ]` into `Past_reports_link`.
+  - `ensureTaskPer1kLayout(spreadsheet)` (`DriveService.js:173-222`): Freezes Columns A..C and Rows 1..2. Ensures headers A2:C2 (`Source_DC`, `Region`, `City`), WTD headers D1:I1, Row 2 subheaders, ensures at least 15 columns exist, and unhides all columns via `AppendService.ensureAllColumnsVisible`.
+  - `initializeRateFormatting(spreadsheet)` (`DriveService.js:227-269`): Pre-applies `#,#0` to volume columns and `#,##0.00` to all rate columns across `Task_per_1k` and `raw_task_1K`.
 - **Depends on:** `Config.js`, `AppendService.js` (for `ensureAllColumnsVisible`).
 - **Depended on by:** `Main.js`, `BackfillService.js`, `TestRunner.js`.
 - **Notable logic / gotchas:** Relies on the Drive API Advanced Service being enabled in Apps Script. If Drive API is disabled, throws: `"Drive API Advanced Service is not enabled! Please enable 'Drive API' under Services in Apps Script."` (`DriveService.js:39`).
@@ -239,33 +239,29 @@ gptd/
 ### `gas_code/AppendService.js`
 - **Purpose:** The core data transformation engine. Handles high-volume batch writes, hub metadata discovery, dynamic reverse-chronological column insertion, and dynamic WTD formula generation.
 - **Key Functions:**
-  - `processDailyAppend(weeklySs, tempSs, weekInfo, dateStr)` (`AppendService.js:15-38`): Master coordinator: calls `appendRawData`, `appendRawTask1k`, `updateTaskPer1kGrid`, `updateDynamicWtdFormulas`, `trimExcessColumns`, and `initializeRateFormatting`.
-  - `appendRawData(weeklySs, tempSs)` (`AppendService.js:44-97`): Reads all rows from `raw_data` in `tempSs`. If `Raw` in `weeklySs` has no headers, dynamically writes Row 1 headers from the source file. Expands destination rows via `dstSheet.insertRowsAfter` if needed to prevent index overflow. Batch writes data via `getRange(startRow, 1, numRows, numCols).setValues(rowsToAppend)`.
-  - `appendRawTask1k(weeklySs, tempSs)` (`AppendService.js:103-173`): Appends daily DC summaries into `raw_task_1K`. Rounds rate columns 5 and 8 mathematically via `Math.round(val * 100) / 100` before writing. Formats rates as `#,##0.00` and counts as `#,##0`.
-  - `extractDcMetadata(weeklySs, tempSs)` (`AppendService.js:626-679`): Scans accumulated `Raw` in `weeklySs`, `raw_data` in `tempSs`, and fallback tab `OFD_OFP`. Extracts `Region` and `City` mapped to `Source_DC`. **Strict matching rule**: Matches only the header strictly named `"city"` (case-insensitive) to prevent false substring matches.
-  - `updateTaskPer1kGrid(weeklySs, tempSs, dayOfWeek, dateStr)` (`AppendService.js:179-366`):
-    1. Builds in-memory lookup map from daily `task_per_1k` (`ofd`, `fwd_task`, `ofp`, `rev_task`).
+  - `processDailyAppend(weeklySs, tempSs, weekInfo, dateStr)` (`AppendService.js:15-39`): Master coordinator: calls `appendRawData`, `appendRawTask1k`, `cleanupStaleDateTables`, `updateTaskPer1kGrid`, `updateDynamicWtdFormulas`, `trimExcessColumns`, and `initializeRateFormatting`.
+  - `appendRawData(weeklySs, tempSs)` (`AppendService.js:47-100`): Reads all rows from `raw_data` in `tempSs`. If `Raw` in `weeklySs` has no headers, dynamically writes Row 1 headers from the source file. Expands destination rows via `dstSheet.insertRowsAfter` if needed to prevent index overflow. Batch writes data via `getRange(startRow, 1, numRows, numCols).setValues(rowsToAppend)`.
+  - `appendRawTask1k(weeklySs, tempSs)` (`AppendService.js:106-176`): Appends daily DC summaries into `raw_task_1K`. Rounds rate columns 5 and 8 mathematically via `Math.round(val * 100) / 100` before writing. Formats rates as `#,##0.00` and counts as `#,##0`.
+  - `updateTaskPer1kGrid(weeklySs, tempSs, dayOfWeek, dateStr, weekInfo = null)` (`AppendService.js:182-379`):
+    1. Builds in-memory lookup map from daily `task_per_1k` (`ofd`, `fwd_task`, `ofp`, `rev_task`) with comma-safe numeric parsing (`parseNum`).
     2. Reads existing hubs in Column A of `Task_per_1k` (Row 3 onwards). Backfills missing Region/City for existing hubs using `extractDcMetadata`.
     3. Discovers new hubs present in the report but missing from `Task_per_1k`. Sorts alphabetically, appends to rows, and styles with thin black borders (`#000000`).
-    4. Determines column insertion index via `getOrCreateDateTableBlock(dstSheet, dateStr)`.
+    4. Determines column insertion index via `getOrCreateDateTableBlock(dstSheet, dateStr, weekInfo)`.
     5. Writes rates as dynamic spreadsheet formulas:
        - Fwd Rate: `=IF(OFD>0, ROUND(Fwd_task/OFD*1000, 2), 0)`
        - Rev Rate: `=IF(OFP>0, ROUND(Rev_Task/OFP*1000, 2), 0)`
     6. Formats day table headers via `formatDayTableHeaders` (Row 1 merged date in `#fff2cc`, Row 2 subheaders, solid medium black right border).
-  - `getOrCreateDateTableBlock(dstSheet, dateStr)` (`AppendService.js:397-478`): Scans Row 1 starting at Col 10 in steps of 6. If date already exists, updates in place. If date is newer than an existing table, inserts 6 columns at that index (`dstSheet.insertColumns(insertAtCol, 6)`), enforcing reverse chronological order. If older, appends 6 columns at the end.
-  - `updateDynamicWtdFormulas(dstSheet)` (`AppendService.js:545-585`): Scans all active date table columns via `getActiveDateTableColumns`. Dynamically rebuilds WTD formulas across Cols D..I for all DC rows:
-    - `OFD` (Col D): `=${Col1}${r}+${Col2}${r}+...`
-    - `Fwd_task` (Col E): `=${Col1}${r}+${Col2}${r}+...`
-    - `Fwd_task_1k` (Col F): `=IF(D${r}>0, ROUND(E${r}/D${r}*1000, 2), 0)`
-    - `OFP` (Col G): `=${Col1}${r}+${Col2}${r}+...`
-    - `Rev_Task` (Col H): `=${Col1}${r}+${Col2}${r}+...`
-    - `Rev_task_1k` (Col I): `=IF(G${r}>0, ROUND(H${r}/G${r}*1000, 2), 0)`
-  - `trimExcessColumns(dstSheet)` (`AppendService.js:590-600`): Deletes any trailing columns beyond the active date tables to eliminate empty space.
-  - `ensureAllColumnsVisible(dstSheet)` (`AppendService.js:372-381`): Unhides all columns (`dstSheet.showColumns(1, maxCols)`).
-  - `getColumnLetter(colNum)` (`AppendService.js:605-614`): Converts 1-indexed column numbers into Excel letters (e.g., `1 -> A`, `27 -> AA`).
+  - `cleanupStaleDateTables(dstSheet, weekInfo)` (`AppendService.js:401-447`): Scans 6-column blocks right-to-left from `maxCols - 5` down to `10`. Any block whose header is not a valid date within `weekInfo.sundayDate`..`weekInfo.saturdayDate` (or empty beyond Col 10) is deleted with `dstSheet.deleteColumns(c, 6)`.
+  - `getOrCreateDateTableBlock(dstSheet, dateStr, weekInfo = null)` (`AppendService.js:455-550`): Scans Row 1 starting at Col 10 in steps of 6. If date already exists, updates in place. If date is newer than an existing table, snapshots shifted tables, inserts 6 columns (`dstSheet.insertColumns(insertAtCol, 6)`), and restores merged date headers via `formatDayTableHeaders(dstSheet, shiftedCol, st.shortDate, curMaxRows)` to prevent merged cell expansion corruption. If older, appends 6 columns at the end.
+  - `formatDayTableHeaders(dstSheet, baseCol, shortDate, maxRow)` (`AppendService.js:556-590`): Formats the merged Row 1 date header (`dd-mmm`, centered, `#fff2cc`), Row 2 subheaders, data cell borders, and medium black right separator border.
+  - `getActiveDateTableColumns(dstSheet, weekInfo = null)` (`AppendService.js:596-627`): Scans Row 1 in steps of 6. When `weekInfo` is provided, strictly filters for dates falling within `weekInfo.sundayDate`..`weekInfo.saturdayDate`.
+  - `updateDynamicWtdFormulas(dstSheet, weekInfo = null)` (`AppendService.js:633-674`): Scans active date table columns via `getActiveDateTableColumns(dstSheet, weekInfo)`. Dynamically rebuilds WTD formulas across Cols D..I for all DC rows based strictly on the current week's active date tables.
+  - `trimExcessColumns(dstSheet, weekInfo = null)` (`AppendService.js:680-692`): Deletes trailing columns beyond the active date tables of the current week.
+  - `getColumnLetter(colNum)` (`AppendService.js:695-704`): Converts 1-indexed column numbers into Excel letters (e.g., `1 -> A`, `27 -> AA`).
+  - `extractDcMetadata(weeklySs, tempSs)` (`AppendService.js:716-769`): Scans accumulated `Raw` in `weeklySs`, `raw_data` in `tempSs`, and fallback tab `OFD_OFP`. Extracts `Region` and `City` mapped to `Source_DC`. **Strict matching rule**: Matches only the header strictly named `"city"` (case-insensitive) to prevent false substring matches.
 - **Depends on:** `Config.js`, `WeekManager.js`, `DriveService.js`.
 - **Depended on by:** `Main.js`, `DriveService.js`, `BackfillService.js`, `TestRunner.js`.
-- **Notable logic / gotchas:** Generating rate metrics as dynamic spreadsheet formulas rather than hardcoded floats ensures that manual data corrections in the daily columns automatically ripple through to WTD and rate metrics without requiring script re-execution.
+- **Notable logic / gotchas:** Generating rate metrics as dynamic spreadsheet formulas rather than hardcoded floats ensures that manual data corrections in the daily columns automatically ripple through to WTD and rate metrics without requiring script re-execution. Snapshotting shifted tables prior to column insertion avoids Google Sheets merged cell header deletion.
 
 ---
 
@@ -559,6 +555,7 @@ The project contains no automated unit testing framework (e.g., Jest, Mocha) due
 | `testProcessWithDriveFile()` | Apps Script Editor > Select & Run | `TestRunner.js:34-63` | End-to-end simulation bypassing Gmail. Uses an existing Drive file ID of an uploaded `.xlsx` file to test Drive API conversion and data appending. |
 | `cleanAndRepairTemplate()` | Sheets Menu or Apps Script Editor | `TestRunner.js:96-98` | Sanitizes the Master Template: purges data rows in `Raw` and `raw_task_1K`, trims `Task_per_1k` to 15 columns, and sets clean initial WTD formulas. |
 | `testBuildPivotTables()` | Apps Script Editor > Select & Run | `TestRunner.js:104-110` | Verifies programmatic construction of all 3 native pivot tables against a specified spreadsheet ID. |
+| `verify_fixes.js` | Terminal (`node tests/verify_fixes.js`) | `tests/verify_fixes.js:1-250` | 5-suite headless unit test verifying date parsing `defaultYear`, right-to-left stale table cleanup, week boundary filtering, merged header restoration, and dynamic WTD formula generation. |
 
 ### How to Run Verification Tests
 1. **Week Calculation Verification**:
@@ -749,6 +746,14 @@ The application operates within Google's standing serverless constraints:
 
 ## 16. Changelog
 *No prior note supplied — changelog starts here.*
+
+- **2026-09-19 (Dynamic Date Table & Stale Table Bug Fix)**:
+  - Resolved dynamic date table failure in `Task_per_1k`: Added snapshot and header restoration in `AppendService.js:getOrCreateDateTableBlock` via `formatDayTableHeaders` so `insertColumns(10, 6)` does not wipe shifted table headers.
+  - Implemented `AppendService.js:cleanupStaleDateTables` to actively purge out-of-week and uningested template tables right-to-left down to base 15 columns.
+  - Upgraded `AppendService.js:getActiveDateTableColumns` to strictly filter by `weekInfo.sundayDate`..`weekInfo.saturdayDate`, preventing stale template dates from polluting dynamic WTD calculations.
+  - Added template sanitization to `DriveService.js:getOrCreateWeeklySpreadsheet`, ensuring cloned templates are trimmed to 15 columns and emptied of historical data rows.
+  - Updated `WeekManager.js:parseDate` with `defaultYear` parameter for reliable parsing of two-part date strings (`DD-MMM`).
+  - Added full test suite in `tests/verify_fixes.js` passing 5/5 programmatic verification suites.
 
 - **2026-09-17 (Initial Documentation & Master Reference Note)**:
   - Comprehensive architectural mapping of the `EI-Pan-India-Report` (`E2E Task Daily Automation`) Google Apps Script codebase.
