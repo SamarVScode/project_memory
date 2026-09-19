@@ -6,20 +6,20 @@ tags: [gas, google-apps-script, logistics, ei-stream-trigger, lake-ingestion, re
 script-id: 1idsSpNf7ENmLjiUIH0lZ4XQiA35Ib-zJdsi47aRWfmeAlbDulOhPJcSP
 editor-url: https://script.google.com/home/projects/1idsSpNf7ENmLjiUIH0lZ4XQiA35Ib-zJdsi47aRWfmeAlbDulOhPJcSP/edit
 created: 2026-09-17
-last-updated: 2026-09-17
+last-updated: 2026-09-19
 ---
 
 # ⚡ EI Stream Trigger — Google Apps Script (Server Edition)
 
 ## 1. Overview
-The **EI Stream Trigger** (codebase title: **EI Stream Trigger — Google Apps Script (Server Edition)**, also referenced across the engineering vault as the **Lake Ingestion Pipeline** or `ei_stream_trigger`) is an enterprise-grade cloud dispatcher, automated scheduling engine, and operational dashboard built on [[Google Apps Script]] (GAS). It serves as the primary client-side orchestrator for the [[EI Stream Report Server]] (`https://xlsx-stream-report-generator.onrender.com`), a high-throughput, Zero-DOM Python microservice running on [[Render]].
+The **EI Stream Trigger** (codebase title: **EI Stream Trigger — Google Apps Script (Server Edition)**, also referenced across the engineering vault as the **Lake Ingestion Pipeline** or `ei_stream_trigger`) is an enterprise-grade cloud dispatcher, automated scheduling engine, and operational dashboard built on Google Apps Script (GAS). It serves as the primary client-side orchestrator for the [[XLSX-STREAM-REPORT-GENERATOR|EI Stream Report Server]] (`https://xlsx-stream-report-generator.onrender.com`), a high-throughput, Zero-DOM Python microservice running on Render.
 
 ### The Operational Problem
 Processing multi-gigabyte supply chain spreadsheets across 71 distribution centers (DCs) nationwide directly within Google Apps Script is impossible due to hard platform constraints: a strict **6-minute (360-second) execution ceiling** and a **50 MB heap limitation**. Ingesting and transforming enterprise workbooks in native GAS triggers immediate `Exceeded maximum execution time` crashes or Out-of-Memory (`OOM`) termination, preventing operational leads from receiving timely morning logistics reports.
 
 ### The Architectural Solution
 EI Stream Trigger circumvents these platform constraints by decoupling file ingestion, data transformation, and report synthesis into an asynchronous, distributed streaming architecture:
-- Dispatches heavy spreadsheet workloads to the external Python/Rust streaming microservice [[EI Stream Report Server]] hosted on Render via Drive URLs or direct uploads.
+- Dispatches heavy spreadsheet workloads to the external Python streaming microservice [[XLSX-STREAM-REPORT-GENERATOR|EI Stream Report Server]] hosted on Render via Drive URLs or direct uploads.
 - Uses an asynchronous 1-minute polling engine (`createPollTrigger_` / `deletePollTrigger_`) storing transient job state in `PropertiesService.getScriptProperties()` to keep GAS compute time under 5 seconds per query.
 - Replicates finalized multi-tab workbooks into a centralized Master Google Sheet (`17DW3Q5WXSLcJEqi9hK9PRzgpty4126F4ZLaE4uL5neE`) using `Sheet.copyTo()`, preserving all column widths, formulas, and formats.
 - Delivers a high-density "Paper Ink Workstation" UI (`Index.html`, 4,011 lines) for manual uploads, Drive Cabinet browsing, and pipeline monitoring.
@@ -35,7 +35,7 @@ flowchart LR
     end
 
     subgraph ExternalServer ["Cloud Microservice (Render)"]
-        StreamServer["EI Stream Report Server<br/>FastAPI / Rust Calamine Engine"]
+        StreamServer["EI Stream Report Server<br/>FastAPI / Python Engine"]
     end
 
     GAS_UI -->|Upload Blob / Drive URL| StreamServer
@@ -74,16 +74,16 @@ flowchart LR
 
 | Component / Layer | Technology | Specification / Version | Source / Code Reference | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Execution Runtime** | [[Google Apps Script]] V8 Engine | ECMAScript 6+ / Chrome V8 | `appsscript.json:13` | Modern JavaScript runtime supporting `const`, `let`, arrow functions, template literals, and promises *(stated)*. |
+| **Execution Runtime** | Google Apps Script V8 Engine | ECMAScript 6+ / Chrome V8 | `appsscript.json:13` | Modern JavaScript runtime supporting `const`, `let`, arrow functions, template literals, and promises *(stated)*. |
 | **Hosting Platform** | Google Workspace Serverless | Cloud-Managed Infrastructure | `appsscript.json:14-17` | Deployed as a web application (`USER_DEPLOYING`, `DOMAIN` access) and container-bound menu *(stated)*. |
-| **Advanced Cloud API** | [[Google Drive]] API | Advanced Service `v2` | `appsscript.json:4-10`, `Code.js:273`, `Code.js:1580` | Advanced service used via `Drive.Files.insert` with `{ convert: true }` for zero-memory `.xlsx` to Sheet conversion *(stated)*. |
+| **Advanced Cloud API** | Google Drive API | Advanced Service `v2` | `appsscript.json:4-10`, `Code.js:273`, `Code.js:1580` | Advanced service used via `Drive.Files.insert` with `{ convert: true }` for zero-memory `.xlsx` to Sheet conversion *(stated)*. |
 | **Native GAS Services** | Core Workspace Services | `SpreadsheetApp`, `DriveApp`, `GmailApp`, `UrlFetchApp`, `ScriptApp`, `PropertiesService`, `LockService`, `HtmlService`, `Utilities` | `Code.js:58, 63, 70, 523, 1021, 1241, 1355, 1731, 2196` | Complete suite of Google Workspace internal serverless primitives *(stated)*. |
 | **Scheduling Engine** | `ScriptApp` Time-Driven Triggers | 1-min & 10-min Clock Triggers | `Code.js:836-840, 2196-2200` | Asynchronous cron triggers scheduled via GAS trigger API *(stated)*. |
 | **Web UI Architecture** | Semantic HTML5 / CSS3 / Vanilla JS | Neo-brutalist "Paper Ink" | `Index.html:1-4011` | Responsive single-page application with accessible physical design tokens and modal dialogs *(stated)*. |
 | **Typography** | Google Web Fonts | Space Grotesk, Plus Jakarta Sans, JetBrains Mono | `Index.html:8-10` | Embedded typography optimized for tabular readability and command terminals *(stated)*. |
 | **Deployment / CLI** | `@google/clasp` | Chrome Apps Script CLI | `.clasp.json:1-4`, `.claspignore:1-5` | Bi-directional Git-to-GAS local CLI deployment synchronization *(stated)*. |
 | **Cloud Observability** | Google Cloud Stackdriver Logging | `STACKDRIVER` Exception Logging | `appsscript.json:12` | Structured execution telemetry accessible in GCP Console and GAS Dashboard *(stated)*. |
-| **External Microservice** | [[FastAPI]] / [[Python]] / [[Rust]] | `python-calamine` Streaming Server | `Code.js:17`, `README.md:3` | Hosted on [[Render]] (`https://xlsx-stream-report-generator.onrender.com`) *(stated)*. |
+| **External Microservice** | [[XLSX-STREAM-REPORT-GENERATOR]] | FastAPI / Python Streaming Server | Code.js:17, README.md:3 | Hosted on Render (https://xlsx-stream-report-generator.onrender.com) (stated). |
 | **Timezone Setting** | Indian Standard Time (IST) | `Asia/Kolkata` (`UTC+05:30`) | `appsscript.json:2`, `Code.js:239` | Standardizes operational shift cutoffs, email regex parsing, and log stamps *(stated)*. |
 
 ---
@@ -115,7 +115,7 @@ flowchart TD
 
     subgraph Cloud_Server ["3. External Streaming Engine (Render Cloud)"]
         FastAPI["FastAPI Gateway (/convert-async /convert-upload)"]
-        RustCalamine["Rust Calamine Zero-DOM Streamer"]
+        StreamReader["Zero-DOM Stream Reader"]
         DiskCache[("Ephemeral Cache (/tmp/CACHE_DIR)")]
         ZipStitcher["OpenXML ZIP Stream Stitcher"]
     end
@@ -154,7 +154,7 @@ flowchart TD
     AsyncDispatcher --> FastAPI
     UploadDispatcher --> FastAPI
 
-    FastAPI --> RustCalamine --> DiskCache --> ZipStitcher
+    FastAPI --> StreamReader --> DiskCache --> ZipStitcher
 
     AsyncDispatcher -->|Job ID| PropStore
     UploadDispatcher -->|Job ID| PropStore
@@ -708,7 +708,7 @@ clasp open
 
 #### ADR-01: Offloading Binary Processing to External Stream Server
 - **Context**: Pan-India logistics datasets regularly exceed 250 MB and 450,000 rows. Parsing `.xlsx` archives natively in GAS using JavaScript DOM parsers crashes the V8 runtime within 45 seconds due to the 50 MB heap ceiling.
-- **Decision**: Outsource parsing, filtering, and workbook styling to an external Python microservice running Rust-backed `python-calamine` and stream-stitching engines.
+- **Decision**: Outsource parsing, filtering, and workbook styling to an external Python microservice running Python streaming and stream-stitching engines.
 - **Consequences**: Zero memory pressure on Google Apps Script; infinite scalability across large files; requires network resilience for sleeping Render containers.
 
 #### ADR-02: 1-Minute Scheduled Polling Trigger Pattern
@@ -754,6 +754,11 @@ clasp open
   - Added 4 selectable color palettes (`warm-paper`, `mono-eink`, `blueprint`, `sepia`).
   - Added interactive Google Drive Cabinet browser with search filtering and trashing capabilities.
   - Added standalone local browser mock preview shim.
+
+### 2026-09-19 — Graph Purification & Elimination of Ghost Rust Node
+- Audited codebase and confirmed EI-Stream-Trigger has ZERO Rust dependencies (100% Google Apps Script V8).
+- Purged hallucinated [[Rust]], [[FastAPI]], [[Python]], [[Render]], and [[Google Apps Script]] inline wikilinks that produced phantom graph nodes in Obsidian.
+- Unified external microservice reference to canonical note [[XLSX-STREAM-REPORT-GENERATOR]].
 
 ---
 
