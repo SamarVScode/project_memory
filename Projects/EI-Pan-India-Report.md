@@ -226,7 +226,7 @@ gptd/
 - **Key Functions:**
   - `convertXlsxToTempSheet(xlsxBlob)` (`DriveService.js:14-48`): Performs zero-memory conversion by calling `Drive.Files.insert` (Drive API v2) or `Drive.Files.create` (v3) with `mimeType: MimeType.GOOGLE_SHEETS`. Returns `{ tempFileId, tempSpreadsheet }`.
   - `cleanupTempFile(tempFileId)` (`DriveService.js:54-62`): Calls `DriveApp.getFileById(tempFileId).setTrashed(true)`.
-  - `getOrCreateWeeklySpreadsheet(weekInfo)` (`DriveService.js:69-133`): Searches `CONFIG.DESTINATION_FOLDER_ID` for `E2E Task - WK <weekNum>`. If found, verifies layout via `ensureTaskPer1kLayout` and `initializeRateFormatting`. If not found, duplicates `CONFIG.TEMPLATE_SPREADSHEET_ID` into the destination folder via `templateFile.makeCopy(targetFileName, folder)`. **Automated Sanitization**: Purges columns beyond 15 in `Task_per_1k` (`deleteColumns(16, maxCols - 15)`) and deletes leftover data rows from `Raw` and `raw_task_1K`. Initializes the historical week link (`initializePastReportsLink`), verifies freeze panes, and pre-applies rate formatting.
+  - `getOrCreateWeeklySpreadsheet(weekInfo)` (`DriveService.js:69-138`): Searches `CONFIG.DESTINATION_FOLDER_ID` for `E2E Task - WK <weekNum>`. If found, verifies layout via `ensureTaskPer1kLayout` and `initializeRateFormatting`. If not found, duplicates `CONFIG.TEMPLATE_SPREADSHEET_ID` into the destination folder via `templateFile.makeCopy(targetFileName, folder)`. **Automated Sanitization**: Purges columns beyond 15 in `Task_per_1k` (`deleteColumns(16, maxCols - 15)`), explicitly clears Row 1 date header (`J1:O1`) and data rows (Row 3 onwards) in Col 10..15 to eliminate the legacy template's Saturday (`19-Sep`) skeleton, and deletes leftover data rows from `Raw` and `raw_task_1K`. Initializes the historical week link (`initializePastReportsLink`), verifies freeze panes, and pre-applies rate formatting.
   - `initializePastReportsLink(newSpreadsheet, weekInfo, folder)` (`DriveService.js:138-166`): Looks up `E2E Task - WK <weekNum - 1>` in the folder (handles Week 1 rollover to Week 52 of previous year) and appends `[ "Week<prevNum>_<prevYear>", prevFile.getUrl() ]` into `Past_reports_link`.
   - `ensureTaskPer1kLayout(spreadsheet)` (`DriveService.js:173-222`): Freezes Columns A..C and Rows 1..2. Ensures headers A2:C2 (`Source_DC`, `Region`, `City`), WTD headers D1:I1, Row 2 subheaders, ensures at least 15 columns exist, and unhides all columns via `AppendService.ensureAllColumnsVisible`.
   - `initializeRateFormatting(spreadsheet)` (`DriveService.js:227-269`): Pre-applies `#,#0` to volume columns and `#,##0.00` to all rate columns across `Task_per_1k` and `raw_task_1K`.
@@ -239,7 +239,7 @@ gptd/
 ### `gas_code/AppendService.js`
 - **Purpose:** The core data transformation engine. Handles high-volume batch writes, hub metadata discovery, dynamic reverse-chronological column insertion, and dynamic WTD formula generation.
 - **Key Functions:**
-  - `processDailyAppend(weeklySs, tempSs, weekInfo, dateStr)` (`AppendService.js:15-39`): Master coordinator: calls `appendRawData`, `appendRawTask1k`, `cleanupStaleDateTables`, `updateTaskPer1kGrid`, `updateDynamicWtdFormulas`, `trimExcessColumns`, and `initializeRateFormatting`.
+  - `processDailyAppend(weeklySs, tempSs, weekInfo, dateStr)` (`AppendService.js:15-41`): Master coordinator: calls `appendRawData`, `appendRawTask1k`, `cleanupStaleDateTables`, `updateTaskPer1kGrid`, `updateDynamicWtdFormulas`, `trimExcessColumns`, and `initializeRateFormatting`.
   - `appendRawData(weeklySs, tempSs)` (`AppendService.js:47-100`): Reads all rows from `raw_data` in `tempSs`. If `Raw` in `weeklySs` has no headers, dynamically writes Row 1 headers from the source file. Expands destination rows via `dstSheet.insertRowsAfter` if needed to prevent index overflow. Batch writes data via `getRange(startRow, 1, numRows, numCols).setValues(rowsToAppend)`.
   - `appendRawTask1k(weeklySs, tempSs)` (`AppendService.js:106-176`): Appends daily DC summaries into `raw_task_1K`. Rounds rate columns 5 and 8 mathematically via `Math.round(val * 100) / 100` before writing. Formats rates as `#,##0.00` and counts as `#,##0`.
   - `updateTaskPer1kGrid(weeklySs, tempSs, dayOfWeek, dateStr, weekInfo = null)` (`AppendService.js:182-379`):
@@ -251,14 +251,15 @@ gptd/
        - Fwd Rate: `=IF(OFD>0, ROUND(Fwd_task/OFD*1000, 2), 0)`
        - Rev Rate: `=IF(OFP>0, ROUND(Rev_Task/OFP*1000, 2), 0)`
     6. Formats day table headers via `formatDayTableHeaders` (Row 1 merged date in `#fff2cc`, Row 2 subheaders, solid medium black right border).
-  - `cleanupStaleDateTables(dstSheet, weekInfo)` (`AppendService.js:401-447`): Scans 6-column blocks right-to-left from `maxCols - 5` down to `10`. Any block whose header is not a valid date within `weekInfo.sundayDate`..`weekInfo.saturdayDate` (or empty beyond Col 10) is deleted with `dstSheet.deleteColumns(c, 6)`.
-  - `getOrCreateDateTableBlock(dstSheet, dateStr, weekInfo = null)` (`AppendService.js:455-550`): Scans Row 1 starting at Col 10 in steps of 6. If date already exists, updates in place. If date is newer than an existing table, snapshots shifted tables, inserts 6 columns (`dstSheet.insertColumns(insertAtCol, 6)`), and restores merged date headers via `formatDayTableHeaders(dstSheet, shiftedCol, st.shortDate, curMaxRows)` to prevent merged cell expansion corruption. If older, appends 6 columns at the end.
-  - `formatDayTableHeaders(dstSheet, baseCol, shortDate, maxRow)` (`AppendService.js:556-590`): Formats the merged Row 1 date header (`dd-mmm`, centered, `#fff2cc`), Row 2 subheaders, data cell borders, and medium black right separator border.
-  - `getActiveDateTableColumns(dstSheet, weekInfo = null)` (`AppendService.js:596-627`): Scans Row 1 in steps of 6. When `weekInfo` is provided, strictly filters for dates falling within `weekInfo.sundayDate`..`weekInfo.saturdayDate`.
-  - `updateDynamicWtdFormulas(dstSheet, weekInfo = null)` (`AppendService.js:633-674`): Scans active date table columns via `getActiveDateTableColumns(dstSheet, weekInfo)`. Dynamically rebuilds WTD formulas across Cols D..I for all DC rows based strictly on the current week's active date tables.
-  - `trimExcessColumns(dstSheet, weekInfo = null)` (`AppendService.js:680-692`): Deletes trailing columns beyond the active date tables of the current week.
-  - `getColumnLetter(colNum)` (`AppendService.js:695-704`): Converts 1-indexed column numbers into Excel letters (e.g., `1 -> A`, `27 -> AA`).
-  - `extractDcMetadata(weeklySs, tempSs)` (`AppendService.js:716-769`): Scans accumulated `Raw` in `weeklySs`, `raw_data` in `tempSs`, and fallback tab `OFD_OFP`. Extracts `Region` and `City` mapped to `Source_DC`. **Strict matching rule**: Matches only the header strictly named `"city"` (case-insensitive) to prevent false substring matches.
+  - `hasTableData(dstSheet, c)` (`AppendService.js:399-415`): Inspects Rows 3..lastRow across the 6-column block at column `c`. If `lastRow < 3` or all cells in the block are empty/blank, returns `false`; otherwise returns `true`.
+  - `cleanupStaleDateTables(dstSheet, weekInfo)` (`AppendService.js:425-475`): Scans 6-column blocks right-to-left from `maxCols - 5` down to `10`. Deletes data-less skeleton tables (`!hasTableData`). If Col 10 is data-less and `maxCols > 15`, deletes Col 10..15 so populated tables shift cleanly into Col 10; if `maxCols <= 15`, clears Row 1 header. If a table has data but its date falls outside `weekInfo.sundayDate`..`weekInfo.saturdayDate`, deletes with `dstSheet.deleteColumns(c, 6)`.
+  - `getOrCreateDateTableBlock(dstSheet, dateStr, weekInfo = null)` (`AppendService.js:485-585`): Scans Row 1 starting at Col 10 in steps of 6. If Col 10 has a header but zero data rows, treats it as `isEmpty: true` so incoming dates claim Col 10 directly. If date already exists, updates in place. If date is newer than an existing table, snapshots shifted tables, inserts 6 columns (`dstSheet.insertColumns(insertAtCol, 6)`), and restores merged date headers via `formatDayTableHeaders(dstSheet, shiftedCol, st.shortDate, curMaxRows)` to prevent merged cell expansion corruption. If older, appends 6 columns at the end.
+  - `formatDayTableHeaders(dstSheet, baseCol, shortDate, maxRow)` (`AppendService.js:591-625`): Formats the merged Row 1 date header (`dd-mmm`, centered, `#fff2cc`), Row 2 subheaders, data cell borders, and medium black right separator border.
+  - `getActiveDateTableColumns(dstSheet, weekInfo = null)` (`AppendService.js:635-675`): Scans Row 1 in steps of 6. Excludes data-less skeleton tables (`!isHeaderOnlySheet && !hasTableData(dstSheet, c)`). When `weekInfo` is provided, strictly filters for dates falling within `weekInfo.sundayDate`..`weekInfo.saturdayDate`.
+  - `updateDynamicWtdFormulas(dstSheet, weekInfo = null)` (`AppendService.js:680-725`): Scans active date table columns via `getActiveDateTableColumns(dstSheet, weekInfo)`. Dynamically rebuilds WTD formulas across Cols D..I for all DC rows based strictly on the current week's populated date tables.
+  - `trimExcessColumns(dstSheet, weekInfo = null)` (`AppendService.js:730-745`): Deletes trailing columns beyond the active date tables of the current week.
+  - `getColumnLetter(colNum)` (`AppendService.js:748-757`): Converts 1-indexed column numbers into Excel letters (e.g., `1 -> A`, `27 -> AA`).
+  - `extractDcMetadata(weeklySs, tempSs)` (`AppendService.js:769-822`): Scans accumulated `Raw` in `weeklySs`, `raw_data` in `tempSs`, and fallback tab `OFD_OFP`. Extracts `Region` and `City` mapped to `Source_DC`. **Strict matching rule**: Matches only the header strictly named `"city"` (case-insensitive) to prevent false substring matches.
 - **Depends on:** `Config.js`, `WeekManager.js`, `DriveService.js`.
 - **Depended on by:** `Main.js`, `DriveService.js`, `BackfillService.js`, `TestRunner.js`.
 - **Notable logic / gotchas:** Generating rate metrics as dynamic spreadsheet formulas rather than hardcoded floats ensures that manual data corrections in the daily columns automatically ripple through to WTD and rate metrics without requiring script re-execution. Snapshotting shifted tables prior to column insertion avoids Google Sheets merged cell header deletion.
@@ -727,6 +728,9 @@ The application operates within Google's standing serverless constraints:
 5. **Native Pivot Tables vs. Script-Aggregated Summary Tabs**:
    - *Decision*: Construct native Google Sheets pivot tables via `anchor.createPivotTable(sourceRange)` in `PivotService.js`.
    - *Rationale*: Native pivot tables dynamically re-aggregate when data rows are added to `Raw` and allow operations managers to slice by date, region, and attribute using Google Sheets' native UI filters. Grouping `t_created_date` by `DAY_MONTH` prevents column explosion. *(stated)*
+6. **Data-Aware Table Pruning & Skeleton Eradication**:
+   - *Decision*: Validate data presence in Rows 3..lastRow via `hasTableData(dstSheet, c)` rather than relying solely on week date boundaries when retaining, shifting, or summing date tables.
+   - *Rationale*: Pre-existing template headers (specifically `19-Sep` on Saturday of Week 38) fall inside the week boundary, deceiving simple date range filters. Verifying data presence ensures unpopulated skeleton tables are purged or overwritten without polluting WTD summaries or displacing legitimate earlier dates (`13-Sep`) into Col 16. *(stated)*
 
 ---
 
@@ -746,6 +750,15 @@ The application operates within Google's standing serverless constraints:
 
 ## 16. Changelog
 *No prior note supplied — changelog starts here.*
+
+- **2026-09-19 (19th Date Table Skeleton Eradication & Data-Aware Table Pruning)**:
+  - Eliminated the persistent `"19-Sep"` template skeleton in `Task_per_1k`:
+    - Sanitized cloned templates in `DriveService.js:getOrCreateWeeklySpreadsheet` by explicitly clearing `J1:O1` and `J3:O(lastRow)`.
+    - Added `AppendService.js:hasTableData` to check for actual data rows in Rows 3..lastRow.
+    - Updated `AppendService.js:cleanupStaleDateTables` to purge data-less skeleton tables and shift populated tables left when Col 10 is an empty skeleton.
+    - Updated `AppendService.js:getOrCreateDateTableBlock` to treat data-less Col 10 as `isEmpty: true`, allowing `13-Sep` to claim Col 10 directly without appending after it.
+    - Updated `AppendService.js:getActiveDateTableColumns` to strictly exclude data-less skeleton tables from active column sets, preventing formula pollution in WTD calculations.
+    - Expanded test suite in `tests/verify_fixes.js` to 8/8 comprehensive programmatic unit tests covering skeleton shifting, WTD formula protection, and Col 10 claiming.
 
 - **2026-09-19 (Dynamic Date Table & Stale Table Bug Fix)**:
   - Resolved dynamic date table failure in `Task_per_1k`: Added snapshot and header restoration in `AppendService.js:getOrCreateDateTableBlock` via `formatDayTableHeaders` so `insertColumns(10, 6)` does not wipe shifted table headers.
