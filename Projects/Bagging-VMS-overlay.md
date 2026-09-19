@@ -876,18 +876,12 @@ Complete git revision history of `SamarVScode/Bagging-VMS-overlay` from reposito
 ---
 
 ## 18. Related Notes
-
-* [[shipVerify_BridgeAutomation]] — Companion Google Apps Script logistics quality inspection system and headless CORS bridge.
-* [[Shipment Verification App]] — User-facing documentation for the VerifyScan Pro shipment audit workstation.
-* [[Projects/GAS-Bagging-VMS-System]] — Dedicated Obsidian vault blueprint for the Google Apps Script backend powering the Bagging VMS system.
-* [[Projects/Repo-Bagging-VMS-overlay]] — Obsidian vault repository metadata note for `Bagging-VMS-overlay`.
-* [[Projects/Repo-cameraOverlayBridge]] — Predecessor photographic evidence camera bridge repository (`SamarVScode/cameraOverlayBridge`).
-* [[Google Apps Script]] — Serverless enterprise development platform powering logistics spreadsheets and cloud storage pipelines.
-* [[WebRTC]] — Real-time browser communications framework enabling hardware camera streaming.
-* [[MediaRecorder]] — Browser video recording standard utilized for WebM VP9 compression.
-* [[Myntra]] — E-commerce logistics and fulfillment network where the Bagging VMS workstation is deployed.
+- [[bagging-vms-gas-backend]] — Dedicated Google Apps Script backend powering video archival and ledger logging.
+- [[cameraOverlayBridge]] — Hardware camera bridge interface providing WebRTC passthrough.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

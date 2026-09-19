@@ -779,15 +779,12 @@ clasp deploy --description "Release v1.2.0 - Optimized Tab Date Matching & RTO R
 ---
 
 ## 18. Related Notes
-
-* [[Google Apps Script Hub Architecture]]
-* [[Flipkart Logistics Operations & Status Taxonomy]]
-* [[Mirzapur Hub Dispatch Protocols]]
-* [[D-1-SummaryAutomation]]
-* [[spf-final]]
-* [[HourlyConversionReport]]
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

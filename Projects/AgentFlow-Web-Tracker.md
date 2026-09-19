@@ -362,13 +362,11 @@ npm run dev
 ---
 
 ## 18. Related Notes
-
 - [[agent-summary-mechanism]] — Monorepo Master Note & Cross-System Blueprint.
-- [[AgentFlow-Android]] — Native Android mobile client with Google ML Kit OCR.
-- [[AgentFlow-Leave-Admin]] — Web administrative leave management dashboard.
-- [[AgentFlow-GAS-Backend]] — Google Apps Script payout ledger engine.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

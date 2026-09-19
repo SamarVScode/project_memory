@@ -555,16 +555,12 @@ The script manifest `src/appsscript.json` does not declare an explicit `oauthSco
 ---
 
 ## 18. Related Notes
-
-- [[DataConversion]] — Underlying file decompression and streaming CSV conversion pipeline.
-- [[scm-performance]] — SCM TAT 24 Hrs Performance Automation operating on the same shared summary spreadsheet (`1jhHxeBlDJ4GNAWLl-6fcsmZKOd0RXDWgSRS_mdL58Js`).
-- [[unified-dashboard]] — Central executive reporting dashboard aggregating cross-functional metrics.
-- [[EI-Pan-India-Report]] — Pan-India logistics reporting engine.
-- [[EI-Stream-Trigger]] — Event-driven trigger architecture for supply-chain data processing.
-- [[Google Apps Script]] — Architectural standards, quotas, and design patterns for GAS development.
-- [[Render]] — Cloud microservice hosting patterns for offloading heavy compute workloads.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

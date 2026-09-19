@@ -676,7 +676,6 @@ The project does NOT deploy any `doGet` or `doPost` Web App endpoints, eliminati
 ---
 
 ## 18. Related Notes
-
 - [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
 - [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
 - [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
@@ -687,6 +686,7 @@ The project does NOT deploy any `doGet` or `doPost` Web App endpoints, eliminati
 > In accordance with vault integration standards, unverified application links sharing only superficial infrastructure (such as the same Telegram supergroup or Mirzapur hub code) without direct upstream/downstream data dependencies have been decoupled.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

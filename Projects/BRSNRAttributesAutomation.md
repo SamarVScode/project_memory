@@ -34,7 +34,7 @@ Direct execution within Google Apps Script faces severe platform constraints:
 ### The Architectural Solution
 BRSNRAttributesAutomation overcomes these constraints through an **Asynchronous Trigger-Chained Microservice Offloading Architecture**:
 1. **Gmail Ingestion & Discovery:** The script runs on a 30-minute time-driven trigger (`processBRSNR`), querying [[Gmail]] for unprocessed emails within a 7-day rolling window (`subject:"Myntra BRSNR" -label:Processed-BRSNR newer_than:7d`). It implements a 3-phase fallback algorithm to discover the correct Excel or CSV attachment.
-2. **Microservice Offloading:** Instead of attempting to parse the binary attachment in GAS, the script constructs a multipart/form-data payload and streams the raw attachment to an external streaming service: [[Projects/Repo-DataConversion|DataConversion]] (`https://xlsx-filter-service.onrender.com/process`), hosted on [[Render]].
+2. **Microservice Offloading:** Instead of attempting to parse the binary attachment in GAS, the script constructs a multipart/form-data payload and streams the raw attachment to an external streaming service: DataConversion (`https://xlsx-filter-service.onrender.com/process`), hosted on [[Render]].
 3. **Asynchronous Polling Chain:** The external microservice accepts the job, stores it in an ephemeral queue, and immediately returns a `202 Accepted` response with a unique `job_id`. GAS persists this state (`jobId`, `threadId`, `isTest`) into `PropertiesService.getScriptProperties()` under the key `BRSNR_PENDING_JOB` and dynamically schedules a 1-minute time-based continuation trigger (`continueTask`).
 4. **CSV Transformation & Hub Filtering:** The continuation trigger polls the service endpoint (`GET /status/{job_id}`). Upon completion (`done`), it streams down a pre-filtered, lightweight CSV file (`GET /download/{job_id}`). GAS parses the clean CSV in milliseconds, extracts specific attributes (`ShipmentId`, `AgeCategory`, `Final Hub`, `TotalPrice`), and isolates records belonging to a whitelist of 6 target logistics hubs: **ALG** (Aligarh), **AYP** (Ayodhya), **DEO** (Deoria), **JNP** (Jaunpur), **MAU** (Mau), and **MRZ** (Mirzapur).
 5. **Dual-Mode Telegram Alerting:** For each matched hub, the script publishes operational alerts directly to a dedicated topic (`BRSNR_TOPIC_ID = 38`) in the central operations supergroup (`-1003779595579`):
@@ -58,7 +58,7 @@ BRSNRAttributesAutomation overcomes these constraints through an **Asynchronous 
 | **Container UI Binding** | `SpreadsheetApp` | Built-in Workspace API | `Code.js:535-541` | Mounts an administrative menu (`🚀 BRSNR Bot`) in Google Sheets UI for manual triggers and historical backlog purging. |
 | **HTTP Egress Engine** | `UrlFetchApp` | Built-in Network API | `Code.js:193`, `242`, `264`, `469`, `499`, `DebugUtility.js:60`, `77`, `103`, `151`, `202` | Executes multipart binary POST uploads to FastAPI, polls status endpoints, and dispatches Telegram Bot API calls. |
 | **CSV & Data Parsing** | `Utilities` | Built-in Utilities API | `Code.js:20`, `46`, `165`, `180`, `294`, `487` | Handles localized date formatting (`Utilities.formatDate`), UUID generation (`Utilities.getUuid`), binary blob generation, and CSV parsing (`Utilities.parseCsv`). |
-| **External Processing Bridge**| [[Projects/Repo-DataConversion|DataConversion]] | Python 3 / FastAPI / Render | `Code.js:10`, `47-49`, `241-263` | External streaming spreadsheet processor (`https://xlsx-filter-service.onrender.com`) that parses `.xlsx`, `.xls`, `.xlsb`, and `.csv` files. |
+| **External Processing Bridge**| DataConversion | Python 3 / FastAPI / Render | `Code.js:10`, `47-49`, `241-263` | External streaming spreadsheet processor (`https://xlsx-filter-service.onrender.com`) that parses `.xlsx`, `.xls`, `.xlsb`, and `.csv` files. |
 | **Alerting & Communication** | [[Telegram]] Bot API | HTTP REST API / HTML & MarkdownV2 Modes | `Code.js:458-509`, `DebugUtility.js:127-210` | Dispatches real-time alerts and CSV documents to supergroup `-1003779595579` on Topic `38`. |
 | **Local Tooling & CLI** | Google Clasp (`@google/clasp`) | Manifest format 1.0 *(stated)* | `.clasp.json:1-16` | Developer CLI used to synchronize local source files with Script ID `1etYJ_EdmTVTyPPnXwU3jY4-ROkCxvuA3778yOmcAHIkyltpoq6YovTFh`. |
 
@@ -483,7 +483,7 @@ sequenceDiagram
 ## 8. External Integrations & APIs
 
 ### 1. External FastAPI Processing Engine (`xlsx-filter-service`)
-- **Service Identity:** [[Projects/Repo-DataConversion|DataConversion]] microservice running on [[Render]].
+- **Service Identity:** DataConversion microservice running on [[Render]].
 - **Endpoint 1: `POST /process`**
   - **Payload:** `multipart/form-data; boundary=-------314159265358979323846`
   - **Form Fields:** `job_id` (string UUID), `file` (binary stream with filename and MIME content type).
@@ -692,7 +692,7 @@ clasp push
 - **Historical (Pre-2026):**
   - Removed direct Google Sheets dashboard integration; transitioned to group-allowed hubs filtering.
   - Implemented 3-phase fallback attachment discovery.
-  - Integrated external [[Projects/Repo-DataConversion|DataConversion]] FastAPI microservice for offloaded streaming spreadsheet filtering.
+  - Integrated external DataConversion FastAPI microservice for offloaded streaming spreadsheet filtering.
   - Added forum topic support (`message_thread_id: 38`) for Telegram supergroup communications.
 
 ---
@@ -715,24 +715,12 @@ clasp push
 ---
 
 ## 18. Related Notes
-
-- **Central Engineering Map:**
-  - [[Dashboard|🧠 Engineering Second Brain & Project Master Map]]
-- **Connected Streaming Microservice:**
-  - [[Projects/Repo-DataConversion|DataConversion (`xlsx-filter-service`)]]
-- **Companion Google Apps Script Automations:**
-  - [[Projects/GAS-HourlyConversionReport|GAS: HourlyConversionReport]]
-  - [[Projects/GAS-dc-rca-progression|GAS: DC RCA Progression]]
-  - [[Projects/GAS-EI-Pan-India-Report|GAS: EI Pan India Report]]
-  - [[Projects/GAS-Lake-Ingestion-Pipeline|GAS: Lake Ingestion Pipeline]]
-  - [[Projects/GAS-spf-final|GAS: SPF Final]]
-  - [[Projects/GAS-D-1-SummaryAutomation|GAS: D-1 Summary Automation]]
-- **Core Domain & Infrastructure References:**
-  - [[Services/Myntra-Logistics-Infrastructure|Myntra Logistics Domain Model]]
-  - [[Services/FastAPI-Render-Bridges|FastAPI Render Streaming Microservices]]
-  - [[Services/Google-Apps-Script|Google Apps Script Environment & Quotas]]
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

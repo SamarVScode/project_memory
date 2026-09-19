@@ -582,14 +582,12 @@ As a Google Apps Script serverless project, the runtime is subject to strict pla
 ---
 
 ## 18. Related Notes
-
-- [[Pre-Alert Logistics Automation — Architecture Decisions]]
-- [[Pre-Alert Logistics Automation — Changelog]]
-- [[Cash Pickup Transaction Tracker]] — Parallel GAS email ingestion and PDF generation daemon
-- [[Shipment Verification App]] — Inbound scanning and reconciliation system
-- [[Hub RCA Tracker Dashboard]] — Fulfillment center reporting and incident tracking
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

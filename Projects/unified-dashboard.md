@@ -740,18 +740,12 @@ No prior note supplied — changelog starts here.
 ---
 
 ## 18. Related Notes
-
-- [[BRSNRAttributesAutomation]] — Specialized automation script handling BRSNR attribute assignment.
-- [[daily-task-alert-gas]] — Operational task and escalation management tracker.
-- [[RTO Q2 AppendAutomation]] — Automated appending pipeline for Return-To-Origin loss tracking.
-- [[RVP Q2 AppendAutomation]] — Automated appending pipeline for Reverse-Pickup loss tracking.
-- [[spf-final]] — Seller Protection Fund loss reconciliation engine.
-- [[dc-rca-progression]] — Hub RCA Tracker Dashboard aggregating multi-tracker compliance across Northern India hubs.
-- [[cameraOverlayBridge]] — Mobile camera overlay tool for shipment and package condition verification.
-- [[Google Apps Script]] — Core runtime platform reference and best practices.
-- [[Clasp CLI]] — Google Command Line Apps Script Projects tooling reference.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

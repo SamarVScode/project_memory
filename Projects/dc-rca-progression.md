@@ -729,16 +729,12 @@ All version increments and architectural milestones reflect the commit history, 
 ---
 
 ## 18. Related Notes
-
-* [[Projects/GAS-dc-rca-progression|GAS: dc rca progression]] — Central Obsidian vault blueprint note for this Google Apps Script application.
-* [[Projects/Repo-DataConversion|Repo-DataConversion]] — Asynchronous spreadsheet filtering microservice (`FastAPI`/`openpyxl`) operating in the same North India logistics cluster.
-* [[Projects/Repo-xlsx_to_csv_bridge|Repo-xlsx_to_csv_bridge]] — Sister microservice providing Google Drive streaming and SAX parsing for MRZ logistics.
-* [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR|Repo-XLSX-STREAM-REPORT-GENERATOR]] — High-performance Rust-powered logistics report generator.
-* [[Projects/GAS-HourlyConversionReport|GAS: HourlyConversionReport]] — Upstream Google Apps Script automation monitoring hourly logistics conversions.
-* [[Services/Google-Apps-Script|Services: Google Apps Script Infrastructure]] — Enterprise knowledge base covering GAS execution quotas, CacheService limits, and clasp workflows.
-* [[Services/Myntra-Logistics-Infrastructure#logistics-stream-engine|Services: Logistics Stream Engine Cluster]] — Knowledge cluster grouping stream processors, conversion bridges, and logistics dashboards.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

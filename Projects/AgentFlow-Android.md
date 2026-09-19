@@ -501,15 +501,11 @@ cd "C:\Users\User\Desktop\payout app\agentflow-android"
 ---
 
 ## 18. Related Notes
-
 - [[agent-summary-mechanism]] — Monorepo Master Note & Cross-System Blueprint.
-- [[AgentFlow-Web-Tracker]] — Web client implementation of the work tracker.
-- [[AgentFlow-Leave-Admin]] — Administrative dashboard for reviewing leave requests.
-- [[AgentFlow-GAS-Backend]] — Google Apps Script financial calculation backend.
-- [[Google Apps Script]] — Corporate ledger automation engine.
-- [[Supabase]] — PostgreSQL and storage cloud platform.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

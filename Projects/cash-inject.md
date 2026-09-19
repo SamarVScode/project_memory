@@ -529,16 +529,12 @@ Deployments are executed manually via the Google Clasp CLI or Google Apps Script
 ---
 
 ## 18. Related Notes
-
-- [[GAS-cash-inject]] — Historical project note stub for cash injection tracking.
-- [[Services/Google-Apps-Script]] — Central architecture guidelines and quota references for Google Workspace Apps Script services.
-- [[Services/Myntra-Logistics-Infrastructure#financial-operations]] — Financial operations cluster documentation for logistics hub reconciliations.
-- [[Projects/Repo-agent-summary-mechanism]] — Associated logistics tracking repository within the financial operations infrastructure.
-- [[AgentFlow-GAS-Backend]] — Related Google Apps Script backend engine for payout calculations and financial ledgers.
-- [[Cash Pickup Transaction Tracker — Architecture Decisions]] — Dedicated architectural decision record for receipt template vectorization.
-- [[Cash Pickup Transaction Tracker — Changelog]] — Detailed release history tracking.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

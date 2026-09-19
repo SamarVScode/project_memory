@@ -337,14 +337,13 @@ clasp open
 ---
 
 ## 18. Related Notes
-
 - [[agent-summary-mechanism]] — Monorepo Master Note & Cross-System Blueprint.
-- [[AgentFlow-Android]] — Native Android mobile client with Google ML Kit OCR.
-- [[AgentFlow-Web-Tracker]] — Field agent web tracker portal.
-- [[AgentFlow-Leave-Admin]] — Web administrative leave management dashboard.
-- [[Google Apps Script]] — Corporate automation platform.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

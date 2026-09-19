@@ -33,7 +33,7 @@ In high-velocity last-mile e-commerce and reverse-logistics distribution centers
 * **Dispute and Fraud Exposure**: Returns and outbound shipments frequently incur customer disputes alleging damaged goods, wrong items received, or missing price tags. Without auditable, high-resolution photographic proof captured at the exact moment of hub processing, operations teams cannot dispute claims or pinpoint vendor vs. carrier liabilities.
 * **Prohibitive SaaS Infrastructure Overhead**: Traditional commercial architectures mandate dedicated backend databases ([[Firebase Firestore]], [[MongoDB]]), custom authentication providers ([[Firebase Auth]], [[Auth0]]), and commercial third-party digital asset management platforms ([[Cloudinary]], [[AWS S3]]). In large-scale logistics networks, this introduces significant recurring licensing expenses, compliance friction, credential provisioning latency, and vendor lock-in.
 * **Browser Sandbox & Permissions Policy Camera Blocking**: When Google Apps Script Web Applications are embedded within enterprise intranets, portals, or iframe wrappers, Google enforces sandboxing under the `googleusercontent.com` domain. Modern Chromium browsers enforce strict **Permissions Policy** rules that block camera access (`navigator.mediaDevices.getUserMedia()`), leaving embedded web applications unable to stream video or capture photographic evidence.
-* **Cross-Origin Resource Sharing (CORS) Barriers**: Standalone hardware workstation overlays—such as [[Bagging-VMS-overlay]] and [[cameraOverlayBridge]]—run on local station hosts (`http://localhost:8080`) or GitHub Pages. These external frontends cannot directly invoke Google Apps Script endpoints via standard `fetch()` or `XMLHttpRequest` due to Google's redirect mechanism and strict CORS headers, which block client-side preflight `OPTIONS` requests.
+* **Cross-Origin Resource Sharing (CORS) Barriers**: Standalone hardware workstation overlays—such as Bagging-VMS-overlay and cameraOverlayBridge—run on local station hosts (`http://localhost:8080`) or GitHub Pages. These external frontends cannot directly invoke Google Apps Script endpoints via standard `fetch()` or `XMLHttpRequest` due to Google's redirect mechanism and strict CORS headers, which block client-side preflight `OPTIONS` requests.
 * **Multi-Hub Operational Isolation**: Different distribution centers (e.g., Delhi North Hub, Bangalore Hub, Mirzapur Hub) require their verification records and photo archives to route to distinct regional Google Sheets and Google Drive folders without deploying isolated codebases or duplicating script projects.
 
 ### The Architectural Solution
@@ -41,7 +41,7 @@ In high-velocity last-mile e-commerce and reverse-logistics distribution centers
 1. **Serverless Infrastructure Replacement**: Replaces Firebase Auth with native Google Workspace identity (`Session.getActiveUser().getEmail()`), replaces Firestore with structured 20-column relational [[Google Sheets]] (`SpreadsheetApp`), and replaces Cloudinary/S3 with automated [[Google Drive]] folder hierarchies (`DriveApp`).
 2. **Dual-Mode Architectural Deployment**:
    * **Full-Featured Workstation GUI (`app.html`)**: A complete single-page application (SPA) featuring TSV/Excel batch import, automatic item bundle splitting (`splitProducts`), physical USB/Bluetooth barcode scanner integration, an interactive 4-step quality audit pipeline, and an administrative historical dashboard with live search, date-range filtering, bulk purge operations, and client-side CSV generation.
-   * **Headless REST API / CORS Bridge (`Code.js:doPost`)**: A dynamic action-routing backend that implements an **Iframe postMessage Proxy Pattern**. External frontends ([[Bagging-VMS-overlay]], [[cameraOverlayBridge]]) submit form data targeted at a hidden iframe; `Code.js:doPost()` executes the requested action and returns an HTML page that triggers `window.parent.postMessage()`, completely bypassing browser CORS barriers without an intermediate proxy server.
+   * **Headless REST API / CORS Bridge (`Code.js:doPost`)**: A dynamic action-routing backend that implements an **Iframe postMessage Proxy Pattern**. External frontends (Bagging-VMS-overlay, cameraOverlayBridge) submit form data targeted at a hidden iframe; `Code.js:doPost()` executes the requested action and returns an HTML page that triggers `window.parent.postMessage()`, completely bypassing browser CORS barriers without an intermediate proxy server.
 3. **Top-Window Camera Permissions Bridge**: Implements a bidirectional `postMessage` protocol between the embedded web app and its top-level host shell. When an operator triggers a photo capture, the web app requests the host frame (`window.top`) to invoke `getUserMedia()` outside the sandboxed iframe, returning the captured JPEG data URL back to the workstation.
 4. **Multi-User / Multi-Hub Isolation Engine (`getPropKey_`)**: Utilizes `PropertiesService.getUserProperties()` with sanitized user-email prefixes (`u_<safeEmail>_<key>`). This guarantees that independent logistics coordinators and hub stations maintain separate target `sheetId`, `folderId`, and `hubName` configurations within a single shared deployment.
 5. **Standardized 4-Step Physical Inspection Protocol**:
@@ -65,7 +65,7 @@ In high-velocity last-mile e-commerce and reverse-logistics distribution centers
 | **Timezone Standard** | Indian Standard Time | `Asia/Kolkata` (UTC+05:30) | `appsscript.json:2` | Aligns all timestamp evaluations, folder creation dates, and spreadsheet logs (`ScannedAt`) with Indian logistics hub shift schedules. |
 | **Exception Logging** | Google Cloud Stackdriver | `STACKDRIVER` | `appsscript.json:4` | Captures uncaught backend exceptions, RPC failures, Drive upload errors, and `Logger.log()` streams directly to Google Cloud Logging. |
 | **Web Presentation** | GAS HtmlService | `HtmlService.createHtmlOutputFromFile` | `Code.js:15-20` | Serves the standalone client SPA, injects viewport meta headers, and configures `ALLOWALL` X-Frame-Options for portal embedding. |
-| **Cross-Origin Bridge** | Hidden Iframe `postMessage` Proxy | Native HTML5 Messaging (`postMessage`) | `Code.js:59-74, 80-88` | Bypasses browser CORS restrictions for external frontends ([[Bagging-VMS-overlay]], [[cameraOverlayBridge]]) by returning an auto-executing script targeting `window.parent`. |
+| **Cross-Origin Bridge** | Hidden Iframe `postMessage` Proxy | Native HTML5 Messaging (`postMessage`) | `Code.js:59-74, 80-88` | Bypasses browser CORS restrictions for external frontends (Bagging-VMS-overlay, cameraOverlayBridge) by returning an auto-executing script targeting `window.parent`. |
 | **Client UI Architecture** | Vanilla HTML5 / ES6+ SPA | Zero-dependency Single Page App | `app.html:1-2289` | Monolithic, self-contained client workstation delivering high-velocity DOM updates, responsive modals, and hardware scanner event handling without a build step. |
 | **Client Typography** | Google Fonts (`Outfit`, `Inter`) | Outfit (Headings: 400–700), Inter (Body: 400–700) | `app.html:9-13, 27-28` | Industrial-grade typography optimized for warehouse workstation readability, numeric tracking clarity, and visual status badging. |
 | **Hardware Integration** | Barcode Scanner Keyboard Wedge | DOM KeyboardEvent (`Enter` key listener) | `app.html:1774, 2174` | Listens for rapid serial keystroke events from 1D/2D USB and Bluetooth handheld barcode scanners targeting `#tracking-input`. |
@@ -81,7 +81,7 @@ In high-velocity last-mile e-commerce and reverse-logistics distribution centers
 
 `shipVerify_BridgeAutomation` is engineered to operate concurrently in two distinct execution modes:
 1. **Direct Workstation SPA Mode**: Logistics operators open the web app directly in a browser tab or embedded within an enterprise shell (`app.html`), interacting with the complete graphical UI.
-2. **Headless Hardware Bridge RPC Mode**: External specialized client web applications (such as [[Bagging-VMS-overlay]] and [[cameraOverlayBridge]]) communicate via HTTP POST (`doPost`) using a hidden iframe form proxy, leveraging the backend strictly for image storage and spreadsheet record management.
+2. **Headless Hardware Bridge RPC Mode**: External specialized client web applications (such as Bagging-VMS-overlay and cameraOverlayBridge) communicate via HTTP POST (`doPost`) using a hidden iframe form proxy, leveraging the backend strictly for image storage and spreadsheet record management.
 
 ```mermaid
 flowchart TD
@@ -657,14 +657,14 @@ flowchart LR
     Bridge <--> PropsAPI
 ```
 
-### 1. Integration with [[Projects/Repo-cameraOverlayBridge|cameraOverlayBridge]]
+### 1. Integration with cameraOverlayBridge
 * **Purpose**: Provides an unrestricted top-level browser host to bypass Chrome Permissions Policy camera blocks on Google Apps Script iframes.
 * **Mechanism**: Embedded iframe with `allow="camera; microphone"`.
 * **Messaging Protocol**:
   * *Request*: Workstation sends `window.top.postMessage({ type: 'OPEN_CAMERA', target: 'intact'|'content'|'packed' }, '*')` (`app.html:1846`).
   * *Response*: Host shell sends `window.postMessage({ type: 'CAMERA_RESULT', image: 'data:image/jpeg;base64,...', target: '...' }, '*')` (`app.html:1507-1536`).
 
-### 2. Integration with [[Projects/Repo-Bagging-VMS-overlay|Bagging-VMS-overlay]]
+### 2. Integration with Bagging-VMS-overlay
 * **Purpose**: Dedicated warehouse bagging table workstation recording video footage and capturing verification snapshots.
 * **Mechanism**: Headless form submission targeting a hidden `<iframe>`.
 * **Messaging Protocol**:
@@ -785,7 +785,7 @@ When deploying via the Google Apps Script Web Editor (**Deploy** > **Manage Depl
    > Running as `USER_DEPLOYING` ensures that all warehouse associates write to the authorized central Google Sheet and Drive folder without requiring individual Google Drive folder edit permissions.
 2. **Who has access**: Select **Anyone within [Your Workspace Domain]** (`DOMAIN`).
    * For Myntra/Flipkart internal operations, this enforces Google Single Sign-On (SSO) while preventing public internet exposure.
-3. **Redeployment URL Stability**: When updating production code, always **edit existing deployment** rather than creating a new deployment. Creating a new deployment generates a new deployment ID (`/exec` URL), which breaks hardcoded iframe links in [[cameraOverlayBridge]] (`cameraOverlayBridge.html:134`).
+3. **Redeployment URL Stability**: When updating production code, always **edit existing deployment** rather than creating a new deployment. Creating a new deployment generates a new deployment ID (`/exec` URL), which breaks hardcoded iframe links in cameraOverlayBridge (`cameraOverlayBridge.html:134`).
 
 ---
 
@@ -825,7 +825,7 @@ clasp push
    * Open the `/exec` URL directly in Chrome.
    * *Note*: Camera capture will fail with "Camera bridge unavailable" unless tested in an environment with the top-window bridge, or the operator uses an external capture workaround.
 2. **Testing Embedded in `cameraOverlayBridge`**:
-   * Clone [[Projects/Repo-cameraOverlayBridge|cameraOverlayBridge]] locally.
+   * Clone cameraOverlayBridge locally.
    * Verify line 134 of `cameraOverlayBridge.html` points to your deployed Apps Script Web App `/exec` URL.
    * Start a local HTTP server:
      ```bash
@@ -891,7 +891,7 @@ clasp push
 * **Unpaginated Sheet Querying (`Code.js:312-341`)**: `getVerifications()` fetches all rows in the spreadsheet (`sheet.getRange(2, 1, lastRow - 1, numCols).getValues()`) into V8 memory before applying filters. When a hub spreadsheet exceeds 10,000 verification rows, this will cause memory bloat and execution delays exceeding 3–5 seconds.
   * *Remediation*: Implement a reverse-scanning loop reading the bottom $N$ rows, or partition sheets monthly.
 * **Silent Drive File Trashing (`Code.js:640-642`)**: In `deleteImageFromDrive_()`, errors during file trashing are logged with `Logger.log()` but suppressed without error notifications. If Drive permissions change, orphaned files may remain in Drive while their corresponding spreadsheet rows are deleted.
-* **Hardcoded Script Deployment URL in Host Shell**: In [[Projects/Repo-cameraOverlayBridge|cameraOverlayBridge]], the deployment URL is hardcoded on line 134. If this script is redeployed with a new deployment version, the host shell HTML file must be manually updated and committed.
+* **Hardcoded Script Deployment URL in Host Shell**: In cameraOverlayBridge, the deployment URL is hardcoded on line 134. If this script is redeployed with a new deployment version, the host shell HTML file must be manually updated and committed.
 * **Client-Side Manifest Memory Volatility**: Parsed manifest items are stored strictly in `appState.items` (`app.html:1568`). If an operator accidentally refreshes the browser tab midway through an inspection batch, all unverified manifest items must be re-pasted into the input view.
   * *Remediation*: Cache `appState.items` in `sessionStorage` or `localStorage`.
 
@@ -914,7 +914,7 @@ clasp push
 ### Phase 1: High Priority (Operational Stability & Reliability)
 - [ ] **Client State Persistence**: Save `appState.items` and `appState.verifiedTrackingIds` to browser `localStorage` or `sessionStorage` to protect operators from accidental browser refreshes.
 - [ ] **Target Origin PostMessage Hardening**: Replace `'*'` in `Code.js:69` and `app.html:1846` with strict domain white-lists (e.g., `https://samarvscode.github.io`).
-- [ ] **Deployment URL Decoupling**: Update [[Projects/Repo-cameraOverlayBridge|cameraOverlayBridge]] to store the GAS `/exec` URL in `localStorage`, eliminating hardcoded script IDs.
+- [ ] **Deployment URL Decoupling**: Update cameraOverlayBridge to store the GAS `/exec` URL in `localStorage`, eliminating hardcoded script IDs.
 
 ### Phase 2: Performance & Scalability Enhancements
 - [ ] **Chunked / Reverse Sheet Querying**: Refactor `getVerifications()` to read records backwards from `lastRow` down to `lastRow - 100`, preventing memory overflow on large spreadsheets.
@@ -936,7 +936,7 @@ clasp push
 * **2026-08-12 (v2.0)**:
   * Migrated from legacy Firebase Auth / Firestore / Cloudinary architecture to 100% native Google Workspace stack (`SpreadsheetApp`, `DriveApp`, `Session`).
   * Implemented multi-tenant user isolation using sanitized email keys in `PropertiesService` (`getPropKey_`).
-  * Engineered hidden iframe `postMessage` proxy pattern in `Code.js:doPost` to enable CORS-free communication with [[Bagging-VMS-overlay]].
+  * Engineered hidden iframe `postMessage` proxy pattern in `Code.js:doPost` to enable CORS-free communication with Bagging-VMS-overlay.
 * **2026-06-25 (v1.2)**:
   * Integrated top-window camera bridge protocol (`OPEN_CAMERA`, `CAMERA_RESULT`) to resolve Chromium Permissions Policy camera blocking inside GAS iframes.
   * Added automated item bundle splitting (`splitProducts`) for multi-quantity shipments (`rawQty > 1`).
@@ -959,16 +959,12 @@ clasp push
 ---
 
 ## 18. Related Notes
-
-* [[Projects/GAS-shipVerify-Bridge]] — Primary high-level project index and knowledge graph registration for this Apps Script bridge.
-* [[Projects/Repo-cameraOverlayBridge]] — The dedicated top-level hardware bridge interface providing WebRTC camera permissions passthrough to this script.
-* [[Projects/Repo-Bagging-VMS-overlay]] — Workstation video capture frontend communicating with this backend via the iframe `postMessage` proxy.
-* [[Projects/GAS-Bagging-VMS-System]] — Sister Apps Script backend handling Base64 WebM VP9 video stream uploads and footage logging.
-* [[Services/Google-Apps-Script]] — Central Google Apps Script platform service documentation and infrastructure guide.
-* [[Services/Myntra-Logistics-Infrastructure#warehouse-vision-vms]] — Master infrastructure cluster covering warehouse vision and VMS workstations.
-* [[shipment_reco]] — Sister logistics reconciliation web application engineered for last-mile hub dispatch and return reconciliation.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 
@@ -976,5 +972,5 @@ To update this project memory document after making changes to the codebase:
 1. **Pull Latest Code**: Navigate to `C:\Users\User\Desktop\gas apps\shipVerify_BridgeAutomation` and execute `clasp pull`.
 2. **Verify File Hashes & Line Numbers**: Check for modifications in `Code.js` (657 lines) and `app.html` (2,289 lines).
 3. **Verify Database Columns**: If modifying `HEADERS` in `Code.js:199-220`, update the **Database Schema Specification** table in Section 7 and adjust the column mappings in `saveVerification()`, `getVerifications()`, and `handleDownloadCSV()`.
-4. **Audit Cross-Origin Protocol**: If adjusting `doPost()` in `Code.js:31-89`, verify that the HTML postMessage proxy structure remains intact and test against [[Bagging-VMS-overlay]] and [[cameraOverlayBridge]].
+4. **Audit Cross-Origin Protocol**: If adjusting `doPost()` in `Code.js:31-89`, verify that the HTML postMessage proxy structure remains intact and test against Bagging-VMS-overlay and cameraOverlayBridge.
 5. **Sync with Obsidian Vault**: Ensure any newly created services, hub clusters, or external repositories are cross-referenced with appropriate `[[wikilinks]]`.

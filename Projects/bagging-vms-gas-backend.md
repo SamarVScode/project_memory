@@ -21,7 +21,7 @@ TARGET VAULT PATH:   C:\Users\User\project_memory\project_memory\Projects\baggin
 PRIMARY DEPLOYMENT:  Google Apps Script Web App (V8 Runtime, executeAs: USER_DEPLOYING, access: ANYONE)
 WORKSTATION RUNTIME: Local Node.js HTTP Server (server.js:8080) & start_station.bat
 HOST SHELL / BRIDGE: [[Bagging-VMS-overlay]] (Top-Level WebRTC Host)
-SISTER REFERENCES:   [[cameraOverlayBridge]], [[shipVerify_BridgeAutomation]], [[pre-alert]]
+SISTER REFERENCES:   [[cameraOverlayBridge]]
 AUDIT SPREADSHEET:   1foxi4mQkaqMaZSYVQi1LIQbBVYEuv7Q_yVbPniG7RLA (Tab: Footage_Logs)
 ARCHIVAL FOLDER:     1TYA0VByXijI-v7787GyfzTGrIHd8QA-i (Google Drive)
 TIMEZONE:            GMT+05:30 (Asia/Kolkata)
@@ -222,7 +222,7 @@ C:\Users\User\Desktop\bagginfvms
 ├── ref_cameraOverlayBridge/     # Reference implementation: VerifyScan Pro standalone top-level camera overlay bridge
 │   └── index.html               # Reference HTML demonstrating sandbox escape pattern via postMessage
 │
-└── ref_gas_project/             # Reference implementation: Shipment Verification App ([[shipVerify_BridgeAutomation]])
+└── ref_gas_project/             # Reference implementation: Shipment Verification App (shipVerify_BridgeAutomation)
     ├── app.html                 # Complete mobile-first shipment verification frontend
     ├── appsscript.json          # Manifest for reference project
     └── Code.gs                  # Full-featured 657-line GAS server with REST API router, Sheet auth, and Drive archival
@@ -667,15 +667,14 @@ No prior note supplied — changelog starts here.
 ---
 
 ## 18. Related Notes
-
 - [[Bagging-VMS-overlay]] — Companion top-level WebRTC camera host shell deployed on GitHub Pages / workstation port 8080 to bypass iframe permissions policies.
-- [[cameraOverlayBridge]] — Sister camera bridge implementation (`VerifyScan Pro`) utilizing the top-level camera overlay pattern.
-- [[shipVerify_BridgeAutomation]] — Reference shipment verification enterprise GAS backend (`ref_gas_project/Code.gs`), demonstrating advanced Sheet-based authentication and dynamic action dispatching.
-- [[pre-alert]] — Ancillary inbound logistics alerting engine (`prealert/Code.js`) extracting shipment landing data from Gmail and syncing to Google Sheets and Telegram.
-- [[Google Apps Script]] — Core cloud serverless execution platform.
-- [[clasp]] — Google Apps Script local CLI developer workflow.
+- [[cameraOverlayBridge]] — Sister camera bridge implementation utilizing the top-level camera overlay pattern.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

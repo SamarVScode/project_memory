@@ -31,7 +31,7 @@ EMBEDDED ENDPOINT: https://script.google.com/a/macros/myntra.com/s/AKfycbyEcPUQI
 ```
 
 ### The Operational Problem
-In enterprise logistics hubs (specifically within [[Myntra]] and [[Flipkart]] returns processing centers, sorting hubs, and outbound bagging stations), operators perform physical shipment quality audits using web applications like [[shipVerify_BridgeAutomation]] (user-facing title: **VerifyScan Pro**). Auditors must capture high-resolution photographic evidence across three distinct inspection checkpoints:
+In enterprise logistics hubs (specifically within [[Myntra]] and [[Flipkart]] returns processing centers, sorting hubs, and outbound bagging stations), operators perform physical shipment quality audits using web applications like shipVerify_BridgeAutomation (user-facing title: **VerifyScan Pro**). Auditors must capture high-resolution photographic evidence across three distinct inspection checkpoints:
 1. **Intact packaging proof** (`target: 'intact'`): Verifying outer flyer sealing and tamper-evident tape before unpacking.
 2. **Product content proof** (`target: 'content'`): Documenting actual unboxed merchandise, physical condition, and intact brand price tags.
 3. **Repacked flyer & shipping label proof** (`target: 'packed'`): Verifying repacked flyer with the Return to Origin (RTO) or outbound airway bill (AWB) label attached.
@@ -748,13 +748,12 @@ This guarantees that the physical camera sensor does not remain powered on in th
 ---
 
 ## 18. Related Notes
-
-* [[Projects/shipVerify_BridgeAutomation|shipVerify_BridgeAutomation (Shipment Verification App)]] — The underlying Google Apps Script Web Application embedded within `cameraOverlayBridge`.
-* [[Projects/Bagging-VMS-overlay|Bagging-VMS-overlay]] — Parallel hardware workstation overlay for logistics bagging stations, featuring local settings and custom camera bridges.
-* [[Projects/GAS-Bagging-VMS-System|GAS: Bagging VMS System]] — Backend Google Apps Script warehouse bagging verification and ledger service.
-* [[Services/Warehouse Vision & VMS Cluster|Warehouse Vision & VMS Cluster Overview]] — Architectural index of vision, camera, and verification systems across sorting hubs.
+- [[Bagging-VMS-overlay]] — Workstation video capture frontend communicating via postMessage bridge.
+- [[bagging-vms-gas-backend]] — Backend Google Apps Script warehouse bagging verification and ledger service.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

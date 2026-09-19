@@ -19,7 +19,7 @@ Every operating day between **10:00 AM and 8:00 PM IST**, upstream enterprise di
 
 ### The Architectural Solution
 HourlyConversionReport solves this architectural barrier by implementing a **Two-Phase Asynchronous Polling & Chained-Trigger Architecture**:
-1. **Phase 1 (`runSamedayPolling`)**: Triggered every 5 minutes by a time-based cron trigger during the operational window (10:00 AM to 8:40 PM IST). It queries [[Gmail]] for the expected hourly email (`subject:"E2E_sameday_Summary_{{DATE}} {{HOUR}}.xlsx"`), verifies the payload format using binary magic-byte inspection (`PK\x03\x04`) or MIME metadata filtering, makes the file accessible via [[Google Drive]], and delegates heavy spreadsheet decompression and target-filtering to an external streaming microservice: [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]] hosted on [[Render]]. Phase 1 records the job identifier in `ScriptProperties` and registers a self-scheduling, one-shot time-based trigger for Phase 2.
+1. **Phase 1 (`runSamedayPolling`)**: Triggered every 5 minutes by a time-based cron trigger during the operational window (10:00 AM to 8:40 PM IST). It queries [[Gmail]] for the expected hourly email (`subject:"E2E_sameday_Summary_{{DATE}} {{HOUR}}.xlsx"`), verifies the payload format using binary magic-byte inspection (`PK\x03\x04`) or MIME metadata filtering, makes the file accessible via [[Google Drive]], and delegates heavy spreadsheet decompression and target-filtering to an external streaming microservice: xlsx_to_csv_bridge hosted on [[Render]]. Phase 1 records the job identifier in `ScriptProperties` and registers a self-scheduling, one-shot time-based trigger for Phase 2.
 2. **Phase 2 (`continueSameday`)**: Fired 10 minutes later (with up to 3 subsequent 5-minute retries) by the installable continuation trigger. It queries the bridge's `/job/{job_id}` endpoint, downloads a pre-filtered, lightweight CSV containing only `MRZ` operational records, cleans hidden carriage returns (`\r`) and Byte-Order Marks (`\uFEFF`), decomposes the data into sheet groups (`E2E_DC` and `Agent_view`), updates a live [[Google Sheets]] operational dashboard (`1vuzG3MNccbOBNKBBTQ0kf9yKT8UQLVV7J9AUj1vR5Rw`) via atomic batch writes, and broadcasts rich HTML KPI cards to dedicated forum topics in a central [[Telegram]] operations supergroup.
 
 ## 2. Tech Stack
@@ -37,7 +37,7 @@ HourlyConversionReport solves this architectural barrier by implementing a **Two
 | **Live Dashboard Store** | `SpreadsheetApp` | Built-in Workspace API | `Code.js:324-400` | Refreshes tabs `E2E_DC` and `Agent_view` in target workbook `1vuzG3MNccbOBNKBBTQ0kf9yKT8UQLVV7J9AUj1vR5Rw`. |
 | **HTTP Egress & Fetch** | `UrlFetchApp` | Built-in Networking API | `Code.js:262`, `538`, `552`, `741-746` | Communicates with the external FastAPI conversion bridge and Telegram Bot API. |
 | **CSV Parsing & Text** | `Utilities` | Built-in Utility API | `Code.js:149`, `560`, `759` | Converts raw CSV text into 2D arrays via `Utilities.parseCsv()` and formats localized date strings. |
-| **External Bridge Engine** | [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]] | Python / FastAPI / `xlsx2csv` on [[Render]] | `Code.js:23-24`, `248-278`, `535-571` | External streaming SAX microservice that parses multi-megabyte `.xlsx` files and filters for `MRZ` rows. |
+| **External Bridge Engine** | xlsx_to_csv_bridge | Python / FastAPI / `xlsx2csv` on [[Render]] | `Code.js:23-24`, `248-278`, `535-571` | External streaming SAX microservice that parses multi-megabyte `.xlsx` files and filters for `MRZ` rows. |
 | **Alerting & Notification** | [[Telegram]] Bot API | HTTP REST API / HTML Mode | `Code.js:34-38`, `732-752` | Dispatches formatted HTML performance cards to topics 5 (`E2E_DC` / Alerts) and 6 (`Agent_view`). |
 | **Project CLI Tooling** | Google Clasp (`@google/clasp`) | `>=2.4.0` *(inferred)* | Project Structure | CLI environment used to manage local source files and push to script ID `1385RHzZzU52h6Mjs-eUmaQle84gjjHANZ-eX_tvou_JhLdgCwHxnux1M`. |
 
@@ -46,7 +46,7 @@ HourlyConversionReport solves this architectural barrier by implementing a **Two
 ## 3. Architecture
 
 ### System Architecture Overview
-The system bridges Google Workspace enterprise applications ([[Gmail]], [[Google Drive]], [[Google Sheets]]) with an external cloud compute worker ([[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]]) and real-time operational communications ([[Telegram]]). Because Google Apps Script enforces a strict 6-minute execution limit, the architecture strictly segregates file acquisition from downstream processing.
+The system bridges Google Workspace enterprise applications ([[Gmail]], [[Google Drive]], [[Google Sheets]]) with an external cloud compute worker (xlsx_to_csv_bridge) and real-time operational communications ([[Telegram]]). Because Google Apps Script enforces a strict 6-minute execution limit, the architecture strictly segregates file acquisition from downstream processing.
 
 ```mermaid
 flowchart TD
@@ -162,7 +162,7 @@ flowchart TD
    - **MIME Inspection for Large Links (`verifyDriveFileMime_`)**: When workbooks arrive as Google Drive hyperlinks in the email body, the script queries Drive metadata without downloading the file into GAS memory, rejecting Google Sheets native formats and HTML pages while accepting `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` and zip archives (`Code.js:82-119`).
 
 2. **Asynchronous Compute Offloading Layer**:
-   - **Bridge Dispatch**: Phase 1 calls `POST /convert-async` on [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]]. Critically, it passes `source_filename`, which signals the bridge parser to discard massive raw inventory and nationwide dispatch sheets, strictly converting only `Agent_view` and `E2E_DC` (`Code.js:248-260`).
+   - **Bridge Dispatch**: Phase 1 calls `POST /convert-async` on xlsx_to_csv_bridge. Critically, it passes `source_filename`, which signals the bridge parser to discard massive raw inventory and nationwide dispatch sheets, strictly converting only `Agent_view` and `E2E_DC` (`Code.js:248-260`).
    - **Trigger Chaining**: Instead of idling in `Utilities.sleep()` (which exhausts GAS execution runtime and blocks the thread), Phase 1 dynamically instantiates a one-shot time-based trigger targeting `continueSameday` scheduled for 10 minutes in the future (`Code.js:221-225`).
 
 3. **Transformation & String Sanitization Layer**:
@@ -445,7 +445,7 @@ The script uses `PropertiesService.getScriptProperties()` for inter-phase commun
 
 ## 8. External Integrations & APIs
 
-### 1. External Streaming Bridge ([[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]])
+### 1. External Streaming Bridge (xlsx_to_csv_bridge)
 The conversion microservice is hosted on [[Render]] (`https://xlsx-to-csv-bridge.onrender.com`). Communication uses HTTP via `UrlFetchApp`:
 
 - **Job Initiation Endpoint (`GET /convert-async`)**:
@@ -580,7 +580,7 @@ clasp deploy --description "Production Sameday Hourly Poller v2"
    - Target Google Sheet: `https://docs.google.com/spreadsheets/d/1vuzG3MNccbOBNKBBTQ0kf9yKT8UQLVV7J9AUj1vR5Rw/edit`.
    - Google Drive storage.
 2. **Node.js & npm** (`>=18.0.0`) for local clasp CLI tooling.
-3. **Running External Bridge**: Access to [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]] on Render.
+3. **Running External Bridge**: Access to xlsx_to_csv_bridge on Render.
 
 ### Step-by-Step Initial Configuration
 1. **Clone Codebase Locally**:
@@ -642,7 +642,7 @@ Prior to v2, `Utilities.parseCsv()` preserved trailing carriage returns (`\r`) f
 
 ## 14. Design Decisions & Rationale
 
-1. **Why Offload to [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]] on Render?**
+1. **Why Offload to xlsx_to_csv_bridge on Render?**
    - *Rationale*: A 150 MB OpenXML `.xlsx` file contains compressed XML packages. Parsing XML in Google Apps Script requires loading the DOM into memory via `XmlService` or regex parsing raw strings. Both approaches exceed GAS's 50 MB heap limit and time out after 6 minutes. Offloading to an external streaming SAX parser (`xlsx2csv`) running in Python on Render maintains an $O(1)$ memory footprint (<50 MB RSS) and returns a clean, filtered CSV in seconds.
 
 2. **Why Two-Phase Trigger Chaining Instead of Synchronous Sleeping?**
@@ -700,23 +700,12 @@ Prior to v2, `Utilities.parseCsv()` preserved trailing carriage returns (`\r`) f
 ---
 
 ## 18. Related Notes
-
-- **Central Engineering Map**: [[Dashboard]]
-- **Connected Satellite Blueprint**: [[Projects/GAS-HourlyConversionReport]]
-- **Connected Conversion Bridge**: [[Projects/Repo-xlsx_to_csv_bridge]]
-- **Filtering Microservice**: [[Projects/Repo-DataConversion]]
-- **Big-Data Stream Hub**: [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR]]
-- **Sibling Logistics Pipelines**:
-  - [[Projects/GAS-EI-Pan-India-Report]]
-  - [[Projects/GAS-dc-rca-progression]]
-  - [[Projects/GAS-Lake-Ingestion-Pipeline]]
-  - [[Projects/GAS-D-1-SummaryAutomation]]
-- **Infrastructure Services**:
-  - [[Services/Google-Apps-Script]]
-  - [[Services/FastAPI-Render-Bridges]]
-  - [[Services/Myntra-Logistics-Infrastructure]]
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

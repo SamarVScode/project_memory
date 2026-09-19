@@ -780,22 +780,12 @@ The application operates within Google's standing serverless constraints:
 ---
 
 ## 18. Related Notes
-
-- **Primary Architecture & Upstream Hub**:
-  - [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR]] — *Core stream reporting engine converting large supply chain workbooks.*
-  - [[Projects/Repo-xlsx_to_csv_bridge]] — *Ultra-low memory FastAPI bridge offloading Excel parsing for GAS scripts.*
-  - [[Projects/Repo-DataConversion]] — *High-throughput streaming filter service for supply chain workbooks.*
-- **Connected Satellites & Sister Automations**:
-  - [[Projects/GAS-EI-Pan-India-Report]] — *Vault stub note for this Google Apps Script project.*
-  - [[Projects/GAS-HourlyConversionReport]] — *Intraday hourly conversion tracking automation.*
-  - [[Projects/GAS-D-1-SummaryAutomation]] — *Previous-day operational summary ingestion script.*
-  - [[Projects/GAS-RVP-Q2-AppendAutomation]] — *Reverse pick-up Q2 append pipeline.*
-  - [[Projects/GAS-RTO-Q2-appendAutomation]] — *Return-to-origin append pipeline.*
-- **Infrastructure & Domain Reference**:
-  - [[Services/Google-Apps-Script]] — *Google Apps Script runtime constraints, quotas, and clasp configuration.*
-  - [[Services/Myntra-Logistics-Infrastructure]] — *Domain model for Myntra logistics, DCs, and operational reporting.*
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

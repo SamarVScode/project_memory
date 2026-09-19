@@ -774,16 +774,13 @@ clasp open
 ---
 
 ## 18. Related Notes
-
-- [[EI Stream Report Server]]: The backend Python FastAPI / Rust Calamine streaming microservice hosted on Render.
-- [[XLSX-STREAM-REPORT-GENERATOR]]: Architecture specification and memory benchmarks for the zero-memory stream engine.
-- [[EI-Pan-India-Report]]: Standalone Google Apps Script daily E2E task ingestion pipeline and weekly partitioner.
-- [[DataConversion]]: Hourly conversion rate analysis and reporting documentation.
-- [[HourlyConversionReport]]: Intraday logistics conversion automation runbook.
-- [[xlsx_to_csv_bridge]]: Binary OpenXML to tabular CSV streaming conversion utilities.
-- [[Services/Myntra-Logistics-Infrastructure]]: Nationwide logistics tracking, DC nodes, and stream engine architecture.
+- [[XLSX-STREAM-REPORT-GENERATOR]] — Architecture specification and zero-memory streaming engine.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

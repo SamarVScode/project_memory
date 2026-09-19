@@ -585,13 +585,12 @@ The application requests five OAuth scopes in `appsscript.json:6-12`:
 
 ## 18. Related Notes
 - [[XLSX-STREAM-REPORT-GENERATOR]] — Python streaming engine microservice deployed on Render.
-- [[EI Stream Report Server]] — Architecture and API contract reference for the streaming report generator.
-- [[Google Apps Script]] — Core runtime platform standards, execution limits, and API directives.
-- [[Master Sheet Engine]] — Consolidated enterprise spreadsheet architecture and tab maintenance rules.
-- [[D-1-SummaryAutomation]] — Automated D-1 email harvesting and reconciliation note.
-- [[HourlyConversionReport]] — Intraday Sameday conversion reporting pipeline documentation.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 To safely refresh this project memory document:

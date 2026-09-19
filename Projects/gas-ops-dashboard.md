@@ -843,15 +843,12 @@ No prior note supplied — changelog starts here.
 ---
 
 ## 18. Related Notes
-
-- [[unified-dashboard]]: Central Operations Unified Dashboard managing Mirzapur hub forward pendency, BRSNR, TASKY, and multi-system Google Sheets workbooks.
-- [[HourlyConversionReport]]: Real-time hourly conversion tracking engine calculating intra-day run rates and Wishmaster conversion pacing.
-- [[nps]]: Dedicated Net Promoter Score feedback engine and executive sentiment analysis dashboard.
-- [[BRSNRAttributesAutomation]]: Automated customer non-receipt attribute tagging, fraud verification, and breach investigation pipeline.
-- [[dc-rca-progression]]: Root Cause Analysis (RCA) progression tracker for distribution center breach resolution.
-- [[Hub RCA Tracker Dashboard]]: Enterprise dashboard monitoring hub-level escalation remediation workflows.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

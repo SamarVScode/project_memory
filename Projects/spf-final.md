@@ -823,16 +823,12 @@ clasp deploy --description "Production Release: Dual Progress Bars & Sheets API 
 ---
 
 ## 18. Related Notes
-
-* [[Hub RCA Tracker Dashboard]]: Companion high-level multi-tracker dashboard covering 7 logistics operational trackers across 12 North India hubs.
-* [[dc-rca-progression]]: Operational RCA progression note tracking hub compliance algorithms and speedometer gauge mechanics.
-* [[DataConversion]]: Data transformation pipeline documentation for e-commerce logistics records.
-* [[EI Stream Report Server]]: Node.js streaming architecture for high-volume logistics Excel generation.
-* [[XLSX-STREAM-REPORT-GENERATOR]]: High-performance XLSX stream writer handling multi-sheet workbooks.
-* [[Myntra Logistics Architecture]]: Domain reference note on regional hub structures and return handling workflows.
-* [[Google Apps Script Production Patterns]]: Core engineering guide for V8 optimization, CacheService strategies, and clasp deployment workflows.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

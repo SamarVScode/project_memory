@@ -585,17 +585,11 @@ All timestamps and commit hashes below reflect the true commit history of the re
 ---
 
 ## 18. Related Notes
-
-* [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR|XLSX-STREAM-REPORT-GENERATOR]] — Advanced successor microservice implementing 5-tier Rust-backed (`python-calamine`) Zero-DOM streaming and dynamic multi-tab report generation.
-* [[Projects/Repo-xlsx_to_csv_bridge|Vault Note: Repo-xlsx_to_csv_bridge]] — Existing vault blueprint note for this microservice.
-* [[Projects/GAS-D-1-SummaryAutomation|GAS: D-1 SummaryAutomation]] — Upstream Google Apps Script consuming D-1 conversion endpoints.
-* [[Projects/GAS-EI-Pan-India-Report|GAS: EI Pan India Report]] — Upstream Google Apps Script utilizing bridge for pan-India logistics aggregation.
-* [[Projects/GAS-Lake-Ingestion-Pipeline|GAS: Lake Ingestion Pipeline]] — Downstream data lake loader consuming CSV streams.
-* [[Projects/GAS-shipVerify-Bridge|GAS: shipVerify-Bridge]] — Shipment verification automation integrated with bridge infrastructure.
-* [[Services/Google-Apps-Script|Services: Google Apps Script Infrastructure]] — Core infrastructure documentation for Google Workspace automations.
-* [[Services/Myntra-Logistics-Infrastructure#logistics-stream-engine|Services: Logistics Stream Engine Cluster]] — Service cluster grouping stream generators and conversion bridges.
+- [[XLSX-STREAM-REPORT-GENERATOR]] — Advanced successor microservice implementing streaming report generation.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

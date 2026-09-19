@@ -22,54 +22,65 @@ Welcome to your central engineering memory layer! This vault serves as the persi
 
 ---
 
-## 🗺️ Operational Knowledge Clusters
+## 🗺️ Architectural Project Suites (Genuine Clusters)
 
-### 1. 📊 Logistics Big-Data & Excel Streaming Pipeline
-*High-throughput data streaming processing 500k+ row supply chain workbooks in constant $O(1)$ memory.*
-* **Core Hub:** [[Projects/XLSX-STREAM-REPORT-GENERATOR|XLSX-STREAM-REPORT-GENERATOR (`ei_stream_server`)]]
-* **Bridges & Filters:**
-  * [[Projects/xlsx_to_csv_bridge|xlsx_to_csv_bridge]]
-  * [[Projects/DataConversion|DataConversion (`xlsx-filter-service`)]]
-* **Connected Google Apps Script Satellites & Pipelines:**
-  * [[Projects/EI-Pan-India-Report|EI-Pan-India-Report]]
-  * [[Projects/HourlyConversionReport|HourlyConversionReport]]
+### 1. 📱 Field Agent Operations & Manpower Tracking (`AgentFlow` Monorepo Suite)
+*Monorepo suite tracking agent shifts, leave requests, payouts, and attendance.*
+* **Monorepo Master Hub:** [[Projects/agent-summary-mechanism|agent-summary-mechanism]]
+  * [[Projects/AgentFlow-Android|AgentFlow Android App]] — Native Android client with ML Kit OCR.
+  * [[Projects/AgentFlow-Web-Tracker|AgentFlow Web Operations Map]] — Field agent web tracker portal.
+  * [[Projects/AgentFlow-Leave-Admin|AgentFlow Leave Administration]] — Administrative leave review dashboard.
+  * [[Projects/AgentFlow-GAS-Backend|AgentFlow GAS Payout Backend]] — Google Apps Script financial calculation backend.
+
+---
+
+### 2. 🎥 Warehouse Vision & VMS Hardware Overlays (`Bagging VMS` Workstation Suite)
+*Workstation camera overlays recording live packing operations in WebM VP9 with barcode scanner integrations.*
+* **Workstation Overlays & Bridges:**
+  * [[Projects/Bagging-VMS-overlay|Bagging-VMS-overlay]] — Top-level WebRTC camera host shell.
+  * [[Projects/cameraOverlayBridge|cameraOverlayBridge]] — Hardware permission camera bridge interface.
+* **Connected Google Apps Script Backend:**
+  * [[Projects/bagging-vms-gas-backend|bagging-vms-gas-backend]] — Serverless video capture, archival, and chain-of-custody logging backend.
+
+---
+
+### 3. 📊 Logistics Big-Data & Excel Streaming Engine (`XLSX-STREAM` Suite)
+*High-throughput data streaming engine processing 500k+ row supply chain workbooks in constant $O(1)$ memory.*
+* **Core Stream Engine Hub:** [[Projects/XLSX-STREAM-REPORT-GENERATOR|XLSX-STREAM-REPORT-GENERATOR (`ei_stream_server`)]]
+* **FastAPI Direct Conversion Bridge:**
+  * [[Projects/xlsx_to_csv_bridge|xlsx_to_csv_bridge]] — Rust/Calamine and SAX streaming XLSX-to-CSV converter.
+* **Connected Stream Trigger Pipelines:**
   * [[Projects/EI-Stream-Trigger|EI-Stream-Trigger (Lake Ingestion Pipeline)]]
   * [[Projects/ei-report-trigger|ei-report-trigger (Render Cloud Trigger Orchestrator)]]
-  * [[Projects/dc-rca-progression|dc-rca-progression (Hub RCA Tracker Dashboard)]]
-  * [[Projects/spf-final|spf-final (North Loss DB / Cluster Lead View)]]
-  * [[Projects/RVP-Q2-AppendAutomation|RVP-Q2-AppendAutomation]]
-  * [[Projects/RTO-Q2-appendAutomation|RTO-Q2-appendAutomation]]
-  * [[Projects/D-1-SummaryAutomation|D-1-SummaryAutomation]]
-  * [[Projects/BRSNRAttributesAutomation|BRSNRAttributesAutomation]]
-  * [[Projects/shipment_reco|shipment_reco]]
-  * [[Projects/shipVerify_BridgeAutomation|shipVerify_BridgeAutomation]]
-  * [[Projects/scm-performance|scm-performance (24-Hr SLA Performance)]]
-  * [[Projects/pre-alert|pre-alert (Inbound Shipment Pre-Alert & Manifest Dispatcher)]]
 
 ---
 
-### 2. 🎥 Warehouse Vision & VMS Hardware Overlays
-*Workstation camera overlays recording live packing operations in WebM VP9 with barcode scanner integrations.*
-* **Web Overlays & Bridges:**
-  * [[Projects/Bagging-VMS-overlay|Bagging-VMS-overlay]]
-  * [[Projects/cameraOverlayBridge|cameraOverlayBridge]]
-* **Connected Google Apps Script Backend:**
-  * [[Projects/bagging-vms-gas-backend|bagging-vms-gas-backend]]
+## 🛰️ Standalone Satellite Applications (Decoupled Nodes)
+
+### 📦 Standalone Logistics Reporting & Hub ETL Satellites
+*Independent Google Apps Script pipelines and microservices executing localized data transformations.*
+* [[Projects/EI-Pan-India-Report|EI-Pan-India-Report]] — Daily E2E task ingestion pipeline and weekly partitioner.
+* [[Projects/HourlyConversionReport|HourlyConversionReport]] — Real-time hourly conversion tracking engine.
+* [[Projects/D-1-SummaryAutomation|D-1-SummaryAutomation]] — Previous-day operational summary ingestion script.
+* [[Projects/RVP-Q2-AppendAutomation|RVP-Q2-AppendAutomation]] — Reverse pick-up Q2 append pipeline.
+* [[Projects/RTO-Q2-appendAutomation|RTO-Q2-appendAutomation]] — Return-to-origin append pipeline.
+* [[Projects/BRSNRAttributesAutomation|BRSNRAttributesAutomation]] — Customer non-receipt attribute tagging pipeline.
+* [[Projects/DataConversion|DataConversion (`xlsx-filter-service`)]] — Asynchronous spreadsheet filtering microservice.
+* [[Projects/dc-rca-progression|dc-rca-progression (Hub RCA Tracker Dashboard)]] — Distribution center breach resolution tracker.
+* [[Projects/spf-final|spf-final (North Loss DB / Cluster Lead View)]] — Seller Protection Fund loss reconciliation engine.
+* [[Projects/scm-performance|scm-performance (24-Hr SLA Performance)]] — SCM TAT 24-hour performance tracker.
+* [[Projects/shipment_reco|shipment_reco]] — Last-mile hub dispatch and return reconciliation tool.
+* [[Projects/shipVerify_BridgeAutomation|shipVerify_BridgeAutomation]] — Inbound scanning and quality audit verification backend.
+* [[Projects/pre-alert|pre-alert (Inbound Shipment Pre-Alert & Manifest Dispatcher)]] — Inbound logistics alerting engine.
 
 ---
 
-### 3. 📱 Field Agent Operations & Manpower Tracking
-*Mobile and administrative tooling tracking agent shifts, leave requests, payouts, and L4D attendance.*
-* **Mobile & Admin Hub (Monorepo):** [[Projects/agent-summary-mechanism|agent-summary-mechanism]]
-  * [[Projects/AgentFlow-Android|AgentFlow Android App]]
-  * [[Projects/AgentFlow-Web-Tracker|AgentFlow Web Operations Map]]
-  * [[Projects/AgentFlow-Leave-Admin|AgentFlow Leave Administration]]
-  * [[Projects/AgentFlow-GAS-Backend|AgentFlow GAS Payout Backend]]
-* **Connected Operations Consoles & Satellites:**
-  * [[Projects/l4d-dashboard|l4d-dashboard (L4D Inactivity Engine & Roster Dashboard)]]
-  * [[Projects/gas-ops-dashboard|gas-ops-dashboard (Operations Hub Management Suite)]]
-  * [[Projects/unified-dashboard|unified-dashboard (MRZ Operations Unified Dashboard)]]
-  * [[Projects/nps|nps (NPS Performance Engine)]]
+### 🖥️ Operations Consoles & Attendance Monitoring
+*Dedicated operational analytics and attendance monitoring consoles.*
+* [[Projects/unified-dashboard|unified-dashboard (MRZ Operations Unified Dashboard)]] — Mirzapur hub forward pendency console.
+* [[Projects/gas-ops-dashboard|gas-ops-dashboard (Operations Hub Management Suite)]] — Operations hub management dashboard.
+* [[Projects/l4d-dashboard|l4d-dashboard (L4D Inactivity Engine & Roster Dashboard)]] — Field agent inactivity and attendance tracker.
+* [[Projects/nps|nps (NPS Performance Engine)]] — Net Promoter Score survey feedback tool.
 
 ---
 
@@ -79,11 +90,10 @@ Welcome to your central engineering memory layer! This vault serves as the persi
 
 ---
 
-### 4. 💰 Financial Automations & Cash Reconciliation
+### 💰 Financial Automations & Cash Reconciliation
 *Automated tracking of Cash-On-Delivery (COD) remittances, transaction lookups, and account top-ups.*
-* **Connected Google Apps Script Satellites:**
-  * [[Projects/cod-automation|cod-automation (Excel Runsheet Bridge & PDF Deposit Slip)]]
-  * [[Projects/cash-inject|cash-inject (Cash Pickup Transaction Tracker)]]
+* [[Projects/cod-automation|cod-automation (Excel Runsheet Bridge & PDF Deposit Slip)]]
+* [[Projects/cash-inject|cash-inject (Cash Pickup Transaction Tracker)]]
 
 ---
 

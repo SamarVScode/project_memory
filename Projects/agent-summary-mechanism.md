@@ -571,15 +571,13 @@ npx @google/clasp push
 - [[AgentFlow-Leave-Admin]] — Web administrative leave management dashboard with date-fns and oxlint.
 - [[AgentFlow-GAS-Backend]] — Google Apps Script payout ledger engine, bi-monthly cycles, and Alpine.js dashboard.
 
-### Vault & Ecosystem References
-- [[Projects/Repo-agent-summary-mechanism|Vault Repo Reference: agent-summary-mechanism]]
-- [[Projects/GAS-Agent-payout|GAS: Agent Payout Service]]
-- [[Projects/GAS-agent-backend-payout|GAS: Agent Backend Payout Engine]]
-- [[Projects/GAS-live-l4d-test|GAS: Live L4D Inactivity Engine]]
-- [[Google Apps Script]] — Corporate automation and spreadsheet calculation platform.
-- [[Supabase]] — Cloud PostgreSQL and file storage backend.
+### Rules & Engineering Standards
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

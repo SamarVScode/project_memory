@@ -753,19 +753,13 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ---
 
 ## 18. Related Notes
-
-* Placeholder wikilinks to related architectural records and sister repository projects:
-  - [[EI Stream Report Server — Architecture Decisions]]
-  - [[EI Stream Report Server — Changelog]]
-  - [[Projects/Repo-xlsx_to_csv_bridge|xlsx_to_csv_bridge]]
-  - [[Projects/Repo-DataConversion|DataConversion]]
-  - [[Projects/GAS-EI-Pan-India-Report|GAS: EI Pan India Report]]
-  - [[Projects/GAS-HourlyConversionReport|GAS: HourlyConversionReport]]
-  - [[Projects/GAS-Lake-Ingestion-Pipeline|GAS: Lake Ingestion Pipeline]]
-  - [[Projects/GAS-dc-rca-progression|GAS: dc rca progression]]
-  - [[Projects/GAS-spf-final|GAS: spf final]]
+- [[EI-Stream-Trigger]] — Event-driven trigger architecture and lake ingestion pipeline.
+- [[ei-report-trigger]] — Cloud trigger orchestrator invoking the streaming report generator.
+- [[xlsx_to_csv_bridge]] — Ultra-low memory FastAPI conversion bridge offloading Excel parsing.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

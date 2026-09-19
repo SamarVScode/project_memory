@@ -684,12 +684,12 @@ The script requests two Google OAuth scopes in `appsscript.json#L23-26`:
 | **AGENT CACHE** | The consolidated Google Sheets storage tab in `SPREADSHEET_ID_MAPPING` maintaining 15 rolling days of deduplicated historical delivery records. |
 
 ## 18. Related Notes
-- [[GAS-live-l4d-test]]
-- [[Projects/Repo-agent-summary-mechanism]]
-- [[Services/Myntra-Logistics-Infrastructure#agent-operations-payout|Agent Operations & Manpower Tracking]]
-- [[Services/Google-Apps-Script|Google Apps Script Infrastructure]]
-- [[L4D Inactivity Engine — Architecture Decisions]]
-- [[L4D Inactivity Engine — Changelog]]
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
+
+---
+
 
 ## 19. Update Instructions (meta)
 To refresh or update this project memory document in future runs:

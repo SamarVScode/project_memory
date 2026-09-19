@@ -21,7 +21,7 @@ last-updated: 2026-09-18
 Operations supervisors and cash desk personnel at logistics fulfillment hubs face significant operational friction and calculation error risks when reconciling physical cash collected by delivery executives against logistics manifest TSV exports from ERP systems. Cashiers must manually segregate physical cash from digital gateway transactions (UPI, card, QR), compute complex denomination totals, reconcile differences against bank deposit slips, and manually archive paper proof slips, leading to reconciliation delays and cash discrepancy disputes.
 
 ### The Architectural Solution
-Deployed as a client-side Single-Page Application (`index.html`) backed by an atomic server execution pipeline (`Code.js`), the application ingests raw tab-delimited Excel clipboard data, parses and validates multi-column courier delivery runsheets, isolates cash collections from digital gateway transactions, computes aggregated financial metrics, and generates a formatted, three-tab [[Google Sheets]] workbook (`Summary`, `Ledger`, and an archived `Cash` tab cloned directly from master spreadsheet `1JL7dO-CWo6B3HaG0UbcIpgmVmBqlRTGgjmvsUsL0Ifw`). Simultaneously, it renders a pixel-perfect, two-page vector audit PDF slip, generates an immediate client-side base64 download stream, organizes generated documents in date-indexed [[Google Drive]] archive folders (`1d69rY5MCHYj7zWKP8mi0VSACXYoXMLkN`), and registers an asynchronous polling trigger to locate and copy corresponding Airtel Payments Bank deposit receipts archived in Drive folder `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` (managed by companion project [[cash-inject]]).
+Deployed as a client-side Single-Page Application (`index.html`) backed by an atomic server execution pipeline (`Code.js`), the application ingests raw tab-delimited Excel clipboard data, parses and validates multi-column courier delivery runsheets, isolates cash collections from digital gateway transactions, computes aggregated financial metrics, and generates a formatted, three-tab [[Google Sheets]] workbook (`Summary`, `Ledger`, and an archived `Cash` tab cloned directly from master spreadsheet `1JL7dO-CWo6B3HaG0UbcIpgmVmBqlRTGgjmvsUsL0Ifw`). Simultaneously, it renders a pixel-perfect, two-page vector audit PDF slip, generates an immediate client-side base64 download stream, organizes generated documents in date-indexed [[Google Drive]] archive folders (`1d69rY5MCHYj7zWKP8mi0VSACXYoXMLkN`), and registers an asynchronous polling trigger to locate and copy corresponding Airtel Payments Bank deposit receipts archived in Drive folder `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` (managed by companion project cash-inject).
 
 ## 2. Tech Stack
 
@@ -100,7 +100,7 @@ flowchart TD
 ### Core Architectural Patterns
 1. **Direct Object Reference Pattern (`Code.js` lines 180–250):** Standard GAS scripts frequently instantiate spreadsheets, close them, and re-open them via `SpreadsheetApp.openById()`. On newly created, unindexed cloud files, `openById()` and `getSheetByName()` frequently throw transient `DocumentApp / SpreadsheetApp` lookup exceptions. This project maintains the live reference returned by `SpreadsheetApp.create()` across all sheet mutations (`ss.getSheets()[0]`, `ss.insertSheet("Ledger")`, and `sourceSheet.copyTo(ss)`), performing a single atomic `SpreadsheetApp.flush()` prior to moving the file into its parent folder.
 2. **Dual Client/Server Parsing Redundancy:** Identical regular expressions and safe fraction parsers (`/(?:"([^"]*(?:""[^"]*)*)"|([^\t]*))(\t|$)/g` and `^i?(-?\d+)\s+(-?\d+)\/(-?\d+)$`) are implemented in both `index.html` (lines 787–874) and `Code.js` (lines 120–131, 703–757). This ensures immediate client-side UI feedback and validation before dispatching large JSON payloads across `google.script.run`.
-3. **Cross-Project Drive Storage Decoupling:** The application integrates directly with the output of [[cash-inject]] (Airtel Payments Bank transaction scanner). It polls folder `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` for bank deposit receipts dated `collectionDate + 1 day` (the physical bank deposit day).
+3. **Cross-Project Drive Storage Decoupling:** The application integrates directly with the output of cash-inject (Airtel Payments Bank transaction scanner). It polls folder `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` for bank deposit receipts dated `collectionDate + 1 day` (the physical bank deposit day).
 4. **Self-Pruning Asynchronous State Machine:** When bank deposit receipts are not yet available in Drive at the moment the runsheet is processed, the system serializes a background task into `ScriptProperties` under `PENDING_PDF_TASKS` and establishes a single `everyHours(1)` trigger. Once all queued dates are resolved (or reach a 24-attempt timeout), the trigger explicitly unregisters itself via `cleanUpHourlyPDFTrigger()`, preventing trigger leakages.
 
 ---
@@ -130,7 +130,7 @@ C:\Users\User\Desktop\cash\
 - **Purpose:** Server-side engine handling RPC entry points from `google.script.run`, concurrency locks, mathematical summaries, Google Sheets generation, PDF compilation, Google Drive file movement, and background trigger orchestration.
 - **Key Configuration Constants (`Code.js` lines 6–9):**
   - `DRIVE_FOLDER_ID`: `"1d69rY5MCHYj7zWKP8mi0VSACXYoXMLkN"` — Primary root Drive folder where per-date subfolders (e.g. `02-07-2026`) are created.
-  - `DELAYED_PDF_SOURCE_FOLDER_ID`: `"1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd"` — Source archive folder holding bank cash pickup deposit slips generated by [[cash-inject]].
+  - `DELAYED_PDF_SOURCE_FOLDER_ID`: `"1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd"` — Source archive folder holding bank cash pickup deposit slips generated by cash-inject.
   - `PENDING_TASKS_PROPERTY_KEY`: `"PENDING_PDF_TASKS"` — Key in `PropertiesService.getScriptProperties()` for asynchronous polling tasks.
   - `SOURCE_SPREADSHEET_ID`: `"1JL7dO-CWo6B3HaG0UbcIpgmVmBqlRTGgjmvsUsL0Ifw"` — External master spreadsheet containing historical daily collection tabs.
 - **Key Functions:**
@@ -313,7 +313,7 @@ sequenceDiagram
 | Constant | Code Location | Value | Description |
 |---|---|---|---|
 | `DRIVE_FOLDER_ID` | `Code.js` line 6 | `1d69rY5MCHYj7zWKP8mi0VSACXYoXMLkN` | Target parent folder in Google Drive where daily reconciliation folders (e.g. `02-07-2026`) are created. |
-| `DELAYED_PDF_SOURCE_FOLDER_ID` | `Code.js` line 7 | `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` | Archive folder where bank cash pickup receipts generated by [[cash-inject]] are stored. |
+| `DELAYED_PDF_SOURCE_FOLDER_ID` | `Code.js` line 7 | `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd` | Archive folder where bank cash pickup receipts generated by cash-inject are stored. |
 | `PENDING_TASKS_PROPERTY_KEY` | `Code.js` line 8 | `PENDING_PDF_TASKS` | Property key in `PropertiesService.getScriptProperties()` storing the array of pending search tasks. |
 | `SOURCE_SPREADSHEET_ID` | `Code.js` line 9 | `1JL7dO-CWo6B3HaG0UbcIpgmVmBqlRTGgjmvsUsL0Ifw` | Master Google Spreadsheet containing daily collection date sheets copied into generated workbooks. |
 
@@ -472,7 +472,7 @@ sequenceDiagram
 3. **Receipt Matching Date Pattern Sensitivity (`Code.js` lines 937–944):**
    The search query pattern in `copyRecieptPdfForDate` relies on strict day/month strings:
    `const patternPaddedLower = (dayOfWeek + "-" + monthName + "-" + dayOfMonth).toLowerCase();`
-   If the bank deposit slip generated by [[cash-inject]] uses an alternate naming convention (e.g. `YYYY-MM-DD`, `DD-MM-YYYY`, or a different locale), the matching logic fails and the task times out after 24 attempts.
+   If the bank deposit slip generated by cash-inject uses an alternate naming convention (e.g. `YYYY-MM-DD`, `DD-MM-YYYY`, or a different locale), the matching logic fails and the task times out after 24 attempts.
 4. **Base64 Payload Memory Footprint (`Code.js` line 82 & `index.html` lines 1040–1056):**
    Encoding multi-page PDFs to Base64 and passing them in the `google.script.run` response payload consumes significant browser and GAS memory. While effective for immediate downloads, very large reports (>10 MB) can exceed GAS RPC payload limits (~50 MB max, but performance degrades above 10 MB).
 
@@ -491,7 +491,7 @@ sequenceDiagram
    - *Rationale *(inferred)*:* Avoids requiring the user to navigate to Google Drive, authenticate separate view permissions, or wait for Drive file indexers before accessing the generated PDF deposit slip.
 4. **Self-Terminating Asynchronous Task Queue (`Code.js` lines 1010–1134):**
    - *Decision:* Establish an hourly polling trigger via `ScriptApp.newTrigger()` that queries `PropertiesService` and auto-deletes itself via `cleanUpHourlyPDFTrigger()` once all queued dates are resolved.
-   - *Rationale *(inferred)*:* Bank deposit slips from [[cash-inject]] arrive hours after runsheet reconciliation. Polling synchronously would violate the 6-minute GAS execution limit. Implementing a persistent background trigger with automatic unregistration prevents trigger leaks while guaranteeing eventual document linkage.
+   - *Rationale *(inferred)*:* Bank deposit slips from cash-inject arrive hours after runsheet reconciliation. Polling synchronously would violate the 6-minute GAS execution limit. Implementing a persistent background trigger with automatic unregistration prevents trigger leaks while guaranteeing eventual document linkage.
 
 ---
 
@@ -509,7 +509,7 @@ sequenceDiagram
 
 > *No prior note supplied — changelog starts here.*
 
-- **2026-09-18:** Initial comprehensive project memory generated from Clasp clone codebase (`remote_clones/cash`). Documented complete architecture, direct-object spreadsheet patterns, TSV parsing engines, two-page vector PDF generation, Base64 client download streams, and the asynchronous hourly bank deposit slip polling daemon connecting to [[cash-inject]].
+- **2026-09-18:** Initial comprehensive project memory generated from Clasp clone codebase (`remote_clones/cash`). Documented complete architecture, direct-object spreadsheet patterns, TSV parsing engines, two-page vector PDF generation, Base64 client download streams, and the asynchronous hourly bank deposit slip polling daemon connecting to cash-inject.
 
 ---
 
@@ -529,15 +529,12 @@ sequenceDiagram
 ---
 
 ## 18. Related Notes
-
-- [[GAS-COD-Automation]] — Initial high-level project memory stub in the Obsidian vault.
-- [[cash-inject]] — Companion project: Airtel Payments Bank Gmail transaction scanner & vector PDF receipt generator that populates `1S-q1DUU8_3FeE8cDr74TzmK0rVpbXdwd`.
-- [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR]] — Connected financial operations repository.
-- [[Google Apps Script]] — Core runtime platform reference.
-- [[Google Drive]] — Target storage and archive infrastructure.
-- [[Google Sheets]] — Report compilation and ledger storage engine.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

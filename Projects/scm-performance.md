@@ -503,7 +503,7 @@ flowchart LR
 
 - [ ] **Migrate Secret to `ScriptProperties`:** Remove hardcoded API key from [`Code.js:20`](file:///C:/Users/User/Desktop/gas%20apps/scm%20performance/Code.js#L20) and inject via `PropertiesService.getScriptProperties().getProperty('XLSX_SERVICE_API_KEY')`.
 - [ ] **Flexible Historical Backfill:** Add a custom dialog or prompt in the `SCM Tools` menu allowing operators to input an arbitrary date (`DD-MMM-YYYY`) to process missed or historical reports.
-- [ ] **Asynchronous Chained Continuation:** Decouple file submission and result polling into two phases (using one-shot triggers similar to [[HourlyConversionReport]]) to eliminate the synchronous 60-second blocking sleep loop.
+- [ ] **Asynchronous Chained Continuation:** Decouple file submission and result polling into two phases (using one-shot triggers similar to HourlyConversionReport) to eliminate the synchronous 60-second blocking sleep loop.
 - [ ] **Telegram Incident Alerting:** Incorporate Telegram Bot API alerts to notify operations supervisors in dedicated topics when an email is missing or when closure rates fall below 75%.
 - [ ] **Dynamic Hub Configuration:** Move hardcoded DC alias keywords from [`Code.js:196`](file:///C:/Users/User/Desktop/gas%20apps/scm%20performance/Code.js#L196) into a spreadsheet config tab or Script Property.
 
@@ -536,15 +536,12 @@ flowchart LR
 ---
 
 ## 18. Related Notes
-
-- [[Projects/DataConversion|DataConversion]] — Dedicated microservice repository documentation for Excel-to-CSV streaming conversions.
-- [[Projects/xlsx_to_csv_bridge|xlsx_to_csv_bridge]] — FastAPI conversion bridge deployed on Render for supply chain workloads.
-- [[Projects/HourlyConversionReport|HourlyConversionReport]] — Parallel GAS application implementing two-phase chained trigger polling for hourly logistics reports.
-- [[Projects/unified-dashboard|unified-dashboard]] — Central supply chain operational monitoring dashboard.
-- [[Projects/EI-Stream-Trigger|EI-Stream-Trigger]] — Escalation Index trigger architecture sharing logging conventions.
-- [[Projects/D-1-SummaryAutomation|D-1-SummaryAutomation]] — End-of-day summary ingestion automation pipeline.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

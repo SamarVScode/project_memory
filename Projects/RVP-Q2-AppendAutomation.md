@@ -946,19 +946,12 @@ Because `appsscript.json` does not explicitly declare an `oauthScopes` array, Go
 ---
 
 ## 18. Related Notes
-
-- [[Projects/GAS-RVP-Q2-AppendAutomation]]: Central Obsidian vault stub note for this project.
-- [[Projects/GAS-RTO-Q2-appendAutomation]]: Sister automation handling Return-To-Origin (RTO) Q2 parcel log appending.
-- [[Projects/GAS-D-1-SummaryAutomation]]: Logistics summary pipeline operating on Day-Minus-1 operational workbooks.
-- [[Projects/GAS-BRSNRAttributesAutomation]]: Automation managing buyer return and seller non-return attribute tracking.
-- [[Projects/GAS-shipment-reco]]: End-to-end forward and reverse shipment reconciliation engine.
-- [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR]]: Core logistics stream report generator (`ei_stream_server`) processing massive supply chain workbooks.
-- [[Services/Myntra-Logistics-Infrastructure#logistics-stream-engine]]: Central knowledge hub for the logistics stream engine cluster.
-- [[Services/Google-Apps-Script]]: Infrastructure guide and best practices for enterprise Google Apps Script development.
-- [[Projects/GAS-EI-Pan-India-Report]]: Pan-India Early Ingestion daily automation pipeline.
-- [[Projects/GAS-HourlyConversionReport]]: Real-time hourly conversion tracking automation.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 

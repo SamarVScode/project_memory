@@ -96,7 +96,7 @@ flowchart TD
 | **State Persistence** | Google Workspace `PropertiesService` | `getScriptProperties()` | `Code.js:138, 142, 147, 201-208, 280-286, 412, 473-480, 846, 929, 1033, 1043` | Key-value state persistence across decoupled execution phases (`job_id`, `retry_count`, `last_processed_date`) *(stated)*. |
 | **HTTP Client** | Google Workspace `UrlFetchApp` | Native Apps Script HTTP Service | `Code.js:251, 433, 447, 669` | Dispatches outbound HTTPS requests to external bridge microservice and Telegram Bot API *(stated)*. |
 | **Scheduling Engine** | `ScriptApp` Project Triggers | Clock-driven & Time-based Triggers | `Code.js:212-215, 307-310, 483-487, 825-829, 894-897, 988-991, 1051-1055` | Schedules the 15-minute polling daemon and dynamic one-shot 10-minute / 5-minute continuation triggers *(stated)*. |
-| **External Processing Bridge** | [[xlsx_to_csv_bridge]] | Python 3.10+ / FastAPI / Uvicorn | `Code.js:24`, `deployment.md:1-31` | Offloaded SAX stream conversion microservice hosted on Render Free Tier (`https://xlsx-to-csv-bridge.onrender.com`) *(stated)*. |
+| **External Processing Bridge** | xlsx_to_csv_bridge | Python 3.10+ / FastAPI / Uvicorn | `Code.js:24`, `deployment.md:1-31` | Offloaded SAX stream conversion microservice hosted on Render Free Tier (`https://xlsx-to-csv-bridge.onrender.com`) *(stated)*. |
 | **Tabular Stream Parser** | `xlsx2csv` (via Bridge) | SAX Event-Driven XML Streamer | `xlsx_to_csv_bridge:requirements.txt:5` | Python library streaming raw OpenXML sheets without DOM overhead, enforcing early-exit filters *(stated)*. |
 | **External Alerting Gateway** | [[Telegram]] Bot API | HTTP REST API (`/sendMessage`) | `Code.js:37-41, 660-680` | Dispatches rich HTML-formatted operational cards to supergroup chat `-1003779595579` across discrete topics *(stated)*. |
 | **Cloud Logging** | Google Cloud Stackdriver | `STACKDRIVER` Exception Logging | `appsscript.json:12`, `Code.js:77, 219, 419` | Cloud logging and error reporting surfaced in Google Cloud Console and Apps Script dashboard *(stated)*. |
@@ -610,7 +610,7 @@ flowchart LR
 
 ### 1. Sister Microservice: `xlsx_to_csv_bridge` (Render)
 
-The application integrates with the cloud microservice documented in [[xlsx_to_csv_bridge]]:
+The application integrates with the cloud microservice documented in xlsx_to_csv_bridge:
 
 - **Host**: `https://xlsx-to-csv-bridge.onrender.com`
 - **Authentication**: Query parameter `api_key=[REDACTED_SECRET]`
@@ -906,15 +906,12 @@ After pushing code to the remote script container, initialize the recurring cloc
 ---
 
 ## 18. Related Notes
-
-- [[xlsx_to_csv_bridge]] — Sister microservice providing Python/FastAPI SAX-streaming XLSX-to-CSV conversion on Render.
-- [[RTO Q2 appendAutomation]] — Sister GAS ETL micro-pipeline ingesting Return-To-Origin (RTO) shipment archives for MRZ.
-- [[RVP Q2 AppendAutomation]] — Sister GAS ETL micro-pipeline ingesting Reverse Pickup (RVP) archives with in-memory ZIP decompression.
-- [[Services/Myntra-Logistics-Infrastructure#logistics-stream-engine|logistics-stream-engine]] — Architecture overview of the logistics stream engine cluster.
-- [[Services/Google-Apps-Script|Google Apps Script Infrastructure]] — Enterprise standards and patterns for GAS deployments.
-- [[Projects/Repo-XLSX-STREAM-REPORT-GENERATOR]] — Upstream report generation repository producing pan-India logistics spreadsheets.
+- [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
+- [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
+- [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
 
 ---
+
 
 ## 19. Update Instructions (meta)
 
