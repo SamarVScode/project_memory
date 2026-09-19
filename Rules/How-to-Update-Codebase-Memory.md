@@ -84,7 +84,7 @@ Go section by section. For each, only touch it if Step 1 found something relevan
 - **Roadmap / TODOs (Section 15)**: mark completed items as done (strike-through or move to Changelog), add newly found TODOs.
 - **Changelog (Section 16)**: always add a new dated entry summarizing this update — what changed, files affected, and anything resolved/superseded elsewhere in the doc. Historical entries already in the Changelog are immutable — never edit, reword, or remove a past entry, even if later context makes it look incomplete or wrong. Add a new entry to correct the record instead.
 - **Glossary (Section 17)**: add new terms only.
-- **Related Notes (Section 18)**: leave untouched unless genuine upstream/downstream data dependencies exist. Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists. Decouple any unverified links.
+- **Related Notes (Section 18)**: Audit all existing cross-project wikilinks against the Strict Graph Node Connection Law. If the note contains hallucinated or unverified links (e.g., linking apps due to shared Telegram groups, shared Google Sheets, shared hub codes like MRZ, or high-level logistics domains), **aggressively prune and decouple them**. Standalone satellites must link strictly to `[[Dashboard]]` and relevant `[[Rules/...]]` notes. Any decoupled edge must be recorded in Section 16 (Changelog) as an architectural clarification.
 - **Update Instructions (Section 19)**: leave untouched unless the update process itself needs to change.
 
 STEP 3 — OUTPUT
@@ -101,8 +101,21 @@ RULES (same as generation prompt — still apply)
 - MONOREPO SUB-PROJECT BOUNDARY: if updating a monorepo sub-project note (`<root-name>—<sub-project-name>.md`), scope changes strictly to that sub-project's directory and do not duplicate shared root concerns or sibling details.
 - CROSS-SECTION PROPAGATION: if a single code change affects multiple sections (e.g. a new dependency that also changes Setup steps, or a workflow change that also touches Security), update every affected section, not just the one closest to the file that changed.
 - NO STALE HISTORY IN 2–15: Sections 2 through 15 describe the CURRENT state of the project only — they should never accumulate old implementation details that no longer apply. History belongs exclusively in Section 16 (Changelog); if something changed, remove the old description from its section and let the Changelog record what it used to be.
-- Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists.
+- Strict Graph Node Connection Law:
+  - Prune any cross-project wikilinks based on shared hub codes (`MRZ`), shared Telegram channels/topics, shared platforms (GAS/Sheets), or general logistics domains.
+  - Retain or establish cross-project links IF AND ONLY IF there is verified programmatic coupling (direct API calls, package imports, engineered producer-consumer pipelines, or hardware bridge pairs).
+  - Never allow casual inline `[[wikilinks]]` in body sections (Sections 1–17); convert any found to plaintext.
 ```
+
+---
+
+## 🕸️ The Strict Graph Node Connection Law for Incremental Audits
+
+During every incremental update, agents must audit Section 18 and body text to ensure graph hygiene:
+1. **Audit Existing Edges:** Check every `[[Project]]` link in Section 18. Does this project actually call or import code from that project? If not, DELETE the link immediately.
+2. **Eliminate False Affinity:** Decouple systems that were erroneously connected due to sharing the same Telegram Supergroup, Google Sheet tab, or facility code.
+3. **Enforce Plaintext for Casual Mentions:** If another application or script is mentioned in Sections 1–17, format it as `code` or plain text, NEVER as a `[[wikilink]]`.
+4. **Log Pruning in Changelog:** Document any removed graph edges in Section 16 (e.g., `Decoupled spurious wikilink to [[OtherProject]] — confirmed standalone satellite with zero API/data dependency`).
 
 ---
 
@@ -120,4 +133,4 @@ Before saving and committing an updated memory note, verify these strict criteri
 | **6** | **Google Workspace Entities** | Changes in hardcoded Spreadsheet IDs, Folder IDs, or Telegram Topic IDs ignored. |
 | **7** | **Wikilink & Graph Integrity** | Stripping or breaking existing valid `[[wikilink]]` connections to verified services or sibling projects. |
 | **8** | **No Cosmetic Rewrites** | Rewriting untouched modules or descriptions without underlying factual code changes. |
-| **9** | **Strict Integration Verification** | Linking apps based on shared infrastructure (e.g. same Telegram group or DC code) without verified upstream/downstream data flows. |
+| **9** | **Strict Graph Node Connection Audit** | Retaining or introducing spurious cross-project links based on shared infrastructure (Telegram, Sheets, DC code) or domain affinity; failing to prune unverified links during update; allowing casual inline `[[project]]` wikilinks in Sections 1–17. |

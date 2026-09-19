@@ -192,8 +192,10 @@ Any domain-specific or project-specific terms, abbreviations, or naming conventi
 Placeholder wikilinks for vault linking:
 - [[<PROJECT_NAME> — Architecture Decisions]]
 - [[<PROJECT_NAME> — Changelog]]
-- Related projects in my vault (only with verified data dependencies).
-- Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists.
+- [[Dashboard]]
+- Relevant rulebooks: e.g. [[Rules/GAS-Architecture-Index|GAS Architecture Index]] (if applicable).
+- Related projects in my vault (STRICT: ONLY with verified programmatic data dependencies).
+- Standalone Projects Rule: If this project does not exchange data directly with another system, it is a Standalone Satellite. Link ONLY to [[Dashboard]] and relevant Rules. Do NOT link to other projects.
 
 ## 19. Update Instructions (meta)
 Short note-to-self on how to safely refresh this document later using [[Rules/How-to-Update-Codebase-Memory|How to Update Codebase Memory]].
@@ -208,8 +210,47 @@ RULES
 - TRACEABILITY: cite specific files and line numbers in Sections 5, 6, 13, and 14.
 - SECRETS: never reproduce actual secret values. Flag committed secrets with a `> [!warning]` and recommend rotation.
 - UNKNOWNS: if something cannot be determined, write exactly `Unknown / not documented`.
-- Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists.
+- Strict Graph Node Connection Law:
+  - NEVER link apps based on shared infrastructure:
+    1. Shared physical facility or hub code (e.g. both operate in `MRZ` or `BOM`).
+    2. Shared notification channels (e.g. both post alerts to the same Telegram chat/topic or email group).
+    3. Shared underlying runtime or platform (e.g. both are Google Apps Script or Python).
+    4. Broad business department/domain (e.g. Inbound Linehaul Manifests vs Customer Escalation Grievances — both are logistics, but completely disjoint systems).
+    5. Casual inline mentions: Never wikilink external apps in body text (Sections 1–17) just because they are mentioned. Refer to them as plaintext. Wikilinks to projects are strictly restricted to Section 18.
+  - ONLY link projects when there is concrete, verified programmatic coupling:
+    1. Direct HTTP/REST/Webhook API call between services.
+    2. Direct monorepo import or library dependency.
+    3. Verified producer-consumer data pipeline (e.g. App A explicitly writes a schema to a table/sheet and App B is explicitly engineered to read that exact table/sheet).
+    4. Hardware-software bridge pair (e.g. WebSocket bridge feeding a frontend overlay).
 ```
+
+---
+
+## 🕸️ The Strict Graph Node Connection Law (Anti-Hallucination Standard)
+
+To prevent the corruption of the Obsidian Knowledge Graph with false edges (e.g., falsely linking customer escalation alerts to inbound shipment manifests because both share a Telegram group or hub code), all agents generating project memories must follow this law:
+
+### 1. The 5 Forbidden Connection Anti-Patterns
+1. **Shared Physical Facility / Hub:** App A and App B both process items for Hub `MRZ`. -> **FORBIDDEN TO LINK.**
+2. **Shared Communication Infrastructure:** App A and App B both post alert cards to Telegram Supergroup `-1003779595579` Topic `9`. -> **FORBIDDEN TO LINK.**
+3. **Shared Platform / Technology:** App A and App B are both built in Google Apps Script or Python. -> **FORBIDDEN TO LINK.**
+4. **Shared Domain Category:** App A does inbound truck manifests and App B does customer delivery escalation disputes. -> **FORBIDDEN TO LINK.** (They belong to different operational pipelines).
+5. **Casual Inline Mention Linking:** Referring to another tool in Section 1 or Section 6. -> **FORBIDDEN TO WIKILINK IN BODY.** Write tool names as plaintext or code font (`tool-name`), never `[[tool-name]]`. Wikilinks between projects must reside solely in Section 18.
+
+### 2. The 4 Legitimate Architectural Connection Criteria
+An edge in Section 18 is permitted **IF AND ONLY IF** at least one criterion is proven from source code:
+1. **Direct Programmatic API / Webhook:** Source code contains explicit HTTP/RPC calls to the other project's endpoints.
+2. **Monorepo Package Dependency:** One package directly imports TypeScript/Python/Java code from another within the monorepo.
+3. **Engineered Producer-Consumer Pipe:** Source code shows App A produces structured data specifically formatted for App B, and App B actively consumes it.
+4. **Hardware/Bridge Workstation Pair:** A local agent/bridge directly feeds real-time telemetry/video streams to a workstation client.
+
+### 3. Canonical Multi-Node Clusters in this Vault (Ground Truth)
+Only 3 multi-project clusters legitimately exist in this vault:
+1. **AgentFlow Monorepo Suite** (5 nodes): `agent-summary-mechanism` (parent) + `agent-flow-analytics`, `agent-flow-core`, `agent-flow-dashboard`, `agent-flow-slack-bot`.
+2. **Bagging VMS Workstation Suite** (3 nodes): `Bagging-VMS-overlay` <-> `bagging-vms-gas-backend` <-> `cameraOverlayBridge`.
+3. **XLSX-STREAM Reporting Suite** (4 nodes): `XLSX-STREAM-REPORT-GENERATOR` <-> `EI-Stream-Trigger`, `ei-report-trigger`, `xlsx_to_csv_bridge`.
+
+All other projects in this vault are **Standalone Satellites**. They must link ONLY to `[[Dashboard]]` and relevant `[[Rules/...]]` notes.
 
 ---
 
@@ -226,4 +267,4 @@ Before committing any generated memory note into the vault, run this verificatio
 | **5** | **Zero Secret Exposure** | Passwords, tokens, credentials, and keystore passwords replaced with `[REDACTED_SECRET]` accompanied by a warning callout. |
 | **6** | **Traceability & Grounding** | Modules in Section 5 and workflows in Section 6 include real filenames and line references. |
 | **7** | **Vault & Dashboard Registration** | Note saved to `Projects/<PROJECT_NAME>.md` and linked in `Dashboard.md` under its operational cluster. |
-| **8** | **Strict Integration Verification** | Section 18 wikilinks strictly reflect verified upstream/downstream data flows; never link apps based on shared infrastructure (e.g. same Telegram group or DC code). |
+| **8** | **Strict Graph Node Connection Gate** | Section 18 contains wikilinks ONLY for verified programmatic data flows (API, import, producer-consumer). Zero links based on shared hub, shared Telegram chat/topic, shared platform, or general domain. Zero casual inline `[[project]]` wikilinks in Sections 1–17. Standalone satellites link strictly to Dashboard and Rules. |
