@@ -4,7 +4,7 @@ type: dashboard
 status: active
 tags: [dashboard, index, master-map, google-apps-script, typescript]
 created: 2026-09-18
-last-updated: 2026-09-18
+last-updated: 2026-09-19
 ---
 
 # 🧠 Engineering Second Brain & Project Master Map
@@ -69,7 +69,7 @@ Welcome to your central engineering memory layer! This vault serves as the persi
   * [[Projects/gas-ops-dashboard|gas-ops-dashboard (Operations Hub Management Suite)]]
   * [[Projects/unified-dashboard|unified-dashboard (MRZ Operations Unified Dashboard)]]
   * [[Projects/nps|nps (NPS Performance Engine)]]
-  * [[Projects/tasky|tasky (Logistics Task Poller)]]
+  * [[Projects/daily-task-alert-gas|daily-task-alert-gas (Daily Task Alert Engine)]]
   * [[Projects/pre-alert|pre-alert (Logistics Dispatch Notifier)]]
 
 ---

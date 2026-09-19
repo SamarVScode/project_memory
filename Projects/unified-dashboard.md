@@ -742,7 +742,7 @@ No prior note supplied — changelog starts here.
 ## 18. Related Notes
 
 - [[BRSNRAttributesAutomation]] — Specialized automation script handling BRSNR attribute assignment.
-- [[tasky]] — Operational task and escalation management tracker.
+- [[daily-task-alert-gas]] — Operational task and escalation management tracker.
 - [[RTO Q2 AppendAutomation]] — Automated appending pipeline for Return-To-Origin loss tracking.
 - [[RVP Q2 AppendAutomation]] — Automated appending pipeline for Reverse-Pickup loss tracking.
 - [[spf-final]] — Seller Protection Fund loss reconciliation engine.
