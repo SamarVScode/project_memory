@@ -4,7 +4,7 @@ type: rule
 status: active
 tags: [rules, engineering-standards, memory-update, incremental-patching]
 created: 2026-09-18
-last-updated: 2026-09-18
+last-updated: 2026-09-19
 ---
 
 # 📘 Rule: How to Update Codebase Memory
@@ -84,7 +84,7 @@ Go section by section. For each, only touch it if Step 1 found something relevan
 - **Roadmap / TODOs (Section 15)**: mark completed items as done (strike-through or move to Changelog), add newly found TODOs.
 - **Changelog (Section 16)**: always add a new dated entry summarizing this update — what changed, files affected, and anything resolved/superseded elsewhere in the doc. Historical entries already in the Changelog are immutable — never edit, reword, or remove a past entry, even if later context makes it look incomplete or wrong. Add a new entry to correct the record instead.
 - **Glossary (Section 17)**: add new terms only.
-- **Related Notes (Section 18)**: leave untouched unless new cross-project overlap is obvious.
+- **Related Notes (Section 18)**: leave untouched unless genuine upstream/downstream data dependencies exist. Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists. Decouple any unverified links.
 - **Update Instructions (Section 19)**: leave untouched unless the update process itself needs to change.
 
 STEP 3 — OUTPUT
@@ -101,13 +101,14 @@ RULES (same as generation prompt — still apply)
 - MONOREPO SUB-PROJECT BOUNDARY: if updating a monorepo sub-project note (`<root-name>—<sub-project-name>.md`), scope changes strictly to that sub-project's directory and do not duplicate shared root concerns or sibling details.
 - CROSS-SECTION PROPAGATION: if a single code change affects multiple sections (e.g. a new dependency that also changes Setup steps, or a workflow change that also touches Security), update every affected section, not just the one closest to the file that changed.
 - NO STALE HISTORY IN 2–15: Sections 2 through 15 describe the CURRENT state of the project only — they should never accumulate old implementation details that no longer apply. History belongs exclusively in Section 16 (Changelog); if something changed, remove the old description from its section and let the Changelog record what it used to be.
+- Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists.
 ```
 
 ---
 
 ## 🛡️ Critical Quality Assurance Gates for Updates
 
-Before saving and committing an updated memory note, verify these 8 strict criteria:
+Before saving and committing an updated memory note, verify these strict criteria:
 
 | Gate | Check | Failure Condition |
 | :---: | :--- | :--- |
@@ -117,5 +118,6 @@ Before saving and committing an updated memory note, verify these 8 strict crite
 | **4** | **Changelog Immutability** | Historical entries in Section 16 edited or deleted; new update must be appended as a new dated entry. |
 | **5** | **Line Citation Freshness** | Outdated line numbers preserved after edits shifted the source code. |
 | **6** | **Google Workspace Entities** | Changes in hardcoded Spreadsheet IDs, Folder IDs, or Telegram Topic IDs ignored. |
-| **7** | **Wikilink & Graph Integrity** | Stripping or breaking existing `[[wikilink]]` connections to services or sibling projects. |
+| **7** | **Wikilink & Graph Integrity** | Stripping or breaking existing valid `[[wikilink]]` connections to verified services or sibling projects. |
 | **8** | **No Cosmetic Rewrites** | Rewriting untouched modules or descriptions without underlying factual code changes. |
+| **9** | **Strict Integration Verification** | Linking apps based on shared infrastructure (e.g. same Telegram group or DC code) without verified upstream/downstream data flows. |

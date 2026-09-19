@@ -4,7 +4,7 @@ type: rule
 status: active
 tags: [rules, engineering-standards, memory-generation, project-onboarding]
 created: 2026-09-18
-last-updated: 2026-09-18
+last-updated: 2026-09-19
 ---
 
 # 📘 Rule: How to Add New Codebase Memory
@@ -192,7 +192,8 @@ Any domain-specific or project-specific terms, abbreviations, or naming conventi
 Placeholder wikilinks for vault linking:
 - [[<PROJECT_NAME> — Architecture Decisions]]
 - [[<PROJECT_NAME> — Changelog]]
-- Related projects in my vault.
+- Related projects in my vault (only with verified data dependencies).
+- Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists.
 
 ## 19. Update Instructions (meta)
 Short note-to-self on how to safely refresh this document later using [[Rules/How-to-Update-Codebase-Memory|How to Update Codebase Memory]].
@@ -207,6 +208,7 @@ RULES
 - TRACEABILITY: cite specific files and line numbers in Sections 5, 6, 13, and 14.
 - SECRETS: never reproduce actual secret values. Flag committed secrets with a `> [!warning]` and recommend rotation.
 - UNKNOWNS: if something cannot be determined, write exactly `Unknown / not documented`.
+- Strict Integration Verification: Never link apps based on shared infrastructure (e.g. same Telegram group or DC code). Only establish connections when a genuine upstream/downstream data flow exists.
 ```
 
 ---
@@ -224,3 +226,4 @@ Before committing any generated memory note into the vault, run this verificatio
 | **5** | **Zero Secret Exposure** | Passwords, tokens, credentials, and keystore passwords replaced with `[REDACTED_SECRET]` accompanied by a warning callout. |
 | **6** | **Traceability & Grounding** | Modules in Section 5 and workflows in Section 6 include real filenames and line references. |
 | **7** | **Vault & Dashboard Registration** | Note saved to `Projects/<PROJECT_NAME>.md` and linked in `Dashboard.md` under its operational cluster. |
+| **8** | **Strict Integration Verification** | Section 18 wikilinks strictly reflect verified upstream/downstream data flows; never link apps based on shared infrastructure (e.g. same Telegram group or DC code). |

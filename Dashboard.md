@@ -44,6 +44,7 @@ Welcome to your central engineering memory layer! This vault serves as the persi
   * [[Projects/shipment_reco|shipment_reco]]
   * [[Projects/shipVerify_BridgeAutomation|shipVerify_BridgeAutomation]]
   * [[Projects/scm-performance|scm-performance (24-Hr SLA Performance)]]
+  * [[Projects/pre-alert|pre-alert (Inbound Shipment Pre-Alert & Manifest Dispatcher)]]
 
 ---
 
@@ -69,8 +70,12 @@ Welcome to your central engineering memory layer! This vault serves as the persi
   * [[Projects/gas-ops-dashboard|gas-ops-dashboard (Operations Hub Management Suite)]]
   * [[Projects/unified-dashboard|unified-dashboard (MRZ Operations Unified Dashboard)]]
   * [[Projects/nps|nps (NPS Performance Engine)]]
-  * [[Projects/daily-task-alert-gas|daily-task-alert-gas (Daily Task Alert Engine)]]
-  * [[Projects/pre-alert|pre-alert (Logistics Dispatch Notifier)]]
+
+---
+
+### 🚨 Customer Escalations & Grievance Routing
+*Automated detection and real-time Telegram dispatch of customer grievance escalations (IMD, delivery disputes, TAT breaches).*
+* [[Projects/daily-task-alert-gas|daily-task-alert-gas (Customer Escalation Alert Engine)]]
 
 ---
 

@@ -10,19 +10,19 @@ last-updated: 2026-09-19
 ---
 
 # daily-task-alert-gas
-> **Enterprise TypeScript 5-Gate Polling Engine, Mirzapur Hub (`MRZ`) Logistics Dispatcher, and Telegram Topic 9 Alert Daemon** — Architecture Specification & Project Memory Note
+> **Enterprise TypeScript 5-Gate Polling Engine, Customer Escalation & CX Dispute Dispatcher, and Telegram Topic 9 Alert Daemon** — Architecture Specification & Project Memory Note
 
 ---
 
 ## 1. Overview
-`daily-task-alert-gas` (version `1.0.0`, Clasp Script ID: `1RYMhyRZ2V8fRmn4IvYKBU2sxCuiLon93-jUYwyVVvK2I1GuZWMT96qbK`) is an autonomous supply chain monitoring daemon built in [[TypeScript]] 5.4 targeting the [[Google Apps Script]] V8 runtime (`module: "None"`). It automates the intake, schema resolution, deduplication, and alerting of daily customer assertion tasks for the Mirzapur logistics hub (`MRZ`).
+`daily-task-alert-gas` (version `1.0.0`, Clasp Script ID: `1RYMhyRZ2V8fRmn4IvYKBU2sxCuiLon93-jUYwyVVvK2I1GuZWMT96qbK`) is an autonomous customer escalation monitoring and CX dispute dispatch daemon built in [[TypeScript]] 5.4 targeting the [[Google Apps Script]] V8 runtime (`module: "None"`). It automates the intake, schema resolution, deduplication, and alerting of daily customer assertion escalations and grievance dispute tasks (IMD, disputed delivery, customer damage claims, TAT breaches) for the Mirzapur logistics hub (`MRZ`).
 
 ### The Operational Problem
-In fast-paced regional delivery hubs such as Mirzapur (`MRZ`), field supervisors and logistics operations teams receive large morning data dumps of delivery tasks, escalations, and Customer Experience (CX) assertions via central [[Google Sheets]] workbooks containing upwards of 14,000+ rows. Prior to automated alerting:
-1. **Manual Polling Fatigue:** Supervisors had to continuously open and refresh massive workbooks during the peak morning intake window (07:00 AM to 12:00 PM IST) to check whether central teams had pasted today's assignments.
-2. **Alert Duplication & Mid-Paste Chaos:** Initial alert scripts risked firing while an upstream operator was halfway through pasting rows, transmitting incomplete task sets or spamming the team with multiple duplicate notifications throughout the morning.
+In fast-paced regional delivery hubs such as Mirzapur (`MRZ`), field supervisors and customer experience (CX) operations teams must swiftly resolve critical customer escalations and grievance disputes — specifically Item Missing in Delivery (`IMD`), disputed delivery claims, customer damage claims, and strict turnaround time (`TAT`) breach escalations. These high-priority customer dispute tasks arrive daily via massive morning data dumps in central [[Google Sheets]] workbooks containing upwards of 14,000+ rows across all regional hubs. Prior to automated alerting:
+1. **Critical Escalation Visibility Delay & Polling Fatigue:** Supervisors had to continuously open and refresh massive workbooks during the peak morning intake window (07:00 AM to 12:00 PM IST) to check whether central teams had logged new customer dispute tasks and TAT breaches, risking severe SLA violations.
+2. **Alert Duplication & Mid-Paste Chaos:** Initial alert scripts risked firing while an upstream operator was halfway through pasting dispute rows, transmitting incomplete grievance task sets or spamming the team with duplicate notifications throughout the morning.
 3. **Annotation Sensitivity False Positives:** When downstream team members updated resolution notes, status flags, or supervisor tags in columns 4+, naive modification checks triggered duplicate alert broadcasts.
-4. **Markdown Parsing Failures:** Special characters (`_`, `*`, `[`, `` ` ``) in customer assertion names caused Telegram's legacy Markdown parser to throw HTTP 400 errors, resulting in lost messages.
+4. **Markdown Parsing Failures:** Special characters (`_`, `*`, `[`, `` ` ``) in customer grievance categories and assertion names caused Telegram's legacy Markdown parser to throw HTTP 400 errors, resulting in lost escalation messages.
 
 ### The Architectural Solution
 `daily-task-alert-gas` eliminates all operational friction by deploying a high-reliability, zero-downtime **5-Gate Polling Engine** executing on a 10-minute recurring time trigger during the morning window:
@@ -646,6 +646,9 @@ The project does NOT deploy any `doGet` or `doPost` Web App endpoints, eliminati
 
 ## 16. Changelog
 
+- **2026-09-19** *(Domain Decoupling & Strict Verification)*:
+  - **Domain Decoupling:** Decoupled `daily-task-alert-gas` from inbound shipment daemon `pre-alert`. Clarified operational problem scope strictly to Customer Escalations and CX Grievance dispute tasks (IMD, disputed delivery, customer damage claims, TAT breaches).
+  - **Integration Verification Audit:** Purged unverified peer app links (`l4d-dashboard`, `unified-dashboard`) lacking direct data pipeline dependencies per strict vault integration rules.
 - **2026-09-19** *(Current Architecture)*:
   - **TypeScript Migration:** Completely refactored legacy single-file JavaScript `Code.js` (from legacy project `tasky`) into modular Native Clasp TypeScript (`src/*.ts`) with strict type checking.
   - **The 5-Gate Polling Engine:** Implemented 10-minute polling lifecycle with 5 sequential gates (Hour window, Date lock, Mid-paste guard, 3-column SHA-256 fingerprint, MRZ filter).
@@ -677,9 +680,11 @@ The project does NOT deploy any `doGet` or `doPost` Web App endpoints, eliminati
 - [[Rules/GAS-Architecture-Index|GAS Architecture Index & Agent Router]] — Authoritative decision matrix and TypeScript Native compilation standard.
 - [[Rules/GAS-Webapp-Architecture-Rulebook|GAS Webapp Architecture Rulebook]] — 21-section engineering standard for Native Clasp TypeScript and zero-downtime triggers.
 - [[Dashboard|Engineering Second Brain & Project Master Map]] — Central knowledge base index and operational project directory.
-- [[Projects/pre-alert|pre-alert (Logistics Dispatch Notifier)]] — Sister inbound logistics daemon monitoring conveyance alerts on Topic ID `8`.
-- [[Projects/unified-dashboard|unified-dashboard (MRZ Operations Unified Dashboard)]] — Mirzapur operational analytics console.
-- [[Projects/l4d-dashboard|l4d-dashboard (L4D Inactivity Engine & Roster Dashboard)]] — Field agent inactivity and attendance dashboard.
+
+> [!important] Strict Domain Boundary & Integration Verification
+> Note: Distinct from inbound shipment tools (e.g. pre-alert); daily-task-alert-gas is strictly an Escalation & Customer Grievance Dispatcher.
+>
+> In accordance with vault integration standards, unverified application links sharing only superficial infrastructure (such as the same Telegram supergroup or Mirzapur hub code) without direct upstream/downstream data dependencies have been decoupled.
 
 ---
 
